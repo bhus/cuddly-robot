@@ -29,5 +29,5 @@ COPY --from=builder /app /app
 EXPOSE 8080
 
 # Run the app
-# We use --server=true to ensure it binds correctly in a container
-ENTRYPOINT ["scala-cli", "run", "projects/web_app/app.sc", "--host", "0.0.0.0", "--port", "8080"]
+# Updated Entrypoint to use the system's Java
+ENTRYPOINT ["scala-cli", "run", "projects/web_app/app.sc", "--jvm", "system", "--host", "0.0.0.0", "--port", "8080"]
