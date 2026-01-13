@@ -16,6 +16,9 @@ FROM eclipse-temurin:21-jre
 WORKDIR /app
 COPY --from=builder /app/app.jar .
 
+# IMPORTANT: You must also copy the public files to the final image!
+COPY --from=builder /app/projects /app/projects
+
 EXPOSE 8080
 
 # Run the pre-compiled JAR directly (fastest startup)
