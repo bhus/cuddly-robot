@@ -1,11 +1,7 @@
 {
   "$schema": "https://railway.app/railway.schema.json",
-  "build": {
-    "builder": "DOCKERFILE",
-    "dockerfilePath": "Dockerfile"
-  },
   "deploy": {
-    "startCommand": "scala-cli run projects/web_app/app.sc --server=false --jvm system -- --host 0.0.0.0 --port ${PORT:-8080}",
+    "startCommand": "java -jar app.jar --host 0.0.0.0 --port ${PORT:-8080}",
     "healthcheckPath": "/",
     "restartPolicyType": "ON_FAILURE"
   }
