@@ -1,0 +1,20 @@
+{
+  "name": "scala-cli",
+  "argv": [
+    "C:\\Users\\User\\Documents\\Projectrs\\scala_project_web\\bin\\scala-cli.exe",
+    "bsp",
+    "--json-options",
+    "C:\\Users\\User\\Documents\\Projectrs\\scala_project_web\\projects\\web_app\\.scala-build\\ide-options-v2.json",
+    "--json-launcher-options",
+    "C:\\Users\\User\\Documents\\Projectrs\\scala_project_web\\projects\\web_app\\.scala-build\\ide-launcher-options.json",
+    "--envs-file",
+    "C:\\Users\\User\\Documents\\Projectrs\\scala_project_web\\projects\\web_app\\.scala-build\\ide-envs.json",
+    "C:\\Users\\User\\Documents\\Projectrs\\scala_project_web\\projects\\web_app\\app.sc"
+  ],
+  "version": "1.11.0",
+  "bspVersion": "2.1.1",
+  "languages": [
+    "scala",
+    "java"
+  ]
+}
