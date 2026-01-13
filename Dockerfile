@@ -22,4 +22,4 @@ COPY --from=builder /app/projects /app/projects
 EXPOSE 8080
 
 # Run the pre-compiled JAR directly (fastest startup)
-ENTRYPOINT ["java", "-jar", "app.jar", "--host", "0.0.0.0", "--port", "8080"]
+ENTRYPOINT ["java", "-jar", "app.jar"]

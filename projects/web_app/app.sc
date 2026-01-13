@@ -6,7 +6,7 @@
 object MyRoutes extends cask.Routes:
   
   @cask.get("/")
-  def home() = 
+  def index() = 
     cask.Response(
       data = os.read(os.pwd / "projects" / "web_app" / "public" / "index.html"),
       headers = Seq("Content-Type" -> "text/html")
@@ -19,5 +19,8 @@ object MyRoutes extends cask.Routes:
 
 object MyServer extends cask.Main:
   val allRoutes = Seq(MyRoutes)
+  
+  override def host = "0.0.0.0"
+  override def port = sys.env.get("PORT").map(_.toInt).getOrElse(8080)
 
 MyServer.main(args)
