@@ -24,4 +24,4 @@ COPY --from=builder /app /app
 EXPOSE 8080
 
 # Run using system JVM
-ENTRYPOINT ["scala-cli", "run", "projects/web_app/app.sc", "--jvm", "system", "--host", "0.0.0.0", "--port", "8080"]
+ENTRYPOINT ["scala-cli", "run", "projects/web_app/app.sc", "--jvm", "system", "--", "--host", "0.0.0.0", "--port", "8080"]
