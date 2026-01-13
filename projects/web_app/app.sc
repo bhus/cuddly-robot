@@ -19,5 +19,8 @@ object MyRoutes extends cask.Routes:
 
 object MyServer extends cask.Main:
   val allRoutes = Seq(MyRoutes)
+  // These overrides ensure Railway can see the app
+  override def host = "0.0.0.0"
+  override def port = sys.env.get("PORT").map(_.toInt).getOrElse(8080)
 
 MyServer.main(args)
