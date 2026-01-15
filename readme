@@ -1,0 +1,29 @@
+To install:
+- Download temurin jdk (https://adoptium.net/en-GB/temurin/releases at the time of this writing) to project dir
+- Download scala cli (https://github.com/VirtusLab/scala-cli/releases at the time of this writing) to project dir
+- Run launch.bat to install in local env [
+
+@echo off
+:: Set the path to your specific JVM folder
+set "JAVA_HOME=%~dp0jvm\jdk-25.0.1+8"
+
+:: Add our local bin and local java to the temporary PATH
+set "PATH=%~dp0bin;%JAVA_HOME%\bin;%PATH%"
+
+echo ---------------------------------------
+echo Scala Portable Environment Loaded!
+echo ---------------------------------------
+echo Java Home: %JAVA_HOME%
+echo.
+:: Verify Java is found
+java -version
+echo.
+:: Verify Scala-CLI is found
+scala-cli --version
+echo ---------------------------------------
+cmd /k
+
+]
+
+- To build: scala-cli --power package projects/web_app/app.sc --assembly -o app.jar --force
+- To run: java -jar app.jar --host 0.0.0.0 --port 8080 
