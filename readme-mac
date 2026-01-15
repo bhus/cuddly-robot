@@ -1,0 +1,63 @@
+To install:
+
+Ensure you choose the version that matches your Mac's processor:
+- Apple Silicon (M1, M2, M3, M4): Use aarch64 or arm64 downloads.
+
+Intel Mac: Use x64 or x86_64 downloads.
+
+Download Links:
+
+- Temurin JDK: Adoptium MacOS Releases. Download the .tar.gz. [ https://www.google.com/search?q=https://adoptium.net/en-GB/temurin/releases%3Fos%3Dmac ]
+
+Note: Unpack this into your jvm/ folder. On Mac, the internal folder structure usually ends in .../Contents/Home.
+
+- Scala CLI: Scala CLI GitHub Releases.[ https://github.com/VirtusLab/scala-cli/releases ]
+
+Apple Silicon: scala-cli-aarch64-apple-darwin.gz
+
+Intel: scala-cli-x86_64-apple-darwin.gz
+
+Action: Unpack, rename to scala-cli, move to your project bin/ folder.
+
+Run the following to dequarantine downloads:
+[
+# Allow the Scala CLI binary to run
+chmod +x bin/scala-cli
+xattr -d com.apple.quarantine bin/scala-cli
+
+# Allow the Java binaries to run (recursively for the whole JDK folder)
+xattr -rd com.apple.quarantine jvm/jdk-25.0.1+8
+]
+
+- Run launch.sh to install in local env [
+
+#!/bin/zsh
+
+# Get the absolute path of the project directory
+BASE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)"
+
+# Set JAVA_HOME (Note the /Contents/Home suffix common on macOS JDKs)
+export JAVA_HOME="$BASE_DIR/jvm/jdk-25.0.1+8/Contents/Home"
+
+# Prepend local bin and java to the PATH
+export PATH="$BASE_DIR/bin:$JAVA_HOME/bin:$PATH"
+
+echo "---------------------------------------"
+echo "Scala Portable Environment Loaded (macOS)!"
+echo "---------------------------------------"
+echo "Java Home: $JAVA_HOME"
+echo ""
+
+# Verify binaries
+java -version
+echo ""
+scala-cli --version
+echo "---------------------------------------"
+
+# Start a new sub-shell (Mac uses zsh by default)
+exec $SHELL
+
+], making sure to make it executable : chmod +x launch.sh
+
+- To build: scala-cli --power package projects/web_app/app.sc --assembly -o app.jar --force
+- To run: java -jar app.jar --host 0.0.0.0 --port 8080
