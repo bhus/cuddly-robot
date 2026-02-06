@@ -4,15 +4,18 @@
 \begin_header
 \save_transient_properties true
 \origin unavailable
-\textclass article
+\textclass book
 \use_default_options true
+\begin_modules
+customHeadersFooters
+\end_modules
 \maintain_unincluded_children no
 \language american
 \language_package default
 \inputencoding utf8
 \fontencoding auto
-\font_roman "default" "default"
-\font_sans "default" "default"
+\font_roman "palatino" "default"
+\font_sans "helvet" "default"
 \font_typewriter "default" "default"
 \font_math "auto" "auto"
 \font_default_family default
@@ -195,6 +198,12 @@ matching
 
 \begin_layout Part
 ELEMENTS OF SCALA
+\end_layout
+
+\begin_layout Section
+
+\family sans
+First Steps
 \end_layout
 
 \begin_layout Standard

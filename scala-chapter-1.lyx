@@ -4,7 +4,7 @@
 \begin_header
 \save_transient_properties true
 \origin unavailable
-\textclass article
+\textclass book
 \use_default_options true
 \master scala-first-steps.lyx
 \maintain_unincluded_children no
@@ -88,10 +88,6 @@
 \end_header
 
 \begin_body
-
-\begin_layout Section
-First Steps
-\end_layout
 
 \begin_layout Subsection*
 Installing Scala
