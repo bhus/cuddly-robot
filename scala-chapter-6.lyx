@@ -94,6 +94,8 @@ When defining methods on classes in scala,
 \end_layout
 
 \begin_layout Subsection*
+
+\family sans
 Variable Length Arguments
 \end_layout
 

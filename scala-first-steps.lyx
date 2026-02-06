@@ -92,10 +92,14 @@ customHeadersFooters
 \begin_body
 
 \begin_layout Title
+
+\size huge
 Dive into Scala
 \end_layout
 
 \begin_layout Section*
+
+\family sans
 FOREWARD
 \end_layout
 
@@ -130,6 +134,8 @@ Along with this has come it's persistent,
 \end_layout
 
 \begin_layout Section*
+
+\family sans
 PREFACE
 \end_layout
 
@@ -200,7 +206,7 @@ matching
 ELEMENTS OF SCALA
 \end_layout
 
-\begin_layout Section
+\begin_layout Chapter
 
 \family sans
 First Steps
@@ -217,7 +223,9 @@ literal "false"
 
 \end_layout
 
-\begin_layout Section
+\begin_layout Chapter
+
+\family sans
 new Scala()
 \end_layout
 
@@ -232,7 +240,9 @@ literal "false"
 
 \end_layout
 
-\begin_layout Section
+\begin_layout Chapter
+
+\family sans
 Classes & Objects
 \end_layout
 
@@ -247,7 +257,9 @@ literal "false"
 
 \end_layout
 
-\begin_layout Section
+\begin_layout Chapter
+
+\family sans
 Collections,
  Blocks & Iterators
 \end_layout
@@ -263,7 +275,9 @@ literal "false"
 
 \end_layout
 
-\begin_layout Section
+\begin_layout Chapter
+
+\family sans
 Standard Types
 \end_layout
 
@@ -278,7 +292,9 @@ literal "false"
 
 \end_layout
 
-\begin_layout Section
+\begin_layout Chapter
+
+\family sans
 Method Madness
 \end_layout
 
@@ -293,7 +309,9 @@ literal "false"
 
 \end_layout
 
-\begin_layout Section
+\begin_layout Chapter
+
+\family sans
 Expressions
 \end_layout
 
@@ -308,7 +326,9 @@ literal "false"
 
 \end_layout
 
-\begin_layout Section
+\begin_layout Chapter
+
+\family sans
 Exceptions,
  Catch & Throw
 \end_layout
@@ -324,7 +344,9 @@ literal "false"
 
 \end_layout
 
-\begin_layout Section
+\begin_layout Chapter
+
+\family sans
 Traits
 \end_layout
 
@@ -339,7 +361,9 @@ literal "false"
 
 \end_layout
 
-\begin_layout Section
+\begin_layout Chapter
+
+\family sans
 Basic IO
 \end_layout
 
@@ -354,7 +378,9 @@ literal "false"
 
 \end_layout
 
-\begin_layout Section
+\begin_layout Chapter
+
+\family sans
 Threads & Processes
 \end_layout
 
@@ -369,7 +395,9 @@ literal "false"
 
 \end_layout
 
-\begin_layout Section
+\begin_layout Chapter
+
+\family sans
 Testing
 \end_layout
 

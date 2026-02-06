@@ -96,6 +96,8 @@ The best way to learn a language that we've found is to build little mini-progra
 \end_layout
 
 \begin_layout Subsection*
+
+\family sans
 Scala is Object Oriented
 \end_layout
 
@@ -215,6 +217,8 @@ Note this is complete in and of itself.
 \end_layout
 
 \begin_layout Subsubsection*
+
+\family sans
 Common Data Types
 \end_layout
 
@@ -261,6 +265,8 @@ My Song
 \end_layout
 
 \begin_layout Subsubsection*
+
+\family sans
 Traits
 \end_layout
 
@@ -286,6 +292,8 @@ class Human extends Speakable
 \end_layout
 
 \begin_layout Subsection*
+
+\family sans
 Scala is Functional
 \end_layout
 
@@ -392,6 +400,8 @@ interpolation
 \end_layout
 
 \begin_layout Subsubsection*
+
+\family sans
 Options
 \end_layout
 
@@ -517,10 +527,14 @@ This can be a bit of a pain to get used to,
 \end_layout
 
 \begin_layout Subsection*
+
+\family sans
 Scala is Both
 \end_layout
 
 \begin_layout Subsubsection*
+
+\family sans
 Pattern Matching
 \end_layout
 
@@ -691,6 +705,8 @@ Have butter!
 \end_layout
 
 \begin_layout Subsubsection*
+
+\family sans
 Case Classes
 \end_layout
 
@@ -768,6 +784,8 @@ Not the same age!
 \end_layout
 
 \begin_layout Subsubsection*
+
+\family sans
 Collections & Comprehensions
 \end_layout
 
@@ -913,6 +931,8 @@ some_value // for each element in list_variable
 \end_layout
 
 \begin_layout Subsection*
+
+\family sans
 And Beyond...
 \end_layout
 

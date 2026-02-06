@@ -89,6 +89,8 @@
 \begin_body
 
 \begin_layout Subsection*
+
+\family sans
 Numbers
 \end_layout
 
@@ -111,6 +113,8 @@ For integers,
 \end_layout
 
 \begin_layout Subsection*
+
+\family sans
 Strings
 \end_layout
 
@@ -221,6 +225,8 @@ println(f"Pi is roughly $pi%.2f") // "Pi is roughly 3.14"
 \end_layout
 
 \begin_layout Subsection*
+
+\family sans
 Ranges
 \end_layout
 
@@ -306,6 +312,8 @@ val list = (1 to 5).toList     // List(1,
 \end_layout
 
 \begin_layout Subsection*
+
+\family sans
 Regular Expressions
 \end_layout
 
@@ -407,6 +415,8 @@ val result = """/""".r.replaceAllIn(rawPath,
 \end_layout
 
 \begin_layout Subsection*
+
+\family sans
 Other
 \end_layout
 

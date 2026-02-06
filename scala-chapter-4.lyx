@@ -104,6 +104,8 @@ There are 3 basic,
 \end_layout
 
 \begin_layout Subsection*
+
+\family sans
 Lists
 \end_layout
 
@@ -255,6 +257,8 @@ This approach encourages mapping operations & comprehensive changes (which we wi
 \end_layout
 
 \begin_layout Subsection*
+
+\family sans
 Maps (Hashes)
 \end_layout
 
@@ -322,6 +326,8 @@ Notice that there's no sequencing requirement.
 \end_layout
 
 \begin_layout Subsection*
+
+\family sans
 Vectors
 \end_layout
 
@@ -379,6 +385,8 @@ This may seem unimpressive,
 \end_layout
 
 \begin_layout Subsection*
+
+\family sans
 Blocks (aka 
 \begin_inset Quotes eld
 \end_inset

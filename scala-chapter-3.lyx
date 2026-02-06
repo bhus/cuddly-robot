@@ -197,6 +197,8 @@ pprint.pprintln(myCompany) -> [Company:
 \end_layout
 
 \begin_layout Subsection*
+
+\family sans
 Inheritance
 \end_layout
 
@@ -304,6 +306,8 @@ pprint.pprintln(myCompany)  // -->
 \end_layout
 
 \begin_layout Subsection*
+
+\family sans
 Objects and Attributes
 \end_layout
 
@@ -394,6 +398,8 @@ c.revenue // 40000
 \end_layout
 
 \begin_layout Subsection*
+
+\family sans
 Companion Objects [ aka Mixins ]
 \end_layout
 

@@ -216,6 +216,8 @@ Notice here that the trait takes a parameter,
 \end_layout
 
 \begin_layout Subsubsection*
+
+\family sans
 Instance Variables in Traits
 \end_layout
 
@@ -282,6 +284,8 @@ trait VerboseService extends WebService:
 \end_layout
 
 \begin_layout Subsubsection*
+
+\family sans
 Self-Types in Traits
 \end_layout
 
@@ -350,6 +354,8 @@ class ProductionService extends WebService,
 \end_layout
 
 \begin_layout Subsection*
+
+\family sans
 Sealed Traits
 \end_layout
 
@@ -359,6 +365,8 @@ Marking a trait as sealed forces all implementations to reside in the same file.
 \end_layout
 
 \begin_layout Subsection*
+
+\family sans
 Including Other Code
 \end_layout
 

@@ -159,6 +159,8 @@ val (success,
 \end_layout
 
 \begin_layout Subsection*
+
+\family sans
 Conditionals
 \end_layout
 
@@ -223,6 +225,8 @@ TODO:
 \end_layout
 
 \begin_layout Subsection*
+
+\family sans
 Case Expressions ( aka Matching )
 \end_layout
 
@@ -744,6 +748,8 @@ glorified if statement
 \end_layout
 
 \begin_layout Subsection*
+
+\family sans
 Loops
 \end_layout
 
@@ -848,6 +854,8 @@ side effects
 \end_layout
 
 \begin_layout Subsubsection*
+
+\family sans
 Functional Loops
 \end_layout
 

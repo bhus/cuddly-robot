@@ -90,6 +90,8 @@
 \begin_body
 
 \begin_layout Subsection*
+
+\family sans
 Installing Scala
 \end_layout
 
@@ -253,6 +255,8 @@ cmd /k
 \end_layout
 
 \begin_layout Subsection*
+
+\family sans
 Write & Run
 \end_layout
 
