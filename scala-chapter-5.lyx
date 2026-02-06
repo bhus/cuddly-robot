@@ -1,0 +1,447 @@
+#LyX 2.4 created this file. For more info see https://www.lyx.org/
+\lyxformat 620
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\use_default_options true
+\maintain_unincluded_children no
+\language american
+\language_package default
+\inputencoding utf8
+\fontencoding auto
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_roman_osf false
+\font_sans_osf false
+\font_typewriter_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\float_placement class
+\float_alignment class
+\paperfontsize default
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\use_formatted_ref 0
+\use_minted 0
+\use_lineno 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tablestyle default
+\tracking_changes false
+\output_changes false
+\change_bars false
+\postpone_fragile_content true
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\docbook_table_output 0
+\docbook_mathml_prefix 1
+\end_header
+
+\begin_body
+
+\begin_layout Subsection*
+Numbers
+\end_layout
+
+\begin_layout Standard
+Numbers are one of the aspects of scala that show it's more than just a scripting language.
+ It's an artifact of the language's underlying relationship to the jvm,
+ and honestly reflects the fact that some choices should not be abstracted away in order that we may keep code optimized.
+\end_layout
+
+\begin_layout Standard
+tldr;
+ - We still need to articulate what kind of a number we are dealing with,
+ be super-short (byte randing from -128 to 127) or super-big (bigint which can make numbers as large as your RAM will allow).
+\end_layout
+
+\begin_layout Standard
+For integers,
+ the usual choices are either Int or Long.
+ For decimeals we have either Float or Double (depending on whether you need floating point or strict decimal places).
+\end_layout
+
+\begin_layout Subsection*
+Strings
+\end_layout
+
+\begin_layout Standard
+Strings basically can be either single-character (Char) or actual string (see java.lang.String).
+ Note though that in scala we get over 200 additional methods baked into the string type.
+\end_layout
+
+\begin_layout Standard
+Literal values can be with single quotes ('a' character),
+ double quotes (
+\begin_inset Quotes eld
+\end_inset
+
+Hi there
+\begin_inset Quotes erd
+\end_inset
+
+) or multiline with triple quotes (
+\begin_inset Quotes eld
+\end_inset
+
+
+\begin_inset Quotes erd
+\end_inset
+
+
+\begin_inset Quotes erd
+\end_inset
+
+ hi there 
+\begin_inset Quotes eld
+\end_inset
+
+
+\begin_inset Quotes erd
+\end_inset
+
+
+\begin_inset Quotes erd
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Standard
+For mutliline strings,
+ we can use the pipe symbol ( | ) combined with the stripMargin method to negate the indentation prior to the pipes.
+ So 
+\end_layout
+
+\begin_layout LyX-Code
+val html = """<html>
+\end_layout
+
+\begin_layout LyX-Code
+             | <body>Hello</body>
+\end_layout
+
+\begin_layout LyX-Code
+             |</html>""".stripMargin
+\end_layout
+
+\begin_layout Standard
+basically renders the html block properly,
+ which allowing us to indent in the code for readability.
+\end_layout
+
+\begin_layout Standard
+We also get some nice interpolation options for string literals.
+ In particular s
+\begin_inset Quotes erd
+\end_inset
+
+value $var
+\begin_inset Quotes erd
+\end_inset
+
+ to allow variable values and f
+\begin_inset Quotes erd
+\end_inset
+
+Var is around $var%.2f
+\begin_inset Quotes erd
+\end_inset
+
+ to allow variable values while controlling their formatting.
+\end_layout
+
+\begin_layout LyX-Code
+val name = "Renaissance"
+\end_layout
+
+\begin_layout LyX-Code
+println(s"Welcome to $name version ${1 + 1}")
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+val pi = 3.14159
+\end_layout
+
+\begin_layout LyX-Code
+println(f"Pi is roughly $pi%.2f") // "Pi is roughly 3.14"
+\end_layout
+
+\begin_layout Subsection*
+Ranges
+\end_layout
+
+\begin_layout Standard
+Ranges are basically an abstration of lists of predetermined values that allow some useful operations while not strictly storing the entire list in memory.
+\end_layout
+
+\begin_layout LyX-Code
+var alphabet = 'a' to 'z'
+\end_layout
+
+\begin_layout Standard
+We can also add a 
+\begin_inset Quotes eld
+\end_inset
+
+ by 
+\begin_inset Quotes eld
+\end_inset
+
+ clause to progress by given increments when we iterate:
+\end_layout
+
+\begin_layout LyX-Code
+val odds = 1 to 10 by 2       // 1,
+ 3,
+ 5,
+ 7,
+ 9
+\end_layout
+
+\begin_layout Standard
+Note that 
+\begin_inset Quotes eld
+\end_inset
+
+until
+\begin_inset Quotes erd
+\end_inset
+
+ is similar to 
+\begin_inset Quotes eld
+\end_inset
+
+ to 
+\begin_inset Quotes eld
+\end_inset
+
+,
+ except it excludes the final number
+\end_layout
+
+\begin_layout LyX-Code
+var alphabet = 'a' to 'z'      // a,
+ b,
+ c,
+ d,
+ ...
+ y,
+ z
+\end_layout
+
+\begin_layout LyX-Code
+var alphabet = 'a' until 'z'   // a,
+ b,
+ c,
+ d,
+ ...
+ y
+\end_layout
+
+\begin_layout Standard
+Ranges can of course to turned into lists if we need,
+ since there is a lot more you can do to manipulate a list ( they are just a little more verbose to deal with code-wise ):
+\end_layout
+
+\begin_layout LyX-Code
+val list = (1 to 5).toList     // List(1,
+ 2,
+ 3,
+ 4,
+ 5)
+\end_layout
+
+\begin_layout Subsection*
+Regular Expressions
+\end_layout
+
+\begin_layout Standard
+Regular expressions are mostly created by defining them in a string and using the 
+\begin_inset Quotes eld
+\end_inset
+
+r
+\begin_inset Quotes erd
+\end_inset
+
+ method to convert to regex:
+\end_layout
+
+\begin_layout LyX-Code
+val EmailRegex = """([a-zA-Z0-9.-]+)@([a-zA-Z0-9.-]+
+\backslash
+.[a-zA-Z]{2,4})""".r
+\end_layout
+
+\begin_layout Standard
+We can then use these in match statements to handle cases against string:
+\end_layout
+
+\begin_layout LyX-Code
+val input = "Contact us at support@startup.io"
+\end_layout
+
+\begin_layout LyX-Code
+input match
+\end_layout
+
+\begin_layout LyX-Code
+  case EmailRegex(user,
+ domain) => 
+\end_layout
+
+\begin_layout LyX-Code
+    println(s"User:
+ $user,
+ Domain:
+ $domain")
+\end_layout
+
+\begin_layout LyX-Code
+  case _ => 
+\end_layout
+
+\begin_layout LyX-Code
+    println("No email found.")
+\end_layout
+
+\begin_layout Standard
+Unlike in other languages,
+ regex objects get methods you can invoke directly on them :
+\end_layout
+
+\begin_layout LyX-Code
+val text = "We have 10 apples and 20 oranges"
+\end_layout
+
+\begin_layout LyX-Code
+val NumberRegex = """(
+\backslash
+d+)""".r
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+val firstNum = NumberRegex.findFirstIn(text) // Some("10")
+\end_layout
+
+\begin_layout LyX-Code
+val allNums  = NumberRegex.findAllIn(text).toList // List("10",
+ "20")
+\end_layout
+
+\begin_layout Standard
+In particular,
+ one method that is often useful is the replacement method:
+\end_layout
+
+\begin_layout LyX-Code
+val rawPath = "user/profile/settings"
+\end_layout
+
+\begin_layout LyX-Code
+val result = """/""".r.replaceAllIn(rawPath,
+ " -> ") 
+\end_layout
+
+\begin_layout LyX-Code
+// Result:
+ "user -> profile -> settings"
+\end_layout
+
+\begin_layout Subsection*
+Other
+\end_layout
+
+\begin_layout Standard
+A quick note that 
+\begin_inset Quotes eld
+\end_inset
+
+Any
+\begin_inset Quotes erd
+\end_inset
+
+ data type can be used when you want to allow a variable to take any type of value.
+ Matching can then be done to handle based on type:
+\end_layout
+
+\begin_layout LyX-Code
+def process(input:
+ Any):
+ Unit = input match
+\end_layout
+
+\begin_layout LyX-Code
+  case s:
+ String => println(s"Got a string:
+ $s")
+\end_layout
+
+\begin_layout LyX-Code
+  case i:
+ Int    => println(s"Got a number:
+ $i")
+\end_layout
+
+\begin_layout LyX-Code
+  case _         => println("Got something else")
+\end_layout
+
+\end_body
+\end_document

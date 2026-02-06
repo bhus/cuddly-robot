@@ -1,0 +1,365 @@
+#LyX 2.4 created this file. For more info see https://www.lyx.org/
+\lyxformat 620
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\use_default_options true
+\maintain_unincluded_children no
+\language american
+\language_package default
+\inputencoding utf8
+\fontencoding auto
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_roman_osf false
+\font_sans_osf false
+\font_typewriter_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\float_placement class
+\float_alignment class
+\paperfontsize default
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\use_formatted_ref 0
+\use_minted 0
+\use_lineno 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tablestyle default
+\tracking_changes false
+\output_changes false
+\change_bars false
+\postpone_fragile_content true
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\docbook_table_output 0
+\docbook_mathml_prefix 1
+\end_header
+
+\begin_body
+
+\begin_layout Subsection*
+Installing Scala
+\end_layout
+
+\begin_layout Standard
+Since the jvm and scala itself are so heavily researched and actively developed,
+ scala is a moving target a little bit,
+ as is the jvm,
+ when it comes to install.
+\end_layout
+
+\begin_layout Standard
+However,
+ at the time of this writing,
+ there are really only 2 things you need.
+ Assuming you're ok with a localized install (eg.
+ not across your OS),
+ the steps are:
+\end_layout
+
+\begin_layout Itemize
+create a folder for your project
+\end_layout
+
+\begin_layout Itemize
+install JDK (temurin should be fine) to folder
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+(https://adoptium.net/en-GB/temurin/releases at the time of this writing) to project dir
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+unzip scala cli (virtuslab is a nice one) to folder
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+(https://github.com/VirtusLab/scala-cli/releases at the time of this writing) to project dir
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+add the following script to a batch file in the project root 
+\series bold
+/launch.bat
+\series default
+ file:
+\end_layout
+
+\begin_layout LyX-Code
+@echo off
+\end_layout
+
+\begin_layout LyX-Code
+::
+ Set the path to your specific JVM folder
+\end_layout
+
+\begin_layout LyX-Code
+set "JAVA_HOME=%~dp0jvm
+\backslash
+jdk-25.0.1+8"
+\end_layout
+
+\begin_layout LyX-Code
+::
+ Add our local bin and local java to the temporary PATH
+\end_layout
+
+\begin_layout LyX-Code
+set "PATH=%~dp0bin;%JAVA_HOME%
+\backslash
+bin;%PATH%"
+\end_layout
+
+\begin_layout LyX-Code
+echo ---------------------------------------
+\end_layout
+
+\begin_layout LyX-Code
+echo Scala Portable Environment Loaded!
+\end_layout
+
+\begin_layout LyX-Code
+echo ---------------------------------------
+\end_layout
+
+\begin_layout LyX-Code
+echo Java Home:
+ %JAVA_HOME%
+\end_layout
+
+\begin_layout LyX-Code
+echo.
+\end_layout
+
+\begin_layout LyX-Code
+::
+ This creates or updates the config file every time you launch
+\end_layout
+
+\begin_layout LyX-Code
+::
+ Overwrite/Create project.scala with the first line (using a single >)
+\end_layout
+
+\begin_layout LyX-Code
+(
+\end_layout
+
+\begin_layout LyX-Code
+  echo // project.scala
+\end_layout
+
+\begin_layout LyX-Code
+  echo //^> using javaOpt "--sun-misc-unsafe-memory-access=allow"
+\end_layout
+
+\begin_layout LyX-Code
+  echo //^> using javaOpt "--add-opens=java.base/java.lang=ALL-UNNAMED"
+\end_layout
+
+\begin_layout LyX-Code
+  echo //^> using dep com.lihaoyi::pprint:0.9.6
+\end_layout
+
+\begin_layout LyX-Code
+) > project.scala
+\end_layout
+
+\begin_layout LyX-Code
+::
+ Verify Java is found
+\end_layout
+
+\begin_layout LyX-Code
+java -version
+\end_layout
+
+\begin_layout LyX-Code
+echo.
+\end_layout
+
+\begin_layout LyX-Code
+::
+ Verify Scala-CLI is found
+\end_layout
+
+\begin_layout LyX-Code
+scala-cli --version
+\end_layout
+
+\begin_layout LyX-Code
+echo ---------------------------------------
+\end_layout
+
+\begin_layout LyX-Code
+cmd /k
+\end_layout
+
+\begin_layout Subsection*
+Write & Run
+\end_layout
+
+\begin_layout Standard
+Add some code:
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+/hello.sc ->
+\end_layout
+
+\begin_layout LyX-Code
+// Programmer moods
+\end_layout
+
+\begin_layout LyX-Code
+enum Mood:
+\end_layout
+
+\begin_layout LyX-Code
+  case Happy,
+ Curious,
+ Caffeinated
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+// Have empathy
+\end_layout
+
+\begin_layout LyX-Code
+def response(mood:
+ Mood) = mood match
+\end_layout
+
+\begin_layout LyX-Code
+ case Mood.Happy       => "Keep coding!"
+\end_layout
+
+\begin_layout LyX-Code
+  case Mood.Curious     => "Let's explore the source code."
+\end_layout
+
+\begin_layout LyX-Code
+  case Mood.Caffeinated => "Compiling at the speed of light!"
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+// Typical morning
+\end_layout
+
+\begin_layout LyX-Code
+val sequence = List(Mood.Happy,
+ Mood.Caffeinated)
+\end_layout
+
+\begin_layout LyX-Code
+sequence.map(response).foreach(println)
+\end_layout
+
+\begin_layout Standard
+Open scala shell with our new batch file:
+\end_layout
+
+\begin_layout LyX-Code
+
+\series bold
+% launch.bat
+\end_layout
+
+\begin_layout Standard
+Run the code:
+\end_layout
+
+\begin_layout LyX-Code
+
+\series bold
+% scala-cli .
+\end_layout
+
+\begin_layout LyX-Code
+> Compiling project (Scala 3.7.4,
+ JVM (25))
+\end_layout
+
+\begin_layout LyX-Code
+> Compiled project (Scala 3.7.4,
+ JVM (25))
+\end_layout
+
+\begin_layout LyX-Code
+> 
+\series bold
+Keep coding!
+\end_layout
+
+\begin_layout LyX-Code
+> 
+\series bold
+Compiling at the speed of light!
+\end_layout
+
+\end_body
+\end_document

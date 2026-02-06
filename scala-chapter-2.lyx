@@ -1,0 +1,1007 @@
+#LyX 2.4 created this file. For more info see https://www.lyx.org/
+\lyxformat 620
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\use_default_options true
+\maintain_unincluded_children no
+\language american
+\language_package default
+\inputencoding utf8
+\fontencoding auto
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_roman_osf false
+\font_sans_osf false
+\font_typewriter_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\float_placement class
+\float_alignment class
+\paperfontsize default
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\use_formatted_ref 0
+\use_minted 0
+\use_lineno 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tablestyle default
+\tracking_changes false
+\output_changes false
+\change_bars false
+\postpone_fragile_content true
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\docbook_table_output 0
+\docbook_mathml_prefix 1
+\end_header
+
+\begin_body
+
+\begin_layout Standard
+The best way to learn a language that we've found is to build little mini-programs to showcase the fundamental features of a language,
+ and then build out the complexity from there.
+ Scala is a language that blends a couple of design orientations together to wonderful effect.
+ 
+\end_layout
+
+\begin_layout Subsection*
+Scala is Object Oriented
+\end_layout
+
+\begin_layout Standard
+Objects are a valued paradigm in scala.
+ When figuring out how to solve a problem,
+ we determine what classes of information we want to involve.
+ In scala,
+ we can define a class like so:
+\end_layout
+
+\begin_layout LyX-Code
+// Define the class
+\end_layout
+
+\begin_layout LyX-Code
+class Song(val title:
+ String)
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+// Use it
+\end_layout
+
+\begin_layout LyX-Code
+val favoriteSong = Song(
+\begin_inset Quotes eld
+\end_inset
+
+Bad Moon Rising
+\begin_inset Quotes erd
+\end_inset
+
+)
+\end_layout
+
+\begin_layout LyX-Code
+val anotherSong = Song(
+\begin_inset Quotes eld
+\end_inset
+
+When it all Goes Wrong Again
+\begin_inset Quotes erd
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Standard
+Classes are instantiated into instances.
+ Classes can define parameters they take (such as title here),
+ which also get assigned to public fields.
+\end_layout
+
+\begin_layout Standard
+Alternatively,
+ we can define and create single objects directly in a single statement:
+\end_layout
+
+\begin_layout LyX-Code
+// Define a single object
+\end_layout
+
+\begin_layout LyX-Code
+object Jukebox:
+\end_layout
+
+\begin_deeper
+\begin_layout LyX-Code
+val brand = 
+\begin_inset Quotes eld
+\end_inset
+
+Vintage 1970
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+def play(song:
+ String):
+ Unit =
+\end_layout
+
+\begin_layout LyX-Code
+    println(s"The $brand Jukebox is now playing:
+ $song")
+\end_layout
+
+\end_deeper
+\begin_layout LyX-Code
+// Call it
+\end_layout
+
+\begin_layout LyX-Code
+Jukebox.play(
+\begin_inset Quotes eld
+\end_inset
+
+My Song
+\begin_inset Quotes erd
+\end_inset
+
+) // -> My Song
+\end_layout
+
+\begin_layout Standard
+Note this is complete in and of itself.
+ No instantiation.
+ It can be used for things like settings.
+\end_layout
+
+\begin_layout Subsubsection*
+Common Data Types
+\end_layout
+
+\begin_layout Standard
+Some examples:
+\end_layout
+
+\begin_layout LyX-Code
+\begin_inset Quotes eld
+\end_inset
+
+bubble boy
+\begin_inset Quotes erd
+\end_inset
+
+.length
+\end_layout
+
+\begin_layout LyX-Code
+\begin_inset Quotes eld
+\end_inset
+
+The Dude
+\begin_inset Quotes erd
+\end_inset
+
+.indexOf('D')
+\end_layout
+
+\begin_layout LyX-Code
+Jukebox.play(
+\begin_inset Quotes eld
+\end_inset
+
+My Song
+\begin_inset Quotes erd
+\end_inset
+
+)
+\end_layout
+
+\begin_layout LyX-Code
+-3981.abs
+\end_layout
+
+\begin_layout Subsubsection*
+Traits
+\end_layout
+
+\begin_layout Standard
+Traits are very similar to mixins in Ruby.
+ They are partial classes that can be combined into other classes.
+ Unlike inheritance (in languages like Java or C#),
+ mixins don't require any sort of hierarchical relationship.
+ They add a degree of power that conventional OO languages lack.
+\end_layout
+
+\begin_layout LyX-Code
+trait Speakable:
+\end_layout
+
+\begin_layout LyX-Code
+  def sayHi():
+ Unit = println("Hi!")
+\end_layout
+
+\begin_layout LyX-Code
+class Human extends Speakable
+\end_layout
+
+\begin_layout Subsection*
+Scala is Functional
+\end_layout
+
+\begin_layout Standard
+Chains of function calls are encouraged:
+\end_layout
+
+\begin_layout LyX-Code
+val rawUsers = List("boop_ai",
+ "sttp_dev",
+ "scala_fan",
+ "doobie_pro")
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+val result = rawUsers
+\end_layout
+
+\begin_layout LyX-Code
+  .map(_.replace("_",
+ " "))    // 1.
+ Transform:
+ Replace underscores
+\end_layout
+
+\begin_layout LyX-Code
+  .map(_.capitalize)           // 2.
+ Transform:
+ Capitalize first letter
+\end_layout
+
+\begin_layout LyX-Code
+  .filter(_.length > 8)        // 3.
+ Filter:
+ Only keep long names
+\end_layout
+
+\begin_layout LyX-Code
+  .sorted                      // 4.
+ Sort:
+ Alphabetical order
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+println(s"Verified Users:
+ $result")
+\end_layout
+
+\begin_layout Standard
+A couple of quick things you will notice:
+\end_layout
+
+\begin_layout Standard
+- 
+\begin_inset Quotes eld
+\end_inset
+
+_
+\begin_inset Quotes erd
+\end_inset
+
+ indicates each individual value of the list as we iterate through
+\end_layout
+
+\begin_layout Standard
+- 
+\begin_inset Quotes eld
+\end_inset
+
+.sorted
+\begin_inset Quotes erd
+\end_inset
+
+ sorts the list based on it's data type
+\end_layout
+
+\begin_layout Standard
+- s
+\begin_inset Quotes erd
+\end_inset
+
+value
+\begin_inset Quotes erd
+\end_inset
+
+ tells us we have variable values we will be substituting in,
+ aka 
+\begin_inset Quotes eld
+\end_inset
+
+interpolation
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+Options
+\end_layout
+
+\begin_layout Standard
+In scala,
+ nulls are rarity.
+ Wherever we have a value that may or may not be present,
+ we use Option data types.
+ The Option basically takes a class,
+ and can be assigned values of that class.
+ The key,
+ however,
+ is that it also distinguishes between *some* data and *no* data.
+\end_layout
+
+\begin_layout Standard
+This is a key difference from more conventional languages.
+ In a language like ruby or python (or even Java!),
+ we often find ourselves writing logic gates by conditions as follows:
+\end_layout
+
+\begin_layout LyX-Code
+if (data != null) {
+\end_layout
+
+\begin_layout LyX-Code
+  // do something amazing,
+ maybe with the data value itself
+\end_layout
+
+\begin_layout LyX-Code
+}
+\end_layout
+
+\begin_layout Standard
+In these cases,
+ before we ever use the value,
+ we want to make sure it has something in it.
+\end_layout
+
+\begin_layout Standard
+This pattern is kind of ugly and dangerous,
+ since the 
+\begin_inset Quotes eld
+\end_inset
+
+empty
+\begin_inset Quotes erd
+\end_inset
+
+ state is 
+\begin_inset Quotes eld
+\end_inset
+
+null
+\begin_inset Quotes erd
+\end_inset
+
+ and therefore if we don't do the check but still use it,
+ it can fail (sometimes in really bad ways).
+\end_layout
+
+\begin_layout Standard
+So scala introduced an 
+\begin_inset Quotes eld
+\end_inset
+
+Option
+\begin_inset Quotes erd
+\end_inset
+
+ type:
+\end_layout
+
+\begin_layout LyX-Code
+val user:
+ Option[String] = Some("Albertus")
+\end_layout
+
+\begin_layout LyX-Code
+val unknown:
+ Option[String] = None
+\end_layout
+
+\begin_layout LyX-Code
+println(user.getOrElse("Guest"))
+\end_layout
+
+\begin_layout Standard
+Note that now,
+ when the value is assigned,
+ it *must* specify that it either has *Some* value or no value (None).
+ There is no 
+\begin_inset Quotes eld
+\end_inset
+
+null
+\begin_inset Quotes erd
+\end_inset
+
+ state available.
+\end_layout
+
+\begin_layout Standard
+Then,
+ when the variable is used,
+ we *must* state (implicitly) what we will do if the variable has no value (
+\begin_inset Quotes eld
+\end_inset
+
+getOrElse
+\begin_inset Quotes erd
+\end_inset
+
+).
+ Every dereference of the value must also tell the software what to do if there is no value in the variable.
+\end_layout
+
+\begin_layout Standard
+This can be a bit of a pain to get used to,
+ but forces a degree of safety,
+ thoroughness & clarity.
+\end_layout
+
+\begin_layout Subsection*
+Scala is Both
+\end_layout
+
+\begin_layout Subsubsection*
+Pattern Matching
+\end_layout
+
+\begin_layout Standard
+match statements are a cornerstone of scala,
+ taking the crown as the preferred method of control flow:
+\end_layout
+
+\begin_layout LyX-Code
+val whiteSauceRecipe = 
+\begin_inset Quotes eld
+\end_inset
+
+Mix butter,
+ flour & water.
+ Heat to reduce.
+\begin_inset Quotes erd
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+var recipe = whiteSauceRecipe
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+val result = recipe.indexOf(
+\begin_inset Quotes eld
+\end_inset
+
+butter
+\begin_inset Quotes erd
+\end_inset
+
+) match
+\end_layout
+
+\begin_layout LyX-Code
+  case n if n >= 0 => 
+\begin_inset Quotes eld
+\end_inset
+
+Have butter!
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+  case _ => 
+\begin_inset Quotes eld
+\end_inset
+
+Tastes bland
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+So in scala,
+ we can 
+\begin_inset Quotes eld
+\end_inset
+
+match
+\begin_inset Quotes erd
+\end_inset
+
+ expressions and take actions based on different results (like a switch statement or multiple if statements but compressed).
+\end_layout
+
+\begin_layout Standard
+So in this case,
+ we 
+\begin_inset Quotes eld
+\end_inset
+
+match
+\begin_inset Quotes erd
+\end_inset
+
+ against the expression
+\series bold
+ recipe.indexOf(
+\begin_inset Quotes eld
+\end_inset
+
+butter
+\begin_inset Quotes erd
+\end_inset
+
+)
+\series default
+,
+ with a 
+\begin_inset Quotes eld
+\end_inset
+
+case
+\begin_inset Quotes erd
+\end_inset
+
+ clause for each type of value we want to handle.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Quotes eld
+\end_inset
+
+case _
+\begin_inset Quotes erd
+\end_inset
+
+ is the 
+\begin_inset Quotes eld
+\end_inset
+
+catch all
+\begin_inset Quotes erd
+\end_inset
+
+ case where if we don't match against anything else,
+ we return the given value (
+\begin_inset Quotes eld
+\end_inset
+
+Tastes bland
+\begin_inset Quotes erd
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Standard
+So in our case,
+ because whiteSauceRecipe contains the substring 
+\begin_inset Quotes eld
+\end_inset
+
+butter
+\begin_inset Quotes erd
+\end_inset
+
+ (at index 4),
+ we match against the first case ( since 4 >= 0 ),
+ and return the value 
+\begin_inset Quotes eld
+\end_inset
+
+Have butter!
+\begin_inset Quotes erd
+\end_inset
+
+.
+ This in turn gets assigned to variable result.
+\end_layout
+
+\begin_layout Subsubsection*
+Case Classes
+\end_layout
+
+\begin_layout Standard
+Case Classes are classes that get a few extras thrown in.
+ We get succinct field definitions plus a constructor wrapped into one statement.
+\end_layout
+
+\begin_layout LyX-Code
+case class Player(name:
+ String,
+ age:
+ Int)
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+val mario = Person(
+\begin_inset Quotes eld
+\end_inset
+
+Mario Menendez
+\begin_inset Quotes erd
+\end_inset
+
+,
+ 27)
+\end_layout
+
+\begin_layout LyX-Code
+val luigi = Persion(
+\begin_inset Quotes eld
+\end_inset
+
+Luigi Verdi
+\begin_inset Quotes erd
+\end_inset
+
+,
+ 29)
+\end_layout
+
+\begin_layout Standard
+With this single declaraction,
+ we get a class we can instantiate quickly.
+ We also get built in operations for things like comparison,
+ pretty-printing and copying.
+\end_layout
+
+\begin_layout LyX-Code
+if (mario.age != luigi.age)
+\end_layout
+
+\begin_layout LyX-Code
+  println(
+\begin_inset Quotes erd
+\end_inset
+
+Not the same age!
+\begin_inset Quotes erd
+\end_inset
+
+) // notice no s
+\begin_inset Quotes erd
+\end_inset
+
+
+\begin_inset Quotes erd
+\end_inset
+
+ since no substitution required
+\end_layout
+
+\begin_layout Subsubsection*
+Collections & Comprehensions
+\end_layout
+
+\begin_layout Standard
+Lists are declared as you would expect:
+\end_layout
+
+\begin_layout LyX-Code
+val numbers = List(1,
+ 2,
+ 3)
+\end_layout
+
+\begin_layout Standard
+The magic comes from 
+\emph on
+comprehensions
+\emph default
+:
+\end_layout
+
+\begin_layout LyX-Code
+val doubled = 
+\series bold
+for
+\series default
+ n 
+\series bold
+<-
+\series default
+ numbers 
+\series bold
+yield
+\series default
+ n * 2
+\end_layout
+
+\begin_layout Standard
+For those unfamiliar,
+ comprehensions operate on the *entire list*,
+ and return (usually) an updated list with each element altered by the value the code block 
+\emph on
+yields
+\emph default
+.
+ So in this case,
+ we get a list of the form List(2,
+ 4,
+ 6).
+\end_layout
+
+\begin_layout Standard
+You can see the syntax here,
+ albeit a bit out of order from normal:
+\end_layout
+
+\begin_layout Standard
+- the statement starts with a _for_
+\end_layout
+
+\begin_layout Standard
+- the 
+\begin_inset Quotes eld
+\end_inset
+
+n
+\begin_inset Quotes erd
+\end_inset
+
+ defines a parameter that will take the value of each element of the list at a time
+\end_layout
+
+\begin_layout Standard
+- for each element,
+ we then execute the code to the right of the 
+\begin_inset Quotes eld
+\end_inset
+
+<-
+\begin_inset Quotes erd
+\end_inset
+
+ operator
+\end_layout
+
+\begin_layout Standard
+- the 
+\begin_inset Quotes eld
+\end_inset
+
+yield
+\begin_inset Quotes erd
+\end_inset
+
+ statement says,
+ for each element in the loop,
+ return this new value (in this case n * 2)
+\end_layout
+
+\begin_layout Standard
+So,
+ in effect,
+ we say 
+\end_layout
+
+\begin_layout LyX-Code
+
+\series bold
+for
+\series default
+ 
+\emph on
+i
+\emph default
+ 
+\series bold
+<-
+\series default
+ 
+\emph on
+list_variable
+\end_layout
+
+\begin_layout LyX-Code
+  ...
+ do some calculations ...
+\end_layout
+
+\begin_layout LyX-Code
+  
+\series bold
+yield
+\series default
+ 
+\emph on
+some_value // for each element in list_variable
+\end_layout
+
+\begin_layout Standard
+...
+ and that's it!
+ This combination of features really does yield a powerful set of capabilities.
+\end_layout
+
+\begin_layout Subsection*
+And Beyond...
+\end_layout
+
+\begin_layout Standard
+A common use case for scala is to deal with data.
+ Here's a what a small db interaction looks like:
+\end_layout
+
+\begin_layout LyX-Code
+package io.startup.api
+\end_layout
+
+\begin_layout LyX-Code
+import sttp.client3.* // Wildcard import
+\end_layout
+
+\begin_layout LyX-Code
+import doobie.* // Database tools
+\end_layout
+
+\begin_layout LyX-Code
+import doobie.implicits.* // Magic "glue" for SQL
+\end_layout
+
+\begin_layout LyX-Code
+// A Trait that defines "State" for our database access
+\end_layout
+
+\begin_layout LyX-Code
+trait DBConfig:
+\end_layout
+
+\begin_layout LyX-Code
+  val xa = Transactor.fromDriverManager[IO](
+\end_layout
+
+\begin_layout LyX-Code
+    "org.postgresql.Driver",
+ "jdbc:postgresql:db",
+ "user",
+ "pass"
+\end_layout
+
+\begin_layout LyX-Code
+  )
+\end_layout
+
+\begin_layout LyX-Code
+// A Case Class for our data
+\end_layout
+
+\begin_layout LyX-Code
+case class Product(id:
+ Int,
+ name:
+ String)
+\end_layout
+
+\begin_layout LyX-Code
+// Our main logic mixing it all in
+\end_layout
+
+\begin_layout LyX-Code
+object ProductService extends DBConfig:
+\end_layout
+
+\begin_layout LyX-Code
+  def getProduct(id:
+ Int) = 
+\end_layout
+
+\begin_layout LyX-Code
+    sql"select id,
+ name from products where id = $id"
+\end_layout
+
+\begin_layout LyX-Code
+      .query[Product]
+\end_layout
+
+\begin_layout LyX-Code
+      .unique
+\end_layout
+
+\begin_layout LyX-Code
+      .transact(xa)
+\end_layout
+
+\begin_layout Standard
+Our solution makes use of the sttp client library and the doobie database tools (magic).
+\end_layout
+
+\end_body
+\end_document

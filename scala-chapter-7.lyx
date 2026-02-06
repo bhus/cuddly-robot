@@ -1,0 +1,1007 @@
+#LyX 2.4 created this file. For more info see https://www.lyx.org/
+\lyxformat 620
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\use_default_options true
+\maintain_unincluded_children no
+\language american
+\language_package default
+\inputencoding utf8
+\fontencoding auto
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_roman_osf false
+\font_sans_osf false
+\font_typewriter_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\float_placement class
+\float_alignment class
+\paperfontsize default
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\use_formatted_ref 0
+\use_minted 0
+\use_lineno 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tablestyle default
+\tracking_changes false
+\output_changes false
+\change_bars false
+\postpone_fragile_content true
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\docbook_table_output 0
+\docbook_mathml_prefix 1
+\end_header
+
+\begin_body
+
+\begin_layout Standard
+Like many other scripting languages,
+ scala allows to alter methods at a pretty profound level.
+ You can override '+' operator.
+\end_layout
+
+\begin_layout LyX-Code
+case class Position(x:
+ Int,
+ y:
+ Int):
+\end_layout
+
+\begin_layout LyX-Code
+  // Define the '+' method
+\end_layout
+
+\begin_layout LyX-Code
+  def +(other:
+ Position):
+ Position =
+\end_layout
+
+\begin_layout LyX-Code
+    Position(this.x + other.x,
+ this.y + other.y)
+\end_layout
+
+\begin_layout LyX-Code
+val p1 = Position(10,
+ 20)
+\end_layout
+
+\begin_layout LyX-Code
+val p2 = Position(5,
+ 5)
+\end_layout
+
+\begin_layout LyX-Code
+// Now you can use it like a native operator!
+\end_layout
+
+\begin_layout LyX-Code
+val p3 = p1 + p2 
+\end_layout
+
+\begin_layout LyX-Code
+// Result:
+ Position(15,
+ 25)
+\end_layout
+
+\begin_layout Standard
+This was a little surprising to us when we first realized this,
+ but allows for the same level of customization usually reserved for scripting languages like Ruby.
+\end_layout
+
+\begin_layout Standard
+As mentioned earlier,
+ parallel assignment is also supported in scala:
+\end_layout
+
+\begin_layout LyX-Code
+val (success,
+ fail) = (res.getOrElse("ok",
+ 0),
+ res.getOrElse("error",
+ 0))
+\end_layout
+
+\begin_layout Subsection*
+Conditionals
+\end_layout
+
+\begin_layout Standard
+scala makes extensive use of options to get around null values.
+ We use the 
+\begin_inset Quotes eld
+\end_inset
+
+Elvis-style
+\begin_inset Quotes erd
+\end_inset
+
+ operators to get values from options,
+ specifying 
+\begin_inset Quotes eld
+\end_inset
+
+coalescing
+\begin_inset Quotes erd
+\end_inset
+
+ type default values if the option is 
+\begin_inset Quotes eld
+\end_inset
+
+None
+\begin_inset Quotes erd
+\end_inset
+
+:
+\end_layout
+
+\begin_layout LyX-Code
+val storedName:
+ Option[String] = None
+\end_layout
+
+\begin_layout LyX-Code
+// Instead of:
+ name ||= "Default"
+\end_layout
+
+\begin_layout LyX-Code
+val name = storedName.getOrElse("Guest")
+\end_layout
+
+\begin_layout Standard
+\begin_inset Quotes eld
+\end_inset
+
+if guards
+\begin_inset Quotes erd
+\end_inset
+
+ s allow us to modify several data structures to skip execution in the given condition
+\end_layout
+
+\begin_layout Standard
+TODO:
+ ^^– fill this in
+\end_layout
+
+\begin_layout Subsection*
+Case Expressions ( aka Matching )
+\end_layout
+
+\begin_layout Standard
+We have now reached a pivotal moment.
+ Case expressions are one of the defining features of scala.
+\end_layout
+
+\begin_layout Standard
+The syntax is deceptively simple:
+\end_layout
+
+\begin_layout LyX-Code
+
+\emph on
+input_expression
+\emph default
+ 
+\series bold
+match
+\series default
+  
+\end_layout
+
+\begin_layout LyX-Code
+  
+\series bold
+case
+\series default
+ 
+\emph on
+case_condition_1
+\emph default
+    => 
+\emph on
+action_block_1
+\end_layout
+
+\begin_layout LyX-Code
+  
+\series bold
+case
+\series default
+ 
+\emph on
+case_condition_2
+\emph default
+    => 
+\emph on
+action_block_2
+\end_layout
+
+\begin_layout LyX-Code
+  ...
+\end_layout
+
+\begin_layout LyX-Code
+  
+\series bold
+case
+\series default
+ _                   => 
+\emph on
+default_action_block
+\end_layout
+
+\begin_layout Standard
+The input_expression is an expression that will be evaluated.
+\end_layout
+
+\begin_layout Standard
+Each case condition is then compared to the input_expression (in the same way a regular expression is compared to a string).
+ The code/action block associated with the first case condition that matches is what gets executed,
+ and the result of the block is returned.
+ 
+\end_layout
+
+\begin_layout Standard
+The input_expression can be virtually any variable or value,
+ and the case conditions are quite varied,
+ enabling anything from a simple match on class types to matches on specific attributes of objects.
+ And each case can be a unique category – one condition may match on type,
+ whereas the next may match on a value.
+ Let's look at an example:
+\end_layout
+
+\begin_layout LyX-Code
+val toTest:
+ 
+\series bold
+Any
+\series default
+ = "Success"
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+toTest 
+\series bold
+match
+\end_layout
+
+\begin_layout LyX-Code
+  
+\series bold
+case
+\series default
+ 0            => println("It's a zero")       // Constant match
+\end_layout
+
+\begin_layout LyX-Code
+  
+\series bold
+case
+\series default
+ "Success"    => println("It's a win!")        // String match
+\end_layout
+
+\begin_layout LyX-Code
+  
+\series bold
+case
+\series default
+ s:
+ String    => println(s"It's a string:
+ $s") // Type match
+\end_layout
+
+\begin_layout LyX-Code
+  
+\series bold
+case
+\series default
+ _            => println("Fallback")           // Wildcard (catch-all)
+\end_layout
+
+\begin_layout Standard
+Notice that the first case_condition is a comparison to see if the value of match is '0'.
+ Even though this is an integer,
+ the comparison is fine and will simply return a false,
+ moving to the next case.
+\end_layout
+
+\begin_layout Standard
+Subsequent case conditions are:
+ comparison to see if the value is 
+\begin_inset Quotes eld
+\end_inset
+
+Success
+\begin_inset Quotes erd
+\end_inset
+
+ (which it actually is),
+ comparison to type to see if it's a string,
+ and then the default catch all.
+ 
+\end_layout
+
+\begin_layout Standard
+Notice as well that the action blocks are simply printing output and not returning any result.
+ This is perfectly fine,
+ burt we can also do more:
+\end_layout
+
+\begin_layout LyX-Code
+
+\series bold
+val
+\series default
+ status = 404
+\end_layout
+
+\begin_layout LyX-Code
+
+\series bold
+val
+\series default
+ message = status 
+\series bold
+match
+\end_layout
+
+\begin_layout LyX-Code
+  
+\series bold
+case
+\series default
+ 200 => "OK"
+\end_layout
+
+\begin_layout LyX-Code
+  
+\series bold
+case
+\series default
+ 404 => "Not Found"
+\end_layout
+
+\begin_layout LyX-Code
+  
+\series bold
+case
+\series default
+ 500 => "Internal Server Error"
+\end_layout
+
+\begin_layout LyX-Code
+  
+\series bold
+case
+\series default
+ _   => "Unknown Status"
+\end_layout
+
+\begin_layout LyX-Code
+println(message) // "Not Found"
+\end_layout
+
+\begin_layout Standard
+Notice the we have a match expression,
+ and then we are assigning the output to a val variable.
+ This is often the preferred method of usage,
+ when possible.
+\end_layout
+
+\begin_layout Standard
+Now,
+ as we mentioned,
+ we can match on classes and attribute values,
+ using 
+\emph on
+destructuring
+\emph default
+ to match on the 
+\begin_inset Quotes eld
+\end_inset
+
+insides
+\begin_inset Quotes erd
+\end_inset
+
+ of a class.
+ In fact,
+ we can combine these as follows:
+\end_layout
+
+\begin_layout LyX-Code
+case class User(name:
+ String,
+ role:
+ String)
+\end_layout
+
+\begin_layout LyX-Code
+val user = User("Alice",
+ "Admin")
+\end_layout
+
+\begin_layout LyX-Code
+user 
+\series bold
+match
+\end_layout
+
+\begin_layout LyX-Code
+  
+\series bold
+case
+\series default
+ 
+\series bold
+\emph on
+User("Alice",
+ _)
+\series default
+\emph default
+      => println("Found Alice,
+ regardless of role")
+\end_layout
+
+\begin_layout LyX-Code
+  
+\series bold
+case
+\series default
+ 
+\series bold
+\emph on
+User(name,
+ "Admin")
+\series default
+\emph default
+   => println(s"Found an Admin named $name")
+\end_layout
+
+\begin_layout LyX-Code
+  
+\series bold
+case
+\series default
+ 
+\series bold
+\emph on
+User(name,
+ role)
+\series default
+\emph default
+      => println(s"Found $name who is a $role")
+\end_layout
+
+\begin_layout Standard
+So this is where things start to diverge from the norm a bit.
+ We can see int he first case,
+ we are saying 
+\begin_inset Quotes eld
+\end_inset
+
+match on when the input_expression when it's a User and the name is 'Alice'
+\begin_inset Quotes erd
+\end_inset
+
+.
+ We don't care what the role is ( hence the 
+\begin_inset Quotes eld
+\end_inset
+
+_
+\begin_inset Quotes erd
+\end_inset
+
+ ).
+ 
+\end_layout
+
+\begin_layout Standard
+Notice that when we add a variable name to the destructured class in the case condition,
+ we get the matching value assigned into a variable of that name that we can use in the corresponding action block.
+\end_layout
+
+\begin_layout Standard
+Scala takes this even further down the functional road,
+ enabling matching on the shape of lists:
+\end_layout
+
+\begin_layout LyX-Code
+val list = List(1,
+ 2,
+ 3)
+\end_layout
+
+\begin_layout LyX-Code
+list 
+\series bold
+match
+\end_layout
+
+\begin_layout LyX-Code
+  
+\series bold
+case
+\series default
+ Nil               => "Empty list"
+\end_layout
+
+\begin_layout LyX-Code
+  
+\series bold
+case
+\series default
+ List(x)           => s"Only one element:
+ $x"
+\end_layout
+
+\begin_layout LyX-Code
+  
+\series bold
+case
+\series default
+ head ::
+ tail      => s"Starts with $head,
+ followed by $tail"
+\end_layout
+
+\begin_layout LyX-Code
+  
+\series bold
+case
+\series default
+ List(1,
+ _*)       => "Starts with 1 and has other stuff"
+\end_layout
+
+\begin_layout Standard
+Notice now this is quite flexible,
+ allowing comparison even to 
+\series bold
+Nil 
+\series default
+in the first case,
+ but then matching on the 'single element list' shape,
+ a list with a head and then tail elements,
+ and even a mix where we match on 
+\begin_inset Quotes eld
+\end_inset
+
+head
+\begin_inset Quotes erd
+\end_inset
+
+ value of 1 and then tail of n.
+\end_layout
+
+\begin_layout Standard
+But there's more (this is one of the favored constructs in the language after all):
+ 
+\end_layout
+
+\begin_layout LyX-Code
+val score = 95
+\end_layout
+
+\begin_layout LyX-Code
+score 
+\series bold
+match
+\end_layout
+
+\begin_layout LyX-Code
+  
+\series bold
+case
+\series default
+ s 
+\emph on
+if
+\emph default
+ s >= 90 
+\series bold
+=>
+\series default
+ "A Grade"
+\end_layout
+
+\begin_layout LyX-Code
+  
+\series bold
+case
+\series default
+ s 
+\emph on
+if
+\emph default
+ s >= 80 
+\series bold
+=>
+\series default
+ "B Grade"
+\end_layout
+
+\begin_layout LyX-Code
+  
+\series bold
+case
+\series default
+ _            
+\series bold
+=>
+\series default
+ "Keep trying!"
+\end_layout
+
+\begin_layout Standard
+In the case conditions,
+ we can add 
+\begin_inset Quotes eld
+\end_inset
+
+if conditions
+\begin_inset Quotes erd
+\end_inset
+
+.
+ So not only can we match on class type and their attribute values,
+ but of course we can match on raw values themselves.
+ In the example above,
+ we check if the score is in a 
+\begin_inset Quotes eld
+\end_inset
+
+range
+\begin_inset Quotes erd
+\end_inset
+
+ in the first 2 clauses:
+ in the first,
+ if it's above 90,
+ then the first case action block gets evaluated,
+ in the second,
+ if it's above 80 (but below 90 since the first case failed),
+ the second action block gets evaluated.
+ 
+\end_layout
+
+\begin_layout Standard
+So a good way to think of this is the case expressions provide a table of contents to the possible actions that can be taken.
+ It's not a simple 
+\begin_inset Quotes eld
+\end_inset
+
+glorified if statement
+\begin_inset Quotes erd
+\end_inset
+
+ anymore.
+\end_layout
+
+\begin_layout Subsection*
+Loops
+\end_layout
+
+\begin_layout Standard
+When I first started looking back into functional languages,
+ one thing I noticed was actually a distinct *lack* of explicit loops.
+ This alwasy used to blow my procedural,
+ OO mind.
+ But as it turns out,
+ it reflects a diffeent approach to problem solving altogether.
+\end_layout
+
+\begin_layout LyX-Code
+val apps = List("sttp",
+ "Doobie",
+ "Tapir")
+\end_layout
+
+\begin_layout LyX-Code
+
+\series bold
+for
+\series default
+ app 
+\series bold
+<-
+\series default
+ apps 
+\series bold
+do
+\end_layout
+
+\begin_layout LyX-Code
+  println(s"Learning $app...")
+\end_layout
+
+\begin_layout Standard
+This is a 
+\begin_inset Quotes eld
+\end_inset
+
+foreach
+\begin_inset Quotes erd
+\end_inset
+
+ loop in scala.
+ Syntax is a little tighter,
+ but at a glance you can see the structure clearly.
+ We declare an iteration variable,
+ 
+\begin_inset Quotes eld
+\end_inset
+
+app
+\begin_inset Quotes erd
+\end_inset
+
+,
+ that gets assigned to each element of the list successively and then the following code block is executed for each instance.
+\end_layout
+
+\begin_layout Standard
+This is used when the code block has *side effects* – like interactions with I/O,
+ database transactions,
+ file system calls,
+ etc
+\end_layout
+
+\begin_layout Standard
+While loops are also available when needed:
+\end_layout
+
+\begin_layout LyX-Code
+var i = 0
+\end_layout
+
+\begin_layout LyX-Code
+while i < 3 do
+\end_layout
+
+\begin_layout LyX-Code
+  println(i)
+\end_layout
+
+\begin_layout LyX-Code
+  i += 1
+\end_layout
+
+\begin_layout Standard
+But in scala,
+ 
+\begin_inset Quotes eld
+\end_inset
+
+side effects
+\begin_inset Quotes erd
+\end_inset
+
+ that occur with other logic is very much frowned upon.
+ It's a mind shift,
+ but it turns out it's one that translates quite well even when dealing with large quantities of data.
+\end_layout
+
+\begin_layout Subsubsection*
+Functional Loops
+\end_layout
+
+\begin_layout Standard
+So in scala,
+ we rarely want to just loop.
+ Usually,
+ this is called in the context of taking a list of things and transforming it into another list (can be single element) of things.
+\end_layout
+
+\begin_layout Standard
+A trivial example is as follows:
+\end_layout
+
+\begin_layout LyX-Code
+val numbers = List(1,
+ 2,
+ 3)
+\end_layout
+
+\begin_layout LyX-Code
+val doubled = numbers.map(n => n * 2) 
+\end_layout
+
+\begin_layout LyX-Code
+// Result:
+ List(2,
+ 4,
+ 6)
+\end_layout
+
+\begin_layout Standard
+Less 
+\begin_inset Quotes eld
+\end_inset
+
+doing
+\begin_inset Quotes erd
+\end_inset
+
+.
+ More 
+\begin_inset Quotes eld
+\end_inset
+
+evolving
+\begin_inset Quotes erd
+\end_inset
+
+ into something new.
+\end_layout
+
+\begin_layout Standard
+We can add a 
+\begin_inset Quotes eld
+\end_inset
+
+yield
+\begin_inset Quotes erd
+\end_inset
+
+ statement too and turn this into factory that produces objects based on conditions (eg.
+ filters):
+\end_layout
+
+\begin_layout LyX-Code
+val names = List("alice",
+ "bob",
+ "charlie")
+\end_layout
+
+\begin_layout LyX-Code
+val capitalized = for 
+\end_layout
+
+\begin_layout LyX-Code
+  name <- names
+\end_layout
+
+\begin_layout LyX-Code
+  if name.startsWith("a") // Remember our "Guard" from earlier?
+\end_layout
+
+\begin_layout LyX-Code
+yield 
+\end_layout
+
+\begin_layout LyX-Code
+  name.capitalize
+\end_layout
+
+\begin_layout LyX-Code
+// Result:
+ List("Alice")
+\end_layout
+
+\begin_layout Standard
+There are actually a couple of things to note here:
+\end_layout
+
+\begin_layout Standard
+- the line after the 
+\begin_inset Quotes eld
+\end_inset
+
+for
+\begin_inset Quotes erd
+\end_inset
+
+ keyword is called a 
+\series bold
+generator:
+
+\series default
+ it dictates the iterator variable that each element of the collection gets assigned to.
+ 
+\end_layout
+
+\begin_layout Standard
+- the line prior to the 
+\begin_inset Quotes eld
+\end_inset
+
+yield
+\begin_inset Quotes erd
+\end_inset
+
+ is called a 
+\series bold
+guard
+\series default
+:
+ it's the condition under which the yield gets invoked (otherwise continuing to the next loop iteration,
+ not returning anything)
+\end_layout
+
+\begin_layout Standard
+- the yield keyword says 
+\begin_inset Quotes eld
+\end_inset
+
+return the result in this case
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+- the value after the yield dictates what the actual result is that should be returned
+\end_layout
+
+\begin_layout Standard
+It may help to know that scala was very much designed from a mathematical background,
+ valuing symmetry and comprehensive logic over traditional programming idioms.
+\end_layout
+
+\end_body
+\end_document

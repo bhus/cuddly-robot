@@ -1,0 +1,411 @@
+#LyX 2.4 created this file. For more info see https://www.lyx.org/
+\lyxformat 620
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\use_default_options true
+\maintain_unincluded_children no
+\language american
+\language_package default
+\inputencoding utf8
+\fontencoding auto
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_roman_osf false
+\font_sans_osf false
+\font_typewriter_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\float_placement class
+\float_alignment class
+\paperfontsize default
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\use_formatted_ref 0
+\use_minted 0
+\use_lineno 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tablestyle default
+\tracking_changes false
+\output_changes false
+\change_bars false
+\postpone_fragile_content true
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\docbook_table_output 0
+\docbook_mathml_prefix 1
+\end_header
+
+\begin_body
+
+\begin_layout Standard
+Traits are the last major component of the scala language (as of this writing),
+ but also considered a major feature.
+\end_layout
+
+\begin_layout Standard
+In prior versions of scala,
+ trait behaved like interfaces – they simply defined what methods that class that was implementing them needed.
+\end_layout
+
+\begin_layout Standard
+Now,
+ however,
+ traits have grown into more than that.
+ They now provide the same benefits as mixins in Ruby.
+ Let's look at an example:
+\end_layout
+
+\begin_layout LyX-Code
+trait Logger:
+\end_layout
+
+\begin_layout LyX-Code
+  def log(msg:
+ String):
+ Unit                 // Abstract:
+ No body
+\end_layout
+
+\begin_layout LyX-Code
+  def info(msg:
+ String) = log(s"[INFO] $msg") // Concrete:
+ Has a body
+\end_layout
+
+\begin_layout Standard
+So we can see here that the log method only has a return type ( :
+ Unit),
+ but no body.
+ This is abstract and simply defines what must be defined on the class.
+\end_layout
+
+\begin_layout Standard
+The info method,
+ however,
+ is a full implementation in and of itself – as you can tell by the body following 
+\begin_inset Quotes eld
+\end_inset
+
+=
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Traits are then 
+\begin_inset Quotes eld
+\end_inset
+
+mixed in
+\begin_inset Quotes erd
+\end_inset
+
+ to classes using the 
+\series bold
+extends
+\series default
+ clause:
+\end_layout
+
+\begin_layout LyX-Code
+class GenericService extends Logger:
+\end_layout
+
+\begin_layout LyX-Code
+  def log(msg:
+ String) = println(msg)
+\end_layout
+
+\begin_layout Standard
+Note that return result of 
+\begin_inset Quotes eld
+\end_inset
+
+Unit
+\begin_inset Quotes erd
+\end_inset
+
+ is the default for methods that don't mention an explicit return type.
+ In the trait definition we *need* this hower,
+ in order to denote that there is no body
+\end_layout
+
+\begin_layout Standard
+We can see that the log method defined in Logger is fully defined in the class that extends it.
+\end_layout
+
+\begin_layout Standard
+A more robust example:
+\end_layout
+
+\begin_layout LyX-Code
+trait DatabaseConfig(val dbName:
+ String)
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+class DoobieRepository(name:
+ String) extends DatabaseConfig(name):
+\end_layout
+
+\begin_layout LyX-Code
+  def connect() = println(s"Connecting to $dbName")
+\end_layout
+
+\begin_layout Standard
+Notice here that the trait takes a parameter,
+ which then is required by the class and mentioned in the extends clause.
+ This allows the trait to make explicit assumptions about attributes available to its methods.
+\end_layout
+
+\begin_layout Subsubsection*
+Instance Variables in Traits
+\end_layout
+
+\begin_layout Standard
+Traits can define members they expect to see in the classes that implement them (and even populate them by default):
+\end_layout
+
+\begin_layout LyX-Code
+trait TaskOptimizer:
+\end_layout
+
+\begin_layout LyX-Code
+  // The trait expects this to exist
+\end_layout
+
+\begin_layout LyX-Code
+  def priority:
+ Int 
+\end_layout
+
+\begin_layout LyX-Code
+  def computeSchedule() = 
+\end_layout
+
+\begin_layout LyX-Code
+    if priority > 10 then "Run Now" else "Wait"
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+class DatabaseTask(val priority:
+ Int) extends TaskOptimizer
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+val job = DatabaseTask(priority = 15)
+\end_layout
+
+\begin_layout LyX-Code
+println(job.computeSchedule()) // "Run Now"
+\end_layout
+
+\begin_layout Standard
+Note that in the trait we define the trait in much the same way as a method - minus the parenthes.
+\end_layout
+
+\begin_layout Standard
+Traits can also override the state from the class they inherit from:
+\end_layout
+
+\begin_layout LyX-Code
+trait VerboseService extends WebService:
+\end_layout
+
+\begin_layout LyX-Code
+  override val apiKey = "VERBOSE_" + super.apiKey
+\end_layout
+
+\begin_layout Subsubsection*
+Self-Types in Traits
+\end_layout
+
+\begin_layout Standard
+We can also define a 
+\begin_inset Quotes eld
+\end_inset
+
+self
+\begin_inset Quotes erd
+\end_inset
+
+ in a trait,
+ which forces any class extending it to only be of the given type:
+\end_layout
+
+\begin_layout LyX-Code
+class WebService:
+\end_layout
+
+\begin_layout LyX-Code
+  val apiKey = "SECRET_123"
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+trait MetricCollector:
+\end_layout
+
+\begin_layout LyX-Code
+  // This trait can only be mixed into a WebService (or its subclasses)
+\end_layout
+
+\begin_layout LyX-Code
+  self:
+ WebService => 
+\end_layout
+
+\begin_layout LyX-Code
+  
+\end_layout
+
+\begin_layout LyX-Code
+  def logUsage() = 
+\end_layout
+
+\begin_layout LyX-Code
+    // It has access to WebService's state!
+\end_layout
+
+\begin_layout LyX-Code
+    println(s"Sending metrics for API Key:
+ $apiKey")
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+class ProductionService extends WebService,
+ MetricCollector
+\end_layout
+
+\begin_layout Subsection*
+Sealed Traits
+\end_layout
+
+\begin_layout Standard
+Marking a trait as sealed forces all implementations to reside in the same file.
+ The is a commonly enforced idiom in scala.
+\end_layout
+
+\begin_layout Subsection*
+Including Other Code
+\end_layout
+
+\begin_layout Standard
+Importing code in scala is based on the concept of packages.
+ In source files,
+ we can state that any classes declared in the file belong to a specific package name.
+\end_layout
+
+\begin_layout LyX-Code
+package io.startup.renaissance
+\end_layout
+
+\begin_layout LyX-Code
+case class User(name:
+ String)
+\end_layout
+
+\begin_layout Standard
+Wherever we want to use this class,
+ we can then *import* the package by name:
+\end_layout
+
+\begin_layout LyX-Code
+import io.startup.renaissance.User
+\end_layout
+
+\begin_layout LyX-Code
+val u = User("Alice")
+\end_layout
+
+\begin_layout Standard
+Pretty straightforward.
+ But because it's scala,
+ we can use this in many flexible ways so save on typing:
+\end_layout
+
+\begin_layout LyX-Code
+import scala.util.control.*                                   // * imports every package in this domain
+\end_layout
+
+\begin_layout LyX-Code
+import java.util.{Date => JDate}                              // allows renaming of domain to clean up any naming conflicts
+\end_layout
+
+\begin_layout LyX-Code
+import sttp.client3.{HttpURLConnectionBackend,
+ basicRequest}  // only import the given classes / objects / whatever from the domain
+\end_layout
+
+\end_body
+\end_document
