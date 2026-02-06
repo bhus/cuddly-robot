@@ -91,6 +91,40 @@ Dive into Scala
 \end_layout
 
 \begin_layout Section*
+FOREWARD
+\end_layout
+
+\begin_layout Standard
+Scala has been on my periphery since I graduated into the workforce.
+ At the time,
+ the JVM was even still in it's infancy.
+ As the Java community grew,
+ along with the online world and copmurer science more broadly,
+ scala has grown to meet the needs of its community time and again.
+ 
+\end_layout
+
+\begin_layout Standard
+What has struck me most,
+ though,
+ is the *caliber* of people that have consistently been involved in the project over time.
+ The very brightest people I know in the field of computer science have been involved in its development since it's inception.
+ Indeed,
+ is it quite possibly the most *academically-influenced* language in the Java world,
+ and perhaps even in the broader community.
+ 
+\end_layout
+
+\begin_layout Standard
+Along with this has come it's persistent,
+ unyielding insistence that it is an at least *two-paradigm* language.
+ It shunned the unilateral insistence of every other lanugage to focus on a single paradigm,
+ pairing Object -Oriented appraoches with Functional ones,
+ and has never let go either influence.
+ This is truly unique.
+\end_layout
+
+\begin_layout Section*
 PREFACE
 \end_layout
 
