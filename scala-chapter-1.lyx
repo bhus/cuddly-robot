@@ -6,6 +6,7 @@
 \origin unavailable
 \textclass article
 \use_default_options true
+\master scala-first-steps.lyx
 \maintain_unincluded_children no
 \language american
 \language_package default
@@ -33,6 +34,7 @@
 \float_placement class
 \float_alignment class
 \paperfontsize default
+\spacing single
 \use_hyperref false
 \papersize default
 \use_geometry false
@@ -48,6 +50,7 @@
 \use_package undertilde 1
 \cite_engine basic
 \cite_engine_type default
+\biblio_style plain
 \use_bibtopic false
 \use_indices false
 \paperorientation portrait
@@ -85,6 +88,10 @@
 \end_header
 
 \begin_body
+
+\begin_layout Section
+First Steps
+\end_layout
 
 \begin_layout Subsection*
 Installing Scala

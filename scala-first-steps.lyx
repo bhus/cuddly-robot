@@ -32,7 +32,8 @@
 \index_command default
 \float_placement class
 \float_alignment class
-\paperfontsize default
+\paperfontsize 12
+\spacing single
 \use_hyperref false
 \papersize default
 \use_geometry false
@@ -48,6 +49,7 @@
 \use_package undertilde 1
 \cite_engine basic
 \cite_engine_type default
+\biblio_style plain
 \use_bibtopic false
 \use_indices false
 \paperorientation portrait
@@ -195,13 +197,9 @@ matching
 ELEMENTS OF SCALA
 \end_layout
 
-\begin_layout Section
-FIRST STEPS
-\end_layout
-
-\begin_layout Subsection*
+\begin_layout Standard
 \begin_inset CommandInset include
-LatexCommand include
+LatexCommand input
 filename "scala-chapter-1.lyx"
 literal "false"
 
@@ -216,7 +214,7 @@ new Scala()
 
 \begin_layout Standard
 \begin_inset CommandInset include
-LatexCommand include
+LatexCommand input
 filename "scala-chapter-2.lyx"
 literal "false"
 
@@ -231,7 +229,7 @@ Classes & Objects
 
 \begin_layout Standard
 \begin_inset CommandInset include
-LatexCommand include
+LatexCommand input
 filename "scala-chapter-3.lyx"
 literal "false"
 
@@ -247,7 +245,7 @@ Collections,
 
 \begin_layout Standard
 \begin_inset CommandInset include
-LatexCommand include
+LatexCommand input
 filename "scala-chapter-4.lyx"
 literal "false"
 
@@ -260,9 +258,9 @@ literal "false"
 Standard Types
 \end_layout
 
-\begin_layout Subsection*
+\begin_layout Standard
 \begin_inset CommandInset include
-LatexCommand include
+LatexCommand input
 filename "scala-chapter-5.lyx"
 literal "false"
 
@@ -277,7 +275,7 @@ Method Madness
 
 \begin_layout Standard
 \begin_inset CommandInset include
-LatexCommand include
+LatexCommand input
 filename "scala-chapter-6.lyx"
 literal "false"
 
@@ -292,7 +290,7 @@ Expressions
 
 \begin_layout Standard
 \begin_inset CommandInset include
-LatexCommand include
+LatexCommand input
 filename "scala-chapter-7.lyx"
 literal "false"
 
@@ -308,7 +306,7 @@ Exceptions,
 
 \begin_layout Standard
 \begin_inset CommandInset include
-LatexCommand include
+LatexCommand input
 filename "scala-chapter-8.lyx"
 literal "false"
 
@@ -323,7 +321,7 @@ Traits
 
 \begin_layout Standard
 \begin_inset CommandInset include
-LatexCommand include
+LatexCommand input
 filename "scala-chapter-9.lyx"
 literal "false"
 
@@ -338,7 +336,7 @@ Basic IO
 
 \begin_layout Standard
 \begin_inset CommandInset include
-LatexCommand include
+LatexCommand input
 filename "scala-chapter-10.lyx"
 literal "false"
 
@@ -353,7 +351,7 @@ Threads & Processes
 
 \begin_layout Standard
 \begin_inset CommandInset include
-LatexCommand include
+LatexCommand input
 filename "scala-chapter-11.lyx"
 literal "false"
 
@@ -368,7 +366,7 @@ Testing
 
 \begin_layout Standard
 \begin_inset CommandInset include
-LatexCommand include
+LatexCommand input
 filename "scala-chapter-12.lyx"
 literal "false"
 
