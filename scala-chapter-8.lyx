@@ -89,17 +89,31 @@
 \begin_body
 
 \begin_layout Standard
-We all know things go wrong.
- On a semi-regular basis.
- However,
- scala is a language that assumes you know what you're doing.
- Honestly,
- it's like most other languages in this regard.
+In a perfect world,
+ databases never time out and users never type "potato" into an age field.
+ In the real world,
+ things go wrong.
+ Scala assumes you know this,
+ and it gives you a tiered defense system to handle the chaos.
+\end_layout
+
+\begin_layout Subsection*
+The Traditional Guard:
+ Try/Catch
 \end_layout
 
 \begin_layout Standard
-To be clear,
- scala does have try catch blocks:
+If you’ve used Java or C#,
+ the try/catch block will feel like a warm,
+ familiar blanket.
+ However,
+ Scala gives it a "matching" upgrade.
+ Instead of separate catch blocks for every type,
+ you use a single match-style block to sort through the wreckage.
+\end_layout
+
+\begin_layout LyX-Code
+Scala
 \end_layout
 
 \begin_layout LyX-Code
@@ -107,7 +121,7 @@ try {
 \end_layout
 
 \begin_layout LyX-Code
-  // Some risky Doobie database call
+// A risky Doobie database call
 \end_layout
 
 \begin_layout LyX-Code
@@ -115,35 +129,48 @@ try {
 \end_layout
 
 \begin_layout LyX-Code
-  case ex:
+case ex:
  java.sql.SQLException if ex.getErrorCode == 101 => 
 \end_layout
 
 \begin_layout LyX-Code
-    println("Specific DB Error")
+println("Specific DB Error:
+ Check your permissions.")
 \end_layout
 
 \begin_layout LyX-Code
-  case ex:
+case ex:
  Exception => 
 \end_layout
 
 \begin_layout LyX-Code
-    println("Generic Error")
+println(s"Generic Error:
+ ${ex.getMessage}")
 \end_layout
 
 \begin_layout LyX-Code
 }
 \end_layout
 
-\begin_layout Standard
-As you can see,
- it brings the same robust matching abilities found in match statements.
- Beautiful.
+\begin_layout Subsubsection*
+Raising Exceptions
 \end_layout
 
 \begin_layout Standard
-We can also raise exceptions in the traditional way when need be:
+You can throw exceptions exactly as you’d expect.
+ In fact,
+ using Case Classes to define custom errors makes them incredibly easy to read and create.
+\end_layout
+
+\begin_layout LyX-Code
+Scala
+\end_layout
+
+\begin_layout LyX-Code
+case class DatabaseException(msg:
+ String,
+ code:
+ Int) extends Exception(msg)
 \end_layout
 
 \begin_layout LyX-Code
@@ -153,180 +180,87 @@ def getUser(id:
 \end_layout
 
 \begin_layout LyX-Code
-  if id < 0 then 
+if id < 0 then throw DatabaseException("Invalid ID",
+ 400)
 \end_layout
 
 \begin_layout LyX-Code
-    throw new IllegalArgumentException("IDs cannot be negative!")
+else "Alice"
 \end_layout
 
-\begin_layout LyX-Code
-  else 
-\end_layout
-
-\begin_layout LyX-Code
-    "Alice"
+\begin_layout Subsection*
+The Functional Guard:
+ The Try Container
 \end_layout
 
 \begin_layout Standard
-And of course we can define custom exceptions as well:
+While try/catch works,
+ it has a downside:
+ it "interrupts" the flow of your program.
+ In modern Scala,
+ we prefer the Try container.
+ Instead of a crash,
+ it returns a "box" that contains either a Success or a Failure.
 \end_layout
 
 \begin_layout LyX-Code
-case class DatabaseException(message:
- String,
- code:
- Int) extends Exception(message)
-\begin_inset Newline newline
-\end_inset
-
-
-\begin_inset Newline newline
-\end_inset
-
-// Raising it:
+Scala
 \end_layout
 
 \begin_layout LyX-Code
-throw DatabaseException("Connection Timeout",
- 504)
-\end_layout
-
-\begin_layout Standard
-However,
- this is a rarity.
- Typically in scala we make use of 
-\series bold
-Try
-\series default
- 
-\emph on
-containers
-\emph default
-.
- They wrap computations and return either 
-\series bold
-Succes(value)
-\series default
- or
-\series bold
- Failure(exception)
-\series default
-.
- Here's an example:
-\end_layout
-
-\begin_layout LyX-Code
-
-\emph on
-import
-\emph default
- scala.util.{
-\series bold
-Try,
+import scala.util.{Try,
  Success,
- Failure
-\series default
-}
+ Failure}
 \end_layout
 
 \begin_layout LyX-Code
-
-\emph on
-val
-\emph default
- result:
- 
-\series bold
-Try
-\series default
-[Int] = 
-\series bold
-Try
-\series default
-("123".toInt)
+val result:
+ Try[Int] = Try("123".toInt)
 \end_layout
 
 \begin_layout LyX-Code
-result 
-\emph on
-match
+result match
 \end_layout
 
 \begin_layout LyX-Code
-  
-\emph on
-case
-\emph default
- 
-\series bold
-Success
-\series default
-(num) 
-\emph on
-=>
-\emph default
- println(s"Got the number:
+case Success(num) => println(s"Value is:
  $num")
 \end_layout
 
 \begin_layout LyX-Code
-  
-\emph on
-case
-\emph default
- 
-\series bold
-Failure
-\series default
-(ex)  
-\emph on
-=>
-\emph default
- println(s"It wasn't a number:
+case Failure(ex) => println(s"Conversion failed:
  ${ex.getMessage}")
 \end_layout
 
 \begin_layout Standard
-We wrap the contentious code in our Try(...) container,
- and then match on the result.
- The match can either be a 
-\series bold
-Success
-\series default
- container with a value (that we get with deconstruction – Success(
-\series bold
-num
-\series default
-)),
- or a 
-\series bold
-Failure
-\series default
- container with an exception (which we also get with deconstruction).
+This is the "Pragmatic" way.
+ By returning a Try,
+ you tell the next developer:
+ "This might fail,
+ and the compiler is going to make sure you deal with that possibility."
+\end_layout
+
+\begin_layout Subsection*
+Either:
+ Choosing a Side
 \end_layout
 
 \begin_layout Standard
-Note:
- another common pattern for dealing with exceptions is via the 
+The Either container is the preferred way to handle business logic errors.
+ By convention,
+ the 
 \series bold
-Either
+Left
 \series default
- container.
- 
+ side holds the error (because "left" is also a synonym for "sinister" or "wrong" in Latin roots) and the 
+\series bold
+Right
+\series default
+ side holds the "right" (correct) result.
 \end_layout
 
-\begin_layout Standard
-Either objects have a left and a right result.
- The idiom for errors is often to return Left(
-\begin_inset Quotes eld
-\end_inset
-
-our error message
-\begin_inset Quotes erd
-\end_inset
-
-) to raise an exception or Right(result_value) to return successful result:
+\begin_layout LyX-Code
+Scala
 \end_layout
 
 \begin_layout LyX-Code
@@ -339,36 +273,34 @@ def divide(a:
 \end_layout
 
 \begin_layout LyX-Code
-  if b == 0 then Left("Cannot divide by zero!")
+if b == 0 then Left("Cannot divide by zero!")
 \end_layout
 
 \begin_layout LyX-Code
-  else Right(a / b)
+else Right(a / b)
 \end_layout
 
 \begin_layout LyX-Code
 val outcome = divide(10,
- 0) // Left("Cannot divide by zero!")
+ 0) // Result:
+ Left("Cannot divide by zero!")
+\end_layout
+
+\begin_layout Subsection*
+System Hygiene:
+ NonFatal and Finally
 \end_layout
 
 \begin_layout Standard
-An additional note on system exceptions.
- Scala doesn't catch errors like 
-\begin_inset Quotes eld
-\end_inset
-
-Out of Memory
-\begin_inset Quotes erd
-\end_inset
-
-,
- since if that's broken it's assumed the app will stop working regardless.
+Not all errors are created equal.
+ If your program runs out of memory (OutOfMemoryError),
+ there is usually nothing you can do—
+the app is going to crash.
+ Scala provides the NonFatal helper to help you catch the "recoverable" stuff while letting the catastrophic stuff through.
 \end_layout
 
-\begin_layout Standard
-However,
- there is a NonFatal class we can match on that catches any intermediate errors,
- such as file access violations:
+\begin_layout LyX-Code
+Scala
 \end_layout
 
 \begin_layout LyX-Code
@@ -380,7 +312,7 @@ try {
 \end_layout
 
 \begin_layout LyX-Code
-  // Risky IO or System Access
+// Risky System Access
 \end_layout
 
 \begin_layout LyX-Code
@@ -388,28 +320,31 @@ try {
 \end_layout
 
 \begin_layout LyX-Code
-  case NonFatal(ex) => 
-\end_layout
-
-\begin_layout LyX-Code
-    // This catches File IO errors,
- but lets OutOfMemory crash the app
-\end_layout
-
-\begin_layout LyX-Code
-    println(s"Recoverable error:
+case NonFatal(ex) => println(s"Recoverable error:
  $ex")
+\end_layout
+
+\begin_layout LyX-Code
+// OutOfMemoryError will bypass this and crash the app safely
 \end_layout
 
 \begin_layout LyX-Code
 }
 \end_layout
 
+\begin_layout Subsubsection*
+The finally Guarantee
+\end_layout
+
 \begin_layout Standard
-Scala,
- due to it's relationship with the jvm,
- can optionally provide a finally block that gets executed regardless of whether an exception occurred or not,
- to allow for cleanup items such as file closures:
+When you open a file or a database connection,
+ you must close it,
+ regardless of what happens in between.
+ The finally block is your iron-clad guarantee.
+\end_layout
+
+\begin_layout LyX-Code
+Scala
 \end_layout
 
 \begin_layout LyX-Code
@@ -421,7 +356,7 @@ try
 \end_layout
 
 \begin_layout LyX-Code
-  println(source.mkString)
+println(source.mkString)
 \end_layout
 
 \begin_layout LyX-Code
@@ -429,16 +364,11 @@ finally
 \end_layout
 
 \begin_layout LyX-Code
-  // This code is GUARANTEED to run,
- even if an exception occurs above
+source.close() // This runs NO MATTER WHAT
 \end_layout
 
 \begin_layout LyX-Code
-  source.close()
-\end_layout
-
-\begin_layout LyX-Code
-  println("Resource closed.")
+println("Resource safely closed.")
 \end_layout
 
 \end_body

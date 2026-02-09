@@ -89,20 +89,17 @@
 \begin_body
 
 \begin_layout Standard
-Because it rests on the JVM,
- scala *does* let us run code in threads:
+Because Scala lives on the JVM,
+ you can manage raw threads manually.
+ It looks exactly like the Java you might remember from years ago:
 \end_layout
 
 \begin_layout LyX-Code
-val thread = new Thread(new Runnable {
+Scala
 \end_layout
 
 \begin_layout LyX-Code
-  def run() = println("Running on a raw thread...")
-\end_layout
-
-\begin_layout LyX-Code
-})
+val thread = new Thread(() => println("Running on a raw thread..."))
 \end_layout
 
 \begin_layout LyX-Code
@@ -110,13 +107,36 @@ thread.start()
 \end_layout
 
 \begin_layout Standard
-However,
- scala favors 
+But manual threading is like trying to manage a busy kitchen by shouting at every individual cook.
+ It’s stressful and prone to accidents.
+ In modern Scala,
+ we don't manage threads;
+ we manage 
 \series bold
-futures
+Futures
 \series default
-,
- shown in the following approach:
+.
+\end_layout
+
+\begin_layout Subsection*
+The Future:
+ A Receipt for Your Result
+\end_layout
+
+\begin_layout Standard
+A 
+\emph on
+Future
+\emph default
+ is a placeholder for a value that hasn't arrived yet.
+ Think of it like a buzzer at a restaurant:
+ you hold the buzzer (the Future),
+ and eventually,
+ it vibrates when your food (the Result) is ready.
+\end_layout
+
+\begin_layout LyX-Code
+Scala
 \end_layout
 
 \begin_layout LyX-Code
@@ -124,7 +144,12 @@ import scala.concurrent.Future
 \end_layout
 
 \begin_layout LyX-Code
-import scala.concurrent.ExecutionContext.Implicits.global // The thread pool
+import scala.concurrent.ExecutionContext.Implicits.global // The "Kitchen Staff" (Thread Pool)
+\end_layout
+
+\begin_layout LyX-Code
+import scala.util.{Success,
+ Failure}
 \end_layout
 
 \begin_layout LyX-Code
@@ -132,15 +157,15 @@ val eventualData = Future {
 \end_layout
 
 \begin_layout LyX-Code
-  // This runs on a different thread
+// This block runs on a background thread
 \end_layout
 
 \begin_layout LyX-Code
-  Thread.sleep(1000)
+Thread.sleep(1000) 
 \end_layout
 
 \begin_layout LyX-Code
-  "Database result"
+"The secret ingredient"
 \end_layout
 
 \begin_layout LyX-Code
@@ -152,13 +177,13 @@ eventualData.onComplete {
 \end_layout
 
 \begin_layout LyX-Code
-  case Success(value) => println(s"Got it:
+case Success(value) => println(s"Order up:
  $value")
 \end_layout
 
 \begin_layout LyX-Code
-  case Failure(e)     => println(s"Failed:
- $e")
+case Failure(e) => println(s"The kitchen crashed:
+ ${e.getMessage}")
 \end_layout
 
 \begin_layout LyX-Code
@@ -166,26 +191,45 @@ eventualData.onComplete {
 \end_layout
 
 \begin_layout Standard
-A future is a placeholder for a value that does not exist yet.
- Futures pull threads from a Thread Pool (ExecutionContext) and run their cod accordingly.
-\end_layout
 
-\begin_layout Standard
-We define the future,
- and attach a code block to the onComplete event to deal with the values once they return.
-\end_layout
-
-\begin_layout Standard
-As we can see,
- the preferred method is not to wait for the result.
- Futures are *eager*,
- so as soon as we define them the begin execution.
- If we want to wait for the result in order to do another calculation,
- we can use the 
 \series bold
-Await
+Two key things to remember:
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+ExecutionContext
 \series default
- clause:
+:
+ This is the "Thread Pool." It’s a group of worker threads waiting to pick up your tasks.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Eagerness
+\series default
+:
+ Futures are eager.
+ The moment you define one,
+ it starts running in the background.
+\end_layout
+
+\begin_layout Subsection*
+Waiting (The "Break Glass" Option)
+\end_layout
+
+\begin_layout Standard
+Usually,
+ we want our code to be "non-blocking," meaning it never stops to wait.
+ But sometimes,
+ especially in a small script or a console app,
+ you just need the result now.
+\end_layout
+
+\begin_layout LyX-Code
+Scala
 \end_layout
 
 \begin_layout LyX-Code
@@ -197,7 +241,7 @@ import scala.concurrent.duration.*
 \end_layout
 
 \begin_layout LyX-Code
-// This pauses the current thread for up to 5 seconds
+// We pause the current thread for up to 5 seconds
 \end_layout
 
 \begin_layout LyX-Code
@@ -211,89 +255,123 @@ println(s"I waited,
  $result")
 \end_layout
 
-\begin_layout Standard
-For cases where we have 2 futures,
- you can use a for statement:
-\end_layout
-
-\begin_layout LyX-Code
-val result = for
-\end_layout
-
-\begin_layout LyX-Code
-  user     <- fetchUserFromApi(id)    // Future 1
-\end_layout
-
-\begin_layout LyX-Code
-  dbStatus <- saveToDatabase(user)    // Future 2
-\end_layout
-
-\begin_layout LyX-Code
-yield
-\end_layout
-
-\begin_layout LyX-Code
-  s"Successfully saved ${user.name}"
+\begin_layout Subsection*
+The "For" Pipeline:
+ Stringing Futures Together
 \end_layout
 
 \begin_layout Standard
-For system tasks (that could be run in a console),
- we can use the following syntax:
+The real magic happens when you have multiple async tasks that depend on each other.
+ Instead of "Callback Hell" (nesting onComplete inside onComplete),
+ Scala uses the for-comprehension to create a clean,
+ readable pipeline.
+\end_layout
+
+\begin_layout LyX-Code
+Scala
+\end_layout
+
+\begin_layout LyX-Code
+val result = for {
+\end_layout
+
+\begin_layout LyX-Code
+user <- fetchUserFromApi(id) // Start task 1
+\end_layout
+
+\begin_layout LyX-Code
+dbStatus <- saveToDatabase(user) // Once task 1 finishes,
+ start task 2
+\end_layout
+
+\begin_layout LyX-Code
+} yield {
+\end_layout
+
+\begin_layout LyX-Code
+s"Successfully saved ${user.name}"
+\end_layout
+
+\begin_layout LyX-Code
+}
+\end_layout
+
+\begin_layout Subsection*
+Talking to the OS:
+ The System Shell
+\end_layout
+
+\begin_layout Standard
+Sometimes the best tool for the job isn't a Scala library,
+ but a command that already exists on your machine.
+ Scala makes the system shell feel like a native part of the language using the sys.process package.
+\end_layout
+
+\begin_layout Standard
+By adding a simple !
+ or !!
+ to a string,
+ you can execute it as a shell command:
+\end_layout
+
+\begin_layout LyX-Code
+Scala
 \end_layout
 
 \begin_layout LyX-Code
 import sys.process.*
-\begin_inset Newline newline
-\end_inset
-
-
 \end_layout
 
 \begin_layout LyX-Code
-// Simple execution
+// 1.
+ Just run it (prints to console,
+ returns the exit code)
 \end_layout
 
 \begin_layout LyX-Code
 "ls -al".!
  
-\begin_inset Newline newline
-\end_inset
-
-
 \end_layout
 
 \begin_layout LyX-Code
-// Capture the output as a String
+// 2.
+ Capture the output (returns a String)
 \end_layout
 
 \begin_layout LyX-Code
-val output = "curl https://api.ipify.org".!!
-\begin_inset Newline newline
-\end_inset
-
-
+val myIp = "curl -s https://api.ipify.org".!!
 \end_layout
 
 \begin_layout LyX-Code
-// Pipelining commands (just like bash!)
+// 3.
+ The "Bash" Mode:
+ Pipelining
 \end_layout
 
 \begin_layout LyX-Code
-val result = ("cat names.txt" #| "grep Alice" #| "wc -l").!!
+// You can pipe commands together exactly like a shell script
+\end_layout
+
+\begin_layout LyX-Code
+val userCount = ("cat names.txt" #| "grep Alice" #| "wc -l").!!
+\end_layout
+
+\begin_layout LyX-Code
+println(s"Found $userCount instances of Alice.")
 \end_layout
 
 \begin_layout Standard
-The simple 
-\series bold
-.!
+The simple
+\emph on
+ .!
+ 
+\emph default
+and
+\emph on
+ .!!
 
-\series default
- and 
-\series bold
-.!!
-
-\series default
- methods on strings make this succinct and powerful.
+\emph default
+ methods make Scala an incredible language for writing system scripts that would usually be written in Bash or Python.
 \end_layout
 
 \end_body

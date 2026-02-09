@@ -89,19 +89,33 @@
 \begin_body
 
 \begin_layout Standard
-When defining methods on classes in scala,
- there are several nuances that will allow cleaner AND more robust code.
-\end_layout
-
-\begin_layout Subsection*
-
-\family sans
-Variable Length Arguments
+In Scala,
+ a method isn't just a sub-routine;
+ it’s an interface.
+ How you design your methods determines how much "friction" other developers (including your future self) feel when using your code.
 \end_layout
 
 \begin_layout Standard
-A method can take in many arguments of a given type by using the '*' syntax.
- The resulting parameter will be treated as a sequence:
+Let's look at how to make your methods flexible,
+ succinct,
+ and powerful.
+\end_layout
+
+\begin_layout Subsection*
+Variable Length Arguments (Varargs)
+\end_layout
+
+\begin_layout Standard
+Sometimes,
+ you don't know if a user wants to pass one item,
+ ten items,
+ or none at all.
+ Instead of forcing the user to wrap their data in a List every time,
+ you can use the * syntax.
+\end_layout
+
+\begin_layout LyX-Code
+Scala
 \end_layout
 
 \begin_layout LyX-Code
@@ -111,7 +125,7 @@ def printAll(names:
 \end_layout
 
 \begin_layout LyX-Code
-  names.foreach(name => println(s"Hello,
+names.foreach(name => println(s"Hello,
  $name"))
 \end_layout
 
@@ -130,30 +144,46 @@ printAll("Alice",
 \end_layout
 
 \begin_layout LyX-Code
-printAll() // You can even pass nothing;
- it becomes an empty Seq
+printAll() // Valid:
+ results in an empty sequence
 \end_layout
 
 \begin_layout Standard
-You can also 
-\begin_inset Quotes eld
-\end_inset
+Within the method,
+ names is treated as a Seq[String].
+ It’s clean,
+ it’s readable,
+ and it’s very "Pragmatic."
+\end_layout
 
-explode
-\begin_inset Quotes erd
-\end_inset
+\begin_layout Subsection*
+The "Splat" Operator:
+ Exploding Collections
+\end_layout
 
- collections into these arguments:
+\begin_layout Standard
+There will be times when you already have a list of data,
+ but you want to pass it into a method that expects Varargs.
+ If you try to pass the list directly,
+ the compiler will complain.
+\end_layout
+
+\begin_layout Standard
+To solve this,
+ we use the Splat operator (:
+ _*).
+ It tells Scala:
+ "Take this collection and explode it into individual arguments."
+\end_layout
+
+\begin_layout LyX-Code
+Scala
 \end_layout
 
 \begin_layout LyX-Code
 val developers = List("Scala",
  "Python",
  "Rust")
-\begin_inset Newline newline
-\end_inset
-
-
 \end_layout
 
 \begin_layout LyX-Code
@@ -165,16 +195,26 @@ val developers = List("Scala",
 \begin_layout LyX-Code
 printAll(developers:
  _*) // SUCCESS:
- Splats the list into individual strings
+ Splats the list!
+\end_layout
+
+\begin_layout Subsection*
+Creating Clean APIs with Tuples
 \end_layout
 
 \begin_layout Standard
-Please note the variable length argument must be the last in the signature,
- and have to be of a specified type.
+One of the most useful idioms in Scala is combining Varargs with Tuples.
+ A Tuple is a small,
+ fixed-size collection of related items—
+like a key and a value.
 \end_layout
 
 \begin_layout Standard
-Another trick we can do if we want to allow arbitrary hash options to be passed is to use Varargs with Tuples:
+We can use this to create methods that look and feel like a configuration block:
+\end_layout
+
+\begin_layout LyX-Code
+Scala
 \end_layout
 
 \begin_layout LyX-Code
@@ -185,20 +225,19 @@ def bulkUpdate(pairs:
 \end_layout
 
 \begin_layout LyX-Code
-  val dataMap = pairs.toMap // Convert those pairs into a Hash Map
+// Convert those pairs into a Map for easy lookup
 \end_layout
 
 \begin_layout LyX-Code
-  println(s"Updating ${dataMap.size} fields...")
-\begin_inset Newline newline
-\end_inset
+val dataMap = pairs.toMap 
+\end_layout
 
-
+\begin_layout LyX-Code
+println(s"Updating ${dataMap.size} fields...")
 \end_layout
 
 \begin_layout LyX-Code
 // Usage:
- Look how clean this is!
 \end_layout
 
 \begin_layout LyX-Code
@@ -206,15 +245,15 @@ bulkUpdate(
 \end_layout
 
 \begin_layout LyX-Code
-  "email" -> "alice@startup.io",
+"email" -> "alice@startup.io",
 \end_layout
 
 \begin_layout LyX-Code
-  "status" -> "active",
+"status" -> "active",
 \end_layout
 
 \begin_layout LyX-Code
-  "plan"   -> "pro"
+"plan" -> "pro"
 \end_layout
 
 \begin_layout LyX-Code
@@ -222,10 +261,59 @@ bulkUpdate(
 \end_layout
 
 \begin_layout Standard
-The '*' makes it variable length,
- while the '(String,
- String)' means it takes pairs (Tuples).
- Quite a useful idiom.
+In this example,
+ "email" -> "alice@startup.io" creates a Tuple of (String,
+ String).
+ By accepting a variable number of these,
+ your method starts to look like a native part of the Scala language.
+\end_layout
+
+\begin_layout Subsection*
+Default and Named Arguments
+\end_layout
+
+\begin_layout Standard
+To keep your method signatures from growing into unreadable monsters,
+ Scala allows you to provide default values.
+ This lets users omit arguments they don't care about.
+\end_layout
+
+\begin_layout LyX-Code
+Scala
+\end_layout
+
+\begin_layout LyX-Code
+def configureApp(port:
+ Int = 8080,
+ debug:
+ Boolean = false):
+ Unit =
+\end_layout
+
+\begin_layout LyX-Code
+println(s"Starting on $port (Debug:
+ $debug)")
+\end_layout
+
+\begin_layout LyX-Code
+// Use the defaults
+\end_layout
+
+\begin_layout LyX-Code
+configureApp() 
+\end_layout
+
+\begin_layout LyX-Code
+// Specify only what you need using Named Arguments
+\end_layout
+
+\begin_layout LyX-Code
+configureApp(debug = true) 
+\end_layout
+
+\begin_layout Standard
+By combining Default Values with Varargs,
+ you can build methods that are simple for beginners but incredibly flexible for power users.
 \end_layout
 
 \end_body

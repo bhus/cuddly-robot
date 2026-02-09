@@ -89,15 +89,32 @@
 \begin_body
 
 \begin_layout Standard
-So scala prides itself on being a union of 2,
- equally well execute patterns.
- The intuition here may be that one must be prioritized over the other.
- Let's take a deeper look.
+In some circles,
+ Scala is praised purely for its Functional Programming (FP) chops.
+ But Scala prides itself on being a "unification" of two patterns.
+ It doesn't treat Object-Orientation (OO) like a legacy burden;
+ it treats it as a first-class way to organize code.
 \end_layout
 
 \begin_layout Standard
-In scala,
- we can create a basic class:
+Let's look at how Scala takes the "boilerplate" out of objects.
+\end_layout
+
+\begin_layout Subsection*
+The Lean Class
+\end_layout
+
+\begin_layout Standard
+In many languages,
+ creating a simple data class requires a constructor,
+ field definitions,
+ and assignments.
+ In Scala,
+ the class header does all three at once.
+\end_layout
+
+\begin_layout LyX-Code
+Scala
 \end_layout
 
 \begin_layout LyX-Code
@@ -105,54 +122,33 @@ class Company(val name:
  String,
  val revenue:
  Int)
-\begin_inset Newline newline
-\end_inset
+\end_layout
 
-
-\begin_inset Newline newline
-\end_inset
-
-val myCompany = Company(
-\begin_inset Quotes eld
-\end_inset
-
-saas-o-rama
-\begin_inset Quotes erd
-\end_inset
-
-,
+\begin_layout LyX-Code
+val myCompany = Company("saas-o-rama",
  7000)
 \end_layout
 
 \begin_layout LyX-Code
-pprint.pprintln(myCompany) -> hello$_$Company@6d8a00e3
+pprint.pprintln(myCompany)
+\end_layout
+
+\begin_layout LyX-Code
+// Result:
+ hello$_$Company@6d8a00e3
 \end_layout
 
 \begin_layout Standard
-\begin_inset Separator plain
-\end_inset
-
-
+That output—
+the "raw dump"—
+isn't very helpful.
+ In the Pickaxe tradition,
+ we want our objects to be communicative.
+ Let’s override the default toString to give us a professional readout.
 \end_layout
 
-\begin_layout Standard
-That seemed to go well.
- We are using Li Haoyi's default 
-\begin_inset Quotes eld
-\end_inset
-
-pprint
-\begin_inset Quotes erd
-\end_inset
-
- libary (which we added in project.scala) which gives a raw dump of the object.
- 
-\end_layout
-
-\begin_layout Standard
-We can do better,
- though.
- Let's override the toString method and give something a bit more useful:
+\begin_layout LyX-Code
+Scala
 \end_layout
 
 \begin_layout LyX-Code
@@ -163,47 +159,45 @@ class Company(val name:
 \end_layout
 
 \begin_layout LyX-Code
-  override def toString:
+override def toString:
  String = 
 \end_layout
 
 \begin_layout LyX-Code
-    s"[Company:
+s"[Company:
  $name | MRR:
  $$$revenue]"
-\begin_inset Newline newline
-\end_inset
+\end_layout
 
-
-\begin_inset Newline newline
-\end_inset
-
-val myCompany = Company(
-\begin_inset Quotes eld
-\end_inset
-
-saas-o-rama
-\begin_inset Quotes erd
-\end_inset
-
-,
+\begin_layout LyX-Code
+val myCompany = Company("saas-o-rama",
  7000)
 \end_layout
 
 \begin_layout LyX-Code
-pprint.pprintln(myCompany) -> [Company:
+pprint.pprintln(myCompany) 
+\end_layout
+
+\begin_layout LyX-Code
+// Result:
+ [Company:
  saas-o-rama | MRR:
  $7000]
 \end_layout
 
 \begin_layout Subsection*
-
-\family sans
-Inheritance
+Specialized Roles:
+ Inheritance
 \end_layout
 
 \begin_layout Standard
-Inheritance is the most well-known mechanism that allows us to create specialization of classes:
+Inheritance allows us to create specialized versions of a general concept.
+ A "Startup," for example,
+ is just a Company that (usually) has seed money and a higher burn rate.
+\end_layout
+
+\begin_layout LyX-Code
+Scala
 \end_layout
 
 \begin_layout LyX-Code
@@ -211,242 +205,125 @@ class StartupCompany(name:
  String,
  revenue:
  Int,
- seedMoney:
- Int) extends Company(name,
+ val seedMoney:
+ Int) 
+\end_layout
+
+\begin_layout LyX-Code
+extends Company(name,
  revenue):
 \end_layout
 
 \begin_layout LyX-Code
-  override def toString:
+override def toString:
  String =
 \end_layout
 
 \begin_layout LyX-Code
-    s"[Startup Company:
- $name | Seed:
- $$$seedMoney | MRR:
- $$$revenue]"
-\end_layout
-
-\begin_layout Standard
-This defines a new class,
- StartupCompany,
- which is a specialization of Company that takes seedMoney (since most startups need some capital to get going).
-\end_layout
-
-\begin_layout Standard
-Looking at an instance of the new class we find:
+val parentText = super.toString()
 \end_layout
 
 \begin_layout LyX-Code
-val myCompany = StartupCompany("startup-o-rama",
+s"[Startup:
+ $name | Seed:
+ $$$seedMoney] (Parent Info:
+ $parentText)"
+\end_layout
+
+\begin_layout LyX-Code
+val myStartup = StartupCompany("startup-o-rama",
  7000,
  80000)
 \end_layout
 
 \begin_layout LyX-Code
-pprint.pprintln(myCompany)  // -->  [Startup Company:
- startup-o-rama | Seed:
- $80000 | MRR:
- $7000]
+pprint.pprintln(myStartup)
 \end_layout
 
 \begin_layout Standard
-So we see the toString method returns the override value.
- We can also make use of the inherited version in our result:
-\end_layout
-
-\begin_layout LyX-Code
-class StartupCompany(name:
- String,
- revenue:
- Int,
- seedMoney:
- Int) extends Company(name,
- revenue):
-\end_layout
-
-\begin_layout LyX-Code
-  override def toString:
- String =
-\end_layout
-
-\begin_layout LyX-Code
-    val p = super.toString()
-\end_layout
-
-\begin_layout LyX-Code
-    s"[Startup Company:
- $name | Seed:
- $$$seedMoney | MRR:
- $$$revenue] (was $p)"
-\begin_inset Newline newline
-\end_inset
-
-
-\end_layout
-
-\begin_layout LyX-Code
-val myCompany = StartupCompany("startup-o-rama",
- 7000,
- 80000)
-\end_layout
-
-\begin_layout LyX-Code
-pprint.pprintln(myCompany)  // --> 
-\end_layout
-
-\begin_layout LyX-Code
-  [Startup Company:
- startup-o-rama | Seed:
- $80000 | MRR:
- $7000] (was [Company:
- startup-o-rama | MRR:
- $7000])
+Notice that we pass name and revenue up to the "parent" Company.
+ We don't mark them as val in the StartupCompany header because they are already defined in the base class.
 \end_layout
 
 \begin_layout Subsection*
-
-\family sans
-Objects and Attributes
+Mutability:
+ The val vs var Choice
 \end_layout
 
 \begin_layout Standard
-So,
- you may have noticed one of the first shorthands that scala offers that many languages don't.
- In Company,
- we simply defin name & revenue in class signature and get a few things at once:
- a class name assigned,
- attributes defined in a single place (they look like parameters here),
- and assignment of values(those passed into constructor).
- That is,
- when I say
+In the class signature,
+ you have a choice that defines the "soul" of your object:
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+val (Value):
+
+\series default
+ Creates a read-only field (a "Getter").
+ This is the Scala default for a reason—
+immutable data is easier to reason about.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+var (Variable):
+
+\series default
+ Creates a field that can be changed (a "Getter" and a "Setter").
 \end_layout
 
 \begin_layout LyX-Code
-class Company(val name:
+Scala
+\end_layout
+
+\begin_layout LyX-Code
+class FlexibleCompany(val name:
  String,
  var revenue:
  Int)
 \end_layout
 
-\begin_layout Standard
-We know that the values passed in will be assigned to the members 
-\begin_inset Quotes eld
-\end_inset
-
-name
-\begin_inset Quotes erd
-\end_inset
-
- & 
-\begin_inset Quotes eld
-\end_inset
-
-revenue
-\begin_inset Quotes erd
-\end_inset
-
-:
+\begin_layout LyX-Code
+val c = FlexibleCompany("Pivot-Co",
+ 1000)
 \end_layout
 
 \begin_layout LyX-Code
-val c = Company(
-\begin_inset Quotes eld
-\end_inset
-
-hi
-\begin_inset Quotes erd
-\end_inset
-
-,
- 200000)
+c.revenue = 5000 // Perfectly legal because it's a 'var'
 \end_layout
 
 \begin_layout LyX-Code
-c.name // 
-\begin_inset Quotes eld
-\end_inset
-
-hi
-\begin_inset Quotes erd
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-And as a bonus,
- if you declare a parameter with 
-\begin_inset Quotes eld
-\end_inset
-
-var
-\begin_inset Quotes erd
-\end_inset
-
-,
- you get both getter and setter methods:
-\end_layout
-
-\begin_layout LyX-Code
-c.revenue = 40000
-\end_layout
-
-\begin_layout LyX-Code
-c.revenue // 40000
+// c.name = "NewName" // This would trigger a compiler error!
 \end_layout
 
 \begin_layout Subsection*
-
-\family sans
-Companion Objects [ aka Mixins ]
+Companion Objects:
+ The Better "Static"
 \end_layout
 
 \begin_layout Standard
-So far we have just explored class use case where where we *instantiate* a class to get new objects [ eg.
- Company(
-\begin_inset Quotes eld
-\end_inset
-
-hi,
- 200000) ].
+In Java or C#,
+ you use the static keyword for methods that belong to the class rather than an instance.
+ Scala replaces this with the Companion Object.
 \end_layout
 
 \begin_layout Standard
-In scala,
- however,
- there is more to this pattern.
- We can create singleton *companion objects* to a class.
- This allows us to define global methods and data we can use to coordinate class instantiation and other tasks.
- For example,
- consider our Company class again from above:
+If you create an object with the same name as your class in the same file,
+ they become "companions." This is where you put your Factory Methods (methods that build instances for you).
+\end_layout
+
+\begin_layout LyX-Code
+Scala
 \end_layout
 
 \begin_layout LyX-Code
 class Company(val name:
  String,
  val revenue:
- Int):
-\end_layout
-
-\begin_layout LyX-Code
-  override def toString:
- String = 
-\end_layout
-
-\begin_layout LyX-Code
-    s"[Company:
- $name | MRR:
- $$$revenue]"
-\end_layout
-
-\begin_layout Standard
-What if we wanted to have some global state and/or methods that could operate on our class to do things like create instances for us (rather than directly instantiating)?
- Well in scala,
- we can coordinate using a 
-\series bold
-companion object:
+ Int)
 \end_layout
 
 \begin_layout LyX-Code
@@ -454,104 +331,50 @@ object Company:
 \end_layout
 
 \begin_layout LyX-Code
-  def buildOne(name:
- String) :
+// A Factory Method
+\end_layout
+
+\begin_layout LyX-Code
+def buildBootstrapped(name:
+ String):
  Company =
 \end_layout
 
 \begin_layout LyX-Code
-    val c = new Company(name,
+println(s"Building $name with zero outside capital...")
+\end_layout
+
+\begin_layout LyX-Code
+new Company(name,
  0)
 \end_layout
 
 \begin_layout LyX-Code
-    println(
-\begin_inset Quotes eld
-\end_inset
-
-we build a new company!
-\begin_inset Quotes erd
-\end_inset
-
-)
+// Usage:
 \end_layout
 
 \begin_layout LyX-Code
-    c
-\begin_inset Newline newline
-\end_inset
-
-
-\end_layout
-
-\begin_layout LyX-Code
-// Use the new companion to build a new company
-\end_layout
-
-\begin_layout LyX-Code
-newCo = Company.buildOne(
-\begin_inset Quotes eld
-\end_inset
-
-Funco
-\begin_inset Quotes erd
-\end_inset
-
-)
+val myNewCo = Company.buildBootstrapped("Funco")
 \end_layout
 
 \begin_layout Standard
-Now,
- we need to be clear here.
- The 
-\begin_inset Quotes eld
-\end_inset
+When you call Company.buildBootstrapped,
+ you are talking to the Object (the singleton).
+ When it returns a value,
+ it gives you an instance of the Class.
+\end_layout
 
-Company
-\begin_inset Quotes erd
-\end_inset
-
- used to invoke 
-\begin_inset Quotes eld
-\end_inset
-
-buildOne
-\begin_inset Quotes erd
-\end_inset
-
- on the last line refers to the Company *object*.
- The rest of the 
-\begin_inset Quotes eld
-\end_inset
-
-Company
-\begin_inset Quotes erd
-\end_inset
-
-s refer to the Company class (such as the return type of the buildOne method,
- as well as the 
-\begin_inset Quotes eld
-\end_inset
-
-new
-\begin_inset Quotes erd
-\end_inset
-
- instantiation within the 
-\begin_inset Quotes eld
-\end_inset
-
-buildOne
-\begin_inset Quotes erd
-\end_inset
-
- method.
- But this allows us to implement the factory pattern,
- giving us control over the conditions under which Company (class) is created.
+\begin_layout Subsection*
+Global State and App Configuration
 \end_layout
 
 \begin_layout Standard
-Companiuon/singleton objects also allow us to get/set global state:
+Not every object needs a "class" counterpart.
+ Sometimes you just need a place to store global settings or utility functions that stay consistent across your entire application.
+\end_layout
+
+\begin_layout LyX-Code
+Scala
 \end_layout
 
 \begin_layout LyX-Code
@@ -559,23 +382,30 @@ object AppConfig:
 \end_layout
 
 \begin_layout LyX-Code
-  val apiBase = "https://api.startup.io"
+val apiBase = "https://api.startup.io"
 \end_layout
 
 \begin_layout LyX-Code
-  var debugMode = true
-\begin_inset Newline newline
-\end_inset
-
-
+var debugMode = true
 \end_layout
 
 \begin_layout LyX-Code
-// Accessible anywhere without 'new'
+// Accessible anywhere without using 'new'
 \end_layout
 
 \begin_layout LyX-Code
-if AppConfig.debugMode then println(s"Connecting to ${AppConfig.apiBase}")
+if AppConfig.debugMode then 
+\end_layout
+
+\begin_layout LyX-Code
+println(s"Connecting to ${AppConfig.apiBase}")
+\end_layout
+
+\begin_layout Standard
+This is the ultimate Pragmatic tool:
+ it’s clean,
+ it’s always there when you need it,
+ and it doesn't require complex "Singleton Pattern" boilerplate.
 \end_layout
 
 \end_body

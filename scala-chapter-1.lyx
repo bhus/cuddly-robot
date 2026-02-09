@@ -89,58 +89,88 @@
 
 \begin_body
 
-\begin_layout Subsection*
-
-\family sans
-Installing Scala
+\begin_layout Standard
+Scala is a moving target.
+ Because it is so actively researched,
+ the environment around it evolves quickly.
+ Usually,
+ this leads to a "setup tax"—
+an hour of fighting environment variables before you write a single line of code.
 \end_layout
 
 \begin_layout Standard
-Since the jvm and scala itself are so heavily researched and actively developed,
- scala is a moving target a little bit,
- as is the jvm,
- when it comes to install.
+We’re going to skip that.
 \end_layout
 
 \begin_layout Standard
-However,
- at the time of this writing,
- there are really only 2 things you need.
- Assuming you're ok with a localized install (eg.
- not across your OS),
- the steps are:
-\end_layout
-
-\begin_layout Itemize
-create a folder for your project
-\end_layout
-
-\begin_layout Itemize
-install JDK (temurin should be fine) to folder
-\end_layout
-
-\begin_deeper
-\begin_layout Itemize
-(https://adoptium.net/en-GB/temurin/releases at the time of this writing) to project dir
-\end_layout
-
-\end_deeper
-\begin_layout Itemize
-unzip scala cli (virtuslab is a nice one) to folder
-\end_layout
-
-\begin_deeper
-\begin_layout Itemize
-(https://github.com/VirtusLab/scala-cli/releases at the time of this writing) to project dir
-\end_layout
-
-\end_deeper
-\begin_layout Itemize
-add the following script to a batch file in the project root 
+Instead of installing Scala across your entire Operating System,
+ we’re going to build a 
 \series bold
-/launch.bat
+Portable Sandbox
 \series default
- file:
+.
+ This keeps your project self-contained and your system clean.
+\end_layout
+
+\begin_layout Subsection*
+The Sandbox Setup
+\end_layout
+
+\begin_layout Standard
+You only need two things to get started.
+ Create a folder for this book (let’s call it scala-sandbox) and follow these steps:
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+The Engine (The JDK)
+\series default
+:
+ Grab a "Portable" or "Archive" version of the Java Development Kit (we recommend 
+\series bold
+Eclipse Temurin
+\series default
+ from adoptium.net).
+ Unzip it directly into your folder.
+ 
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+The Pilot (Scala CLI
+\series default
+):
+ Download the 
+\series bold
+Scala CLI
+\series default
+ binary (from VirtusLab).
+ This is the Swiss Army Knife of modern Scala.
+ Drop the executable into a subfolder named bin.
+\end_layout
+
+\begin_layout Subsection*
+The Launch Script
+\end_layout
+
+\begin_layout Standard
+To make this environment "alive," we'll create a small script.
+ This tells your computer to use the local Java and Scala versions you just downloaded,
+ rather than searching the whole house for them.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+For Windows
+\series default
+ (launch.bat):
+\end_layout
+
+\begin_layout LyX-Code
+Code snippet
 \end_layout
 
 \begin_layout LyX-Code
@@ -148,19 +178,7 @@ add the following script to a batch file in the project root
 \end_layout
 
 \begin_layout LyX-Code
-::
- Set the path to your specific JVM folder
-\end_layout
-
-\begin_layout LyX-Code
-set "JAVA_HOME=%~dp0jvm
-\backslash
-jdk-25.0.1+8"
-\end_layout
-
-\begin_layout LyX-Code
-::
- Add our local bin and local java to the temporary PATH
+set "JAVA_HOME=%~dp0[your-jdk-folder-name]"
 \end_layout
 
 \begin_layout LyX-Code
@@ -182,22 +200,8 @@ echo ---------------------------------------
 \end_layout
 
 \begin_layout LyX-Code
-echo Java Home:
- %JAVA_HOME%
-\end_layout
-
-\begin_layout LyX-Code
-echo.
-\end_layout
-
-\begin_layout LyX-Code
 ::
- This creates or updates the config file every time you launch
-\end_layout
-
-\begin_layout LyX-Code
-::
- Overwrite/Create project.scala with the first line (using a single >)
+ Automatically create our project settings
 \end_layout
 
 \begin_layout LyX-Code
@@ -205,19 +209,19 @@ echo.
 \end_layout
 
 \begin_layout LyX-Code
-  echo // project.scala
+echo // project.scala
 \end_layout
 
 \begin_layout LyX-Code
-  echo //^> using javaOpt "--sun-misc-unsafe-memory-access=allow"
+echo //> using javaOpt "--sun-misc-unsafe-memory-access=allow"
 \end_layout
 
 \begin_layout LyX-Code
-  echo //^> using javaOpt "--add-opens=java.base/java.lang=ALL-UNNAMED"
+echo //> using javaOpt "--add-opens=java.base/java.lang=ALL-UNNAMED"
 \end_layout
 
 \begin_layout LyX-Code
-  echo //^> using dep com.lihaoyi::pprint:0.9.6
+echo //> using dep com.lihaoyi::pprint:0.9.6
 \end_layout
 
 \begin_layout LyX-Code
@@ -225,49 +229,33 @@ echo.
 \end_layout
 
 \begin_layout LyX-Code
-::
- Verify Java is found
-\end_layout
-
-\begin_layout LyX-Code
-java -version
-\end_layout
-
-\begin_layout LyX-Code
-echo.
-\end_layout
-
-\begin_layout LyX-Code
-::
- Verify Scala-CLI is found
-\end_layout
-
-\begin_layout LyX-Code
-scala-cli --version
-\end_layout
-
-\begin_layout LyX-Code
-echo ---------------------------------------
-\end_layout
-
-\begin_layout LyX-Code
 cmd /k
 \end_layout
 
-\begin_layout Subsection*
+\begin_layout Standard
 
-\family sans
+\emph on
+(Note:
+ For Mac or Linux users,
+ you can achieve the same by sourcing a simple .sh script to export these paths.)
+\end_layout
+
+\begin_layout Subsection*
 Write & Run
 \end_layout
 
 \begin_layout Standard
-Add some code:
+Now,
+ let's see why we’re here.
+ Create a file named 
+\emph on
+hello.sc
+\emph default
+ in your folder and type in the following:
 \end_layout
 
 \begin_layout Standard
-
-\series bold
-/hello.sc ->
+Scala
 \end_layout
 
 \begin_layout LyX-Code
@@ -279,13 +267,9 @@ enum Mood:
 \end_layout
 
 \begin_layout LyX-Code
-  case Happy,
+case Happy,
  Curious,
  Caffeinated
-\begin_inset Newline newline
-\end_inset
-
-
 \end_layout
 
 \begin_layout LyX-Code
@@ -298,23 +282,19 @@ def response(mood:
 \end_layout
 
 \begin_layout LyX-Code
- case Mood.Happy       => "Keep coding!"
+case Mood.Happy => "Keep coding!"
 \end_layout
 
 \begin_layout LyX-Code
-  case Mood.Curious     => "Let's explore the source code."
+case Mood.Curious => "Let's explore the source code."
 \end_layout
 
 \begin_layout LyX-Code
-  case Mood.Caffeinated => "Compiling at the speed of light!"
-\begin_inset Newline newline
-\end_inset
-
-
+case Mood.Caffeinated => "Compiling at the speed of light!"
 \end_layout
 
 \begin_layout LyX-Code
-// Typical morning
+// A typical morning
 \end_layout
 
 \begin_layout LyX-Code
@@ -326,46 +306,52 @@ val sequence = List(Mood.Happy,
 sequence.map(response).foreach(println)
 \end_layout
 
-\begin_layout Standard
-Open scala shell with our new batch file:
-\end_layout
-
-\begin_layout LyX-Code
-
-\series bold
-% launch.bat
+\begin_layout Subsection*
+The Moment of Truth
 \end_layout
 
 \begin_layout Standard
-Run the code:
+Run your launch.bat file to open your localized command prompt.
+ Now,
+ tell Scala CLI to run everything in the current directory:
+\end_layout
+
+\begin_layout Standard
+Bash
 \end_layout
 
 \begin_layout LyX-Code
-
-\series bold
 % scala-cli .
 \end_layout
 
 \begin_layout LyX-Code
-> Compiling project (Scala 3.7.4,
- JVM (25))
+You should see Scala spring to life,
+ download the necessary dependencies (like pprint),
+ and output:
 \end_layout
 
 \begin_layout LyX-Code
-> Compiled project (Scala 3.7.4,
- JVM (25))
+Plaintext
 \end_layout
 
 \begin_layout LyX-Code
-> 
-\series bold
 Keep coding!
 \end_layout
 
 \begin_layout LyX-Code
-> 
-\series bold
 Compiling at the speed of light!
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Congratulations
+\series default
+.
+ You have a professional-grade Scala 3 environment running entirely inside a single folder.
+ No installers,
+ no registry keys,
+ just code.
 \end_layout
 
 \end_body

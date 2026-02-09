@@ -89,39 +89,45 @@
 \begin_body
 
 \begin_layout Standard
-Scala owns performance and in particular big data.
- So it makes sense that collections would be where it outshines most other languages.
- 
-\end_layout
-
-\begin_layout Standard
-There are 3 basic,
- big-name collections:
- lists,
- vectors,
- and maps.
- 
+Scala is the undisputed heavyweight champion of big data.
+ It makes sense,
+ then,
+ that its collections are where the language outshines almost everything else.
+ While other languages treat lists as simple storage,
+ Scala treats them as high-speed engines for transformation.
 \end_layout
 
 \begin_layout Subsection*
-
-\family sans
-Lists
+The Big Three:
+ Lists,
+ Vectors,
+ and Maps
 \end_layout
 
 \begin_layout Standard
-Lists hold collections of objects (object references if you want to be specific),
- with each object occupying a position in the array at a given *index* (eg.
- 0,
- 1,
- 2...n).
- They are the break and butter for small to medium sized data sets.
+In Scala,
+ we typically reach for three primary containers.
+ By default,
+ these are immutable.
+ You don't "change" a list;
+ you create a new,
+ refined version of it.
+\end_layout
+
+\begin_layout Subsubsection*
+Lists:
+ The Bread and Butter
 \end_layout
 
 \begin_layout Standard
-Lists by default are *immutable*,
- meaning they can't be added to.
- The pattern if we need to update a list is to create a new one that is a copy of the existing + given new elements.
+A List is an ordered sequence,
+ ideal for small to medium-sized data.
+ Scala uses () for indexing rather than [],
+ a small departure from C-style languages that hints at Scala's mathematical roots.
+\end_layout
+
+\begin_layout LyX-Code
+Scala
 \end_layout
 
 \begin_layout LyX-Code
@@ -131,463 +137,266 @@ val fruit = List("Apple",
 \end_layout
 
 \begin_layout LyX-Code
-var pickOne = fruit(0) // Returns 
-\begin_inset Quotes eld
-\end_inset
-
-Apple
-\begin_inset Quotes erd
-\end_inset
-
-
-\begin_inset Newline newline
-\end_inset
-
-
-\begin_inset Newline newline
-\end_inset
-
-val moreFruit = 
-\begin_inset Quotes eld
-\end_inset
-
-Dragonfruit
-\begin_inset Quotes erd
-\end_inset
-
- ::
- fruit
+val first = fruit(0) // "Apple"
 \end_layout
 
 \begin_layout LyX-Code
-val changeCherry = fruit.updated(2,
- 
-\begin_inset Quotes eld
-\end_inset
-
-Kiwi
-\begin_inset Quotes erd
-\end_inset
-
-)
-\end_layout
-
-\begin_layout Standard
-Note the use of 
-\begin_inset Quotes eld
-\end_inset
-
-()
-\begin_inset Quotes erd
-\end_inset
-
- syntax to get element,
- rather than 
-\begin_inset Quotes eld
-\end_inset
-
-[]
-\begin_inset Quotes erd
-\end_inset
-
- in other languages.
- This is one of the beauties of scala but also why some folks coming from other languages label it as 
-\begin_inset Quotes eld
-\end_inset
-
-hard
-\begin_inset Quotes erd
-\end_inset
-
-:
- it is not afraid to break conventions of other languages (*cough* C *cough*).
-\end_layout
-
-\begin_layout Standard
-Also,
- we add an element by creating a new list with the changes:
- we can create a new list with the new value added (in this case we prepend),
- the new value substituted into a given index,
- or an old value dropped.
+// Prepending (Adding to the front)
 \end_layout
 
 \begin_layout LyX-Code
-val noFirstFruit = fruit.drop(1) // drops everything to the left of the given index
+val moreFruit = "Dragonfruit" ::
+ fruit 
 \end_layout
 
 \begin_layout LyX-Code
-val noLastFruit = fruit.dropRight(1) // drops everything to the right of the given index
+// Updating (Creating a new list with one change)
 \end_layout
 
 \begin_layout LyX-Code
-val dropBananaAddCitruses =  fruit.patch(1,
- List(
-\begin_inset Quotes eld
-\end_inset
-
-lemon
-\begin_inset Quotes erd
-\end_inset
-
-,
- 
-\begin_inset Quotes eld
-\end_inset
-
-lime
-\begin_inset Quotes erd
-\end_inset
-
-),
- 1) // remove banana,
- add more citrus in the middle
+val kiwiList = fruit.updated(2,
+ "Kiwi") 
 \end_layout
 
 \begin_layout Standard
-Note:
- obj.patch(fromIndex,
- replacementCollection,
- numberOfElementsToRemove) combines a few of these into one,
- where we give it an index & number of elements to remove,
- as well as an optional new list to insert.
+Scala provides powerful tools like .patch to perform surgery on your data:
+\end_layout
+
+\begin_layout LyX-Code
+Scala
+\end_layout
+
+\begin_layout LyX-Code
+// Remove 1 element at index 1,
+ and insert "Lemon" and "Lime"
+\end_layout
+
+\begin_layout LyX-Code
+val citruses = fruit.patch(1,
+ List("Lemon",
+ "Lime"),
+ 1)
+\end_layout
+
+\begin_layout Subsubsection*
+Vectors:
+ The Random-Access Specialist
 \end_layout
 
 \begin_layout Standard
-This approach encourages mapping operations & comprehensive changes (which we will discuss in a minute) over one-offs.
+If your dataset is enormous and you need to jump to the middle of it instantly,
+ use a Vector.
+ While a List has to walk from the beginning to find the 10,000th element,
+ a Vector can "teleport" there.
 \end_layout
 
-\begin_layout Subsection*
+\begin_layout LyX-Code
+Scala
+\end_layout
 
-\family sans
-Maps (Hashes)
+\begin_layout LyX-Code
+val trees = Vector("Pine",
+ "Birch",
+ "Maple")
+\end_layout
+
+\begin_layout LyX-Code
+val middle = trees(trees.length / 2)
+\end_layout
+
+\begin_layout Subsubsection*
+Maps:
+ The Dictionary
 \end_layout
 
 \begin_layout Standard
-Hashes are collections where the elements are indexed by a key that can be any type of object or values (not necessarily integers in order):
+A Map (often called a Hash or Dictionary) stores pairs of keys and values.
+ There is no sequencing requirement here;
+ you just need to know the key.
+\end_layout
+
+\begin_layout LyX-Code
+Scala
 \end_layout
 
 \begin_layout LyX-Code
 val meal = Map(
-\begin_inset Quotes eld
-\end_inset
-
-main course
-\begin_inset Quotes erd
-\end_inset
-
- -> "lobster",
- 
-\begin_inset Quotes eld
-\end_inset
-
-appetizer
-\begin_inset Quotes erd
-\end_inset
-
- -> "escargots",
- 
-\begin_inset Quotes eld
-\end_inset
-
-dessert
-\begin_inset Quotes erd
-\end_inset
-
- -> 
-\begin_inset Quotes eld
-\end_inset
-
-chocolate cake
-\begin_inset Quotes erd
-\end_inset
-
-)
-\begin_inset Newline newline
-\end_inset
-
-
-\begin_inset Newline newline
-\end_inset
-
-val appies = meal(
-\begin_inset Quotes eld
-\end_inset
-
-appetizer
-\begin_inset Quotes erd
-\end_inset
-
-)
-\end_layout
-
-\begin_layout Standard
-Notice that there's no sequencing requirement.
- The only constraint is that keys must be of the same type.
-\end_layout
-
-\begin_layout Subsection*
-
-\family sans
-Vectors
-\end_layout
-
-\begin_layout Standard
-Vectors list lists,
- but are optimized for *random-access*,
- as opposed to iteration.
- That is to say,
- even if your collection is enormous,
- if you need the middle element you can jump there immediately.
 \end_layout
 
 \begin_layout LyX-Code
-val trees = Vector(
-\begin_inset Quotes eld
-\end_inset
-
-pine
-\begin_inset Quotes erd
-\end_inset
-
-,
+"main" -> "Lobster",
  
-\begin_inset Quotes eld
-\end_inset
-
-birch
-\begin_inset Quotes erd
-\end_inset
-
-,
- 
-\begin_inset Quotes eld
-\end_inset
-
-maple
-\begin_inset Quotes erd
-\end_inset
-
-)
-\begin_inset Newline newline
-\end_inset
-
-
-\begin_inset Newline newline
-\end_inset
-
-val whitey = trees(trees.length / 2) // Grab middle element
 \end_layout
 
-\begin_layout Standard
-This may seem unimpressive,
- but as data sets grow large,
- the last statement will typically perform better with a vector than a list.
+\begin_layout LyX-Code
+"starter" -> "Escargots"
+\end_layout
+
+\begin_layout LyX-Code
+)
+\end_layout
+
+\begin_layout LyX-Code
+val appy = meal("starter") // "Escargots"
 \end_layout
 
 \begin_layout Subsection*
-
-\family sans
-Blocks (aka 
-\begin_inset Quotes eld
-\end_inset
-
-Higher Order Functions
-\begin_inset Quotes erd
-\end_inset
-
-) & Iterators
+The Iterator Block (Higher-Order Functions)
 \end_layout
 
 \begin_layout Standard
-Now,
- imagine that we have a list of company objects (see above).
- Let's create a company list class for some common operations on company lists:
+This is where Scala gets exciting.
+ Instead of writing manual for loops with counters and temporary variables,
+ we use Blocks.
+\end_layout
+
+\begin_layout Standard
+Imagine we have a list of Company objects.
+ We want to find a specific one.
+\end_layout
+
+\begin_layout LyX-Code
+Scala
 \end_layout
 
 \begin_layout LyX-Code
 class CompanyList(companies:
- List[Company])
+ List[Company]):
 \end_layout
 
 \begin_layout LyX-Code
-  def withBrand(brand:String):Option[Company] =
+def withBrand(brand:
+ String):
+ Option[Company] =
 \end_layout
 
 \begin_layout LyX-Code
-    companies.find { c =>
-\begin_inset Newline newline
-\end_inset
-
-      c.name == brand
-\begin_inset Newline newline
-\end_inset
-
-    }
-\begin_inset Newline newline
-\end_inset
-
-
-\begin_inset Newline newline
-\end_inset
-
-// Use it!
-\begin_inset Newline newline
-\end_inset
-
-val c = CompanyList( List(Company("Nike",
- 10),
- Company("Reebok",
- 20)) )
-\begin_inset Newline newline
-\end_inset
-
-c.withBrand { "Reebok" }
-\end_layout
-
-\begin_layout Standard
-Note that in withBrand we are take a brand name,
- and then execute the 
-\begin_inset Quotes eld
-\end_inset
-
-find
-\begin_inset Quotes erd
-\end_inset
-
- method with a strange iterator 
-\emph on
-code block
-\emph default
- attached:
-\end_layout
-
-\begin_layout Standard
-- the 
-\begin_inset Quotes eld
-\end_inset
-
- c => 
-\begin_inset Quotes eld
-\end_inset
-
- syntax says 
-\begin_inset Quotes eld
-\end_inset
-
-for each element in the collection,
- assign it to the variable defined left of the 
-\begin_inset Quotes eld
-\end_inset
-
-=>
-\begin_inset Quotes erd
-\end_inset
-
- (in this case 'c'),
- 
-\end_layout
-
-\begin_layout Standard
-- then run the chunk of code after the 
-\begin_inset Quotes eld
-\end_inset
-
-=>
-\begin_inset Quotes erd
-\end_inset
-
- for each element in the collection
-\end_layout
-
-\begin_layout Standard
-What happens with the result of this block depends on the method it's used for.
- In this case,
- it's expected to return a boolean value,
- and will return the first element where the code block returns true.
- [ Well that's not quite true actually – it will return a value of Some[
-\emph on
-value
-\emph default
-] ( or None if no elements are found ) ]
-\end_layout
-
-\begin_layout Standard
-NOTE:
- another quick thing to notice here is that there is no 
-\begin_inset Quotes eld
-\end_inset
-
-return
-\begin_inset Quotes erd
-\end_inset
-
- statement here.
- That's basically a convenience measure for clarity,
- where the method takes the last statement of it's call chain and assumes that is what it should return.
-\end_layout
-
-\begin_layout Standard
-We could also generalize this statement and allow *any* code block to be taken to evaluate against the list to find an element:
+companies.find { c => 
 \end_layout
 
 \begin_layout LyX-Code
-  def findFlex(block:
- Company => Boolean):Option[Company] =
+c.name == brand 
 \end_layout
 
 \begin_layout LyX-Code
-    companies.find { c => 
+}
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Let’s break down that { c => ...
+ } syntax:
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+The Variable (c):
+
+\series default
+ This is a temporary name for "the current element" as Scala walks through the list.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+The Arrow (=>):
+
+\series default
+ This separates the variable name from the logic.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+The Result:
+
+\series default
+ The find method expects a Boolean.
+ It will return the first element where your block results in true.
 \begin_inset Newline newline
 \end_inset
 
-      block(c)
-\begin_inset Newline newline
-\end_inset
 
-    }
+\series bold
+Note on Returns:
+
+\series default
+ You won't see a return keyword here.
+ In Scala,
+ the last expression in a block is automatically the return value.
+ It’s cleaner,
+ less noisy,
+ and perfectly "Pragmatic."
+\end_layout
+
+\begin_layout Subsection*
+Flexible Logic:
+ Passing Blocks
 \end_layout
 
 \begin_layout Standard
-Notice how the parameter is defined here:
- 
+We can take this a step further.
+ What if we want to allow the user of our class to decide how to find a company?
+ We can define a method that accepts a code block as a parameter.
 \end_layout
 
 \begin_layout LyX-Code
-block:
- Company => Boolean
-\end_layout
-
-\begin_layout Standard
-This tells the method the parameter is named block,
- and it expects a code block that will take a Company as a parameter and return a boolean result.
-\end_layout
-
-\begin_layout Standard
-We can then invoke it with:
+Scala
 \end_layout
 
 \begin_layout LyX-Code
-c.findFlex { c => c.name == "Reebok" }
-\end_layout
-
-\begin_layout Standard
-NOTE:
- Many language stop here,
- but scala actually refines this further with a convenient shorthand syntax,
- where we can use underscore ( 
-\begin_inset Quotes eld
-\end_inset
-
-_
-\begin_inset Quotes erd
-\end_inset
-
- ) to mean the current element in our iteration.
- So the above would become:
+def findFlex(check:
+ Company => Boolean):
+ Option[Company] =
 \end_layout
 
 \begin_layout LyX-Code
-c.findFlex { _.name == "Reebok" }
+companies.find { c => check(c) }
+\end_layout
+
+\begin_layout Standard
+The type Company => Boolean tells the compiler:
+ "This method expects a function that takes a Company and returns true or false."
+\end_layout
+
+\begin_layout Standard
+Now,
+ we can call it with whatever logic we want:
+\end_layout
+
+\begin_layout LyX-Code
+Scala
+\end_layout
+
+\begin_layout LyX-Code
+// Long form
+\end_layout
+
+\begin_layout LyX-Code
+myList.findFlex { c => c.name == "Reebok" }
+\end_layout
+
+\begin_layout LyX-Code
+// The Professional Shorthand
+\end_layout
+
+\begin_layout LyX-Code
+myList.findFlex { _.name == "Reebok" }
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+The Underscore (_):
+
+\series default
+ This is the ultimate Scala shorthand.
+ It means "the current item." If you only use the variable once in your block,
+ you can toss the c => and just use the underscore.
+ It turns your code into a succinct,
+ readable sentence.
 \end_layout
 
 \end_body

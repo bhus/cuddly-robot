@@ -89,12 +89,28 @@
 \begin_body
 
 \begin_layout Standard
-As in most things,
- scala can do things the basic way.
+At some point,
+ your beautiful Scala logic needs to interact with the cold,
+ hard reality of the file system.
+ Because Scala runs on the JVM,
+ you have access to the ultra-reliable Java NIO (New I/O) libraries,
+ but Scala provides some "syntactic sugar" to make these interactions feel much more natural.
+\end_layout
+
+\begin_layout Subsection*
+Reading Files:
+ The Safe Way
 \end_layout
 
 \begin_layout Standard
-Reading from a file:
+The most common mistake in I/O is opening a file and forgetting to close it.
+ In Scala,
+ we use the .using pattern (or manual resource management) to ensure that once we are done reading,
+ the file handle is snapped shut immediately.
+\end_layout
+
+\begin_layout LyX-Code
+Scala
 \end_layout
 
 \begin_layout LyX-Code
@@ -102,23 +118,65 @@ import scala.io.Source
 \end_layout
 
 \begin_layout LyX-Code
-// The "Using" block ensures the file is closed automatically
+import scala.util.Using
 \end_layout
 
 \begin_layout LyX-Code
-val content = Source.fromFile("config.txt").use { source =>
+// 'Using' is a manager:
+ it opens the resource and closes it 
 \end_layout
 
 \begin_layout LyX-Code
-  source.getLines().toList
+// automatically even if your code crashes in the middle.
+\end_layout
+
+\begin_layout LyX-Code
+val lines:
+ Try[List[String]] = Using(Source.fromFile("config.txt")) { source =>
+\end_layout
+
+\begin_layout LyX-Code
+source.getLines().toList
 \end_layout
 
 \begin_layout LyX-Code
 }
 \end_layout
 
+\begin_layout LyX-Code
+lines match
+\end_layout
+
+\begin_layout LyX-Code
+case Success(content) => println(s"Read ${content.size} lines.")
+\end_layout
+
+\begin_layout LyX-Code
+case Failure(e) => println(s"Failed to read file:
+ ${e.getMessage}")
+\end_layout
+
 \begin_layout Standard
-Writing to a file:
+By wrapping our file access in Using,
+ we convert a risky operation into a Try container (which we learned about in Chapter 8).
+ It's safe,
+ predictable,
+ and clean.
+\end_layout
+
+\begin_layout Subsection*
+Writing Files:
+ Leveraging the JVM
+\end_layout
+
+\begin_layout Standard
+For writing data,
+ we often lean on the robust java.nio libraries.
+ While they look a bit more "Java-ish," they are incredibly fast and handle character encoding (like UTF-8) with precision.
+\end_layout
+
+\begin_layout LyX-Code
+Scala
 \end_layout
 
 \begin_layout LyX-Code
@@ -131,13 +189,87 @@ import java.nio.charset.StandardCharsets
 \end_layout
 
 \begin_layout LyX-Code
-val data = "Hello,
- Scala 3!"
+val path = Paths.get("output.txt")
 \end_layout
 
 \begin_layout LyX-Code
-Files.write(Paths.get("output.txt"),
+val data = "Hello,
+ Renaissance!
+\backslash
+nThis is Scala 3."
+\end_layout
+
+\begin_layout LyX-Code
+// Files.write is a 'one-shot' operation:
+ it opens,
+ writes,
+ and closes.
+\end_layout
+
+\begin_layout LyX-Code
+Files.write(path,
  data.getBytes(StandardCharsets.UTF_8))
+\end_layout
+
+\begin_layout Subsection*
+The Modern Approach:
+ "Source" Shortcuts
+\end_layout
+
+\begin_layout Standard
+If you just need to grab the entire contents of a file as a single string (common for config files or templates),
+ Scala makes it a one-liner:
+\end_layout
+
+\begin_layout LyX-Code
+Scala
+\end_layout
+
+\begin_layout LyX-Code
+val content = Source.fromFile("banner.txt").mkString
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+A Note on Performance
+\series default
+:
+ Source.fromFile is great for simple tasks,
+ but if you are processing a 10GB log file,
+ you'll want to use source.getLines() which is lazy.
+ It doesn't load the whole file into RAM;
+ it just gives you one line at a time as you ask for it.
+\end_layout
+
+\begin_layout Subsection*
+Working with Paths
+\end_layout
+
+\begin_layout Standard
+Instead of treating file locations as messy strings like "C:/users/docs/file.txt",
+ we use the Paths and Path objects.
+ This makes your code "cross-platform," meaning it will work on Windows,
+ macOS,
+ and Linux without you having to worry about backslashes versus forward slashes.
+\end_layout
+
+\begin_layout LyX-Code
+Scala
+\end_layout
+
+\begin_layout LyX-Code
+val dir = Paths.get("data",
+ "logs")
+\end_layout
+
+\begin_layout LyX-Code
+val file = dir.resolve("app.log") // Automatically handles separators
+\end_layout
+
+\begin_layout LyX-Code
+println(s"Looking for file at:
+ ${file.toAbsolutePath}")
 \end_layout
 
 \end_body

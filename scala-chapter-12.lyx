@@ -89,8 +89,25 @@
 \begin_body
 
 \begin_layout Standard
-ScalaTest is the most common way to do testing in scala.
- AnyWordSpec in particular is one of the most popular styles:
+Testing in Scala is primarily handled by ScalaTest.
+ It is a massive,
+ flexible framework that supports many styles,
+ but the most "Pragmatic" choice is AnyWordSpec.
+ It allows you to write tests that read like English sentences.
+\end_layout
+
+\begin_layout Subsection*
+The WordSpec Style:
+ Testing Behavior
+\end_layout
+
+\begin_layout Standard
+Instead of naming a method test_price_calculation_with_tax,
+ we describe the Subject and its Behavior.
+\end_layout
+
+\begin_layout LyX-Code
+Scala
 \end_layout
 
 \begin_layout LyX-Code
@@ -106,93 +123,68 @@ class ProductServiceSpec extends AnyWordSpec with Matchers:
 \end_layout
 
 \begin_layout LyX-Code
-  "A ProductService" should {
+"A ProductService" should {
 \end_layout
 
 \begin_layout LyX-Code
-    "calculate tax correctly" in {
+"calculate tax correctly" in {
 \end_layout
 
 \begin_layout LyX-Code
-      val price = 100.0
+val price = 100.0
 \end_layout
 
 \begin_layout LyX-Code
-      val tax = PriceCalculator.calculateTax(price)
+val tax = PriceCalculator.calculateTax(price)
 \end_layout
 
 \begin_layout LyX-Code
-      tax shouldBe 113.0 // DSL for assertions
+tax shouldBe 113.0 // This is the "Matchers" DSL
 \end_layout
 
 \begin_layout LyX-Code
-    }
+}
 \end_layout
 
 \begin_layout LyX-Code
-    "return an error for negative prices" in {
+"return an error for negative prices" in {
 \end_layout
 
 \begin_layout LyX-Code
-      val result = PriceCalculator.calculateTax(-1)
+val result = PriceCalculator.calculateTax(-1)
 \end_layout
 
 \begin_layout LyX-Code
-      result shouldBe a [Left[_,
- _]]
+result shouldBe a [Left[_,
+ _]] // Checking the "shape" of the data
 \end_layout
 
 \begin_layout LyX-Code
-    }
+}
 \end_layout
 
 \begin_layout LyX-Code
-  }
+}
 \end_layout
 
 \begin_layout Standard
-We can see even though this is considered a unit test,
- tests are organized around expected behaviour.
- 
-\begin_inset Quotes eld
-\end_inset
+By mixing in Matchers,
+ we get access to shouldBe.
+ It makes assertions feel less like a math equation and more like a conversation.
+\end_layout
 
-shouldBe
-\begin_inset Quotes erd
-\end_inset
-
- in particular allows for multiple aspects of testing,
- from specific values to general 
-\begin_inset Quotes eld
-\end_inset
-
-shape
-\begin_inset Quotes erd
-\end_inset
-
-.
+\begin_layout Subsection*
+Testing the Future
 \end_layout
 
 \begin_layout Standard
-Future testing is also a first class citizen.
- ScalaFutures allows this without having to inject 
-\begin_inset Quotes eld
-\end_inset
+Testing asynchronous code (like our Futures from Chapter 11) is notoriously difficult in other languages,
+ often involving "sleep" timers that make tests slow and flaky.
+ ScalaTest handles this elegantly with the ScalaFutures trait.
+\end_layout
 
-wait
-\begin_inset Quotes erd
-\end_inset
-
-,
- 
-\begin_inset Quotes eld
-\end_inset
-
-sleep
-\begin_inset Quotes erd
-\end_inset
-
- or other gross hacks.
+\begin_layout LyX-Code
+Scala
 \end_layout
 
 \begin_layout LyX-Code
@@ -204,109 +196,125 @@ class ApiSpec extends AnyWordSpec with ScalaFutures:
 \end_layout
 
 \begin_layout LyX-Code
-  "The API" should {
+"The API" should {
 \end_layout
 
 \begin_layout LyX-Code
-    "fetch data eventually" in {
+"fetch data eventually" in {
 \end_layout
 
 \begin_layout LyX-Code
-      val eventualData = mySttpClient.getData() // invokes the future
+val eventualData = mySttpClient.getData() // Returns a Future
 \end_layout
 
 \begin_layout LyX-Code
-      
+// 'whenReady' handles the waiting for you
 \end_layout
 
 \begin_layout LyX-Code
-      // 'whenReady' waits for the Future to finish
+whenReady(eventualData) { data =>
 \end_layout
 
 \begin_layout LyX-Code
-      whenReady(eventualData) { data =>
+data.name shouldBe "Renaissance"
 \end_layout
 
 \begin_layout LyX-Code
-        data.name shouldBe "Renaissance"
+}
 \end_layout
 
 \begin_layout LyX-Code
-      }
+}
 \end_layout
 
 \begin_layout LyX-Code
-    }
+}
 \end_layout
 
-\begin_layout LyX-Code
-  }
+\begin_layout Subsection*
+Property-Based Testing:
+ The Stress Test
 \end_layout
 
 \begin_layout Standard
-When it comes to testing apis and back end SQL stores,
- 
+Sometimes,
+ writing individual test cases isn't enough.
+ What if a bug only appears when a string is empty,
+ or a number is exactly Int.MaxValue?
+\end_layout
+
+\begin_layout Standard
+Property-based testing (often using a tool called ScalaCheck alongside ScalaTest) allows you to define a "property" that must always be true,
+ and the library will bombard your code with random data to try and break it.
+\end_layout
+
+\begin_layout LyX-Code
+Scala
+\end_layout
+
+\begin_layout LyX-Code
+// Conceptual Example:
+\end_layout
+
+\begin_layout LyX-Code
+"The Calculator" should {
+\end_layout
+
+\begin_layout LyX-Code
+"always return a positive number when squaring" in {
+\end_layout
+
+\begin_layout LyX-Code
+forAll { (n:
+ Int) => 
+\end_layout
+
+\begin_layout LyX-Code
+Calculator.square(n) should be >= 0
+\end_layout
+
+\begin_layout LyX-Code
+}
+\end_layout
+
+\begin_layout LyX-Code
+}
+\end_layout
+
+\begin_layout LyX-Code
+}
+\end_layout
+
+\begin_layout Subsection*
+Integration:
+ Doobie and sttp
+\end_layout
+
+\begin_layout Standard
+When you move into full application testing,
+ your strategy will rely on the libraries we've used throughout this tour:
+\end_layout
+
+\begin_layout Itemize
+
 \series bold
 sttp
 \series default
- & 
+:
+ Provides a "Testing Backend" that lets you mock API responses without actually hitting the network.
+\end_layout
+
+\begin_layout Itemize
+
 \series bold
 Doobie
 \series default
- will be your best friends.
-\end_layout
-
-\begin_layout Standard
-For property-based testing,
- often the best strategy is to allow some degree of randomness over a reasonably large sample size to ensure spooky behaviours are accounbed for:
-\end_layout
-
-\begin_layout LyX-Code
-import org.scalatest.concurrent.ScalaFutures
-\end_layout
-
-\begin_layout LyX-Code
-class ApiSpec extends AnyWordSpec with ScalaFutures:
-\end_layout
-
-\begin_layout LyX-Code
-  "The API" should {
-\end_layout
-
-\begin_layout LyX-Code
-    "fetch data eventually" in {
-\end_layout
-
-\begin_layout LyX-Code
-      val eventualData = mySttpClient.getData()
-\end_layout
-
-\begin_layout LyX-Code
-      
-\end_layout
-
-\begin_layout LyX-Code
-      // 'whenReady' waits for the Future to finish
-\end_layout
-
-\begin_layout LyX-Code
-      whenReady(eventualData) { data =>
-\end_layout
-
-\begin_layout LyX-Code
-        data.name shouldBe "Renaissance"
-\end_layout
-
-\begin_layout LyX-Code
-      }
-\end_layout
-
-\begin_layout LyX-Code
-    }
-\end_layout
-
-\begin_layout LyX-Code
-  }
+:
+ Provides a
+\emph on
+ doobie-scalatest
+\emph default
+ module that can actually check your SQL strings against your database schema at compile time to ensure your queries are valid.
 \end_layout
 
 \end_body
