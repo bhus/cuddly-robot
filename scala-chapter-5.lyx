@@ -270,19 +270,15 @@ You can define strings with single quotes (for a single Char),
 \end_layout
 
 \begin_layout LyX-Code
-Scala
-\end_layout
-
-\begin_layout LyX-Code
 val html = """<html>
 \end_layout
 
 \begin_layout LyX-Code
-| <body>Hello Scala!</body>
+             | <body>Hello Scala!</body>
 \end_layout
 
 \begin_layout LyX-Code
-|</html>""".stripMargin
+             |</html>""".stripMargin
 \end_layout
 
 \begin_layout Standard
@@ -307,10 +303,6 @@ s interpolation:
 \begin_layout Itemize
 f interpolation:
  For "formatted" injection (like rounding decimals).
-\end_layout
-
-\begin_layout LyX-Code
-Scala
 \end_layout
 
 \begin_layout LyX-Code
@@ -339,10 +331,6 @@ Ranges:
 A Range is a clever abstraction.
  It represents a list of values (like 1 to 1000) without actually creating 1000 integers in your memory.
  It only generates the numbers as you need them.
-\end_layout
-
-\begin_layout LyX-Code
-Scala
 \end_layout
 
 \begin_layout LyX-Code
@@ -382,10 +370,6 @@ In many languages,
 \end_layout
 
 \begin_layout LyX-Code
-Scala
-\end_layout
-
-\begin_layout LyX-Code
 val EmailRegex = """([a-zA-Z0-9.-]+)@([a-zA-Z0-9.-]+
 \backslash
 .[a-zA-Z]{2,4})""".r
@@ -394,10 +378,6 @@ val EmailRegex = """([a-zA-Z0-9.-]+)@([a-zA-Z0-9.-]+
 \begin_layout Standard
 Because they are objects,
  you can call methods directly on them:
-\end_layout
-
-\begin_layout LyX-Code
-Scala
 \end_layout
 
 \begin_layout LyX-Code
@@ -430,10 +410,6 @@ This is where the "Pickaxe" style of programming really shines.
 \end_layout
 
 \begin_layout LyX-Code
-Scala
-\end_layout
-
-\begin_layout LyX-Code
 val input = "Contact us at support@startup.io"
 \end_layout
 
@@ -442,13 +418,13 @@ input match
 \end_layout
 
 \begin_layout LyX-Code
-case EmailRegex(user,
+  case EmailRegex(user,
  domain) => println(s"User:
  $user on $domain")
 \end_layout
 
 \begin_layout LyX-Code
-case _ => println("No email found.")
+  case _ => println("No email found.")
 \end_layout
 
 \begin_layout Subsection*
@@ -463,29 +439,25 @@ Sometimes you don't know what kind of data you're going to get.
 \end_layout
 
 \begin_layout LyX-Code
-Scala
-\end_layout
-
-\begin_layout LyX-Code
 def process(input:
  Any):
  Unit = input match
 \end_layout
 
 \begin_layout LyX-Code
-case s:
+  case s:
  String => println(s"Processing text:
  $s")
 \end_layout
 
 \begin_layout LyX-Code
-case i:
+  case i:
  Int => println(s"Processing number:
  $i")
 \end_layout
 
 \begin_layout LyX-Code
-case _ => println("Unknown entity detected.")
+  case _ => println("Unknown entity detected.")
 \end_layout
 
 \end_body

@@ -107,64 +107,76 @@ Instead of naming a method test_price_calculation_with_tax,
 \end_layout
 
 \begin_layout LyX-Code
-Scala
-\end_layout
-
-\begin_layout LyX-Code
 import org.scalatest.wordspec.AnyWordSpec
 \end_layout
 
 \begin_layout LyX-Code
 import org.scalatest.matchers.should.Matchers
+\begin_inset Newline newline
+\end_inset
+
+
 \end_layout
 
 \begin_layout LyX-Code
 class ProductServiceSpec extends AnyWordSpec with Matchers:
+\begin_inset Newline newline
+\end_inset
+
+
 \end_layout
 
 \begin_layout LyX-Code
-"A ProductService" should {
+  "A ProductService" should {
+\begin_inset Newline newline
+\end_inset
+
+
 \end_layout
 
 \begin_layout LyX-Code
-"calculate tax correctly" in {
+    "calculate tax correctly" in {
 \end_layout
 
 \begin_layout LyX-Code
-val price = 100.0
+      val price = 100.0
 \end_layout
 
 \begin_layout LyX-Code
-val tax = PriceCalculator.calculateTax(price)
+      val tax = PriceCalculator.calculateTax(price)
 \end_layout
 
 \begin_layout LyX-Code
-tax shouldBe 113.0 // This is the "Matchers" DSL
+      tax shouldBe 113.0 // This is the "Matchers" DSL
 \end_layout
 
 \begin_layout LyX-Code
-}
+    }
+\begin_inset Newline newline
+\end_inset
+
+
 \end_layout
 
 \begin_layout LyX-Code
-"return an error for negative prices" in {
+    "return an error for negative prices" in {
 \end_layout
 
 \begin_layout LyX-Code
-val result = PriceCalculator.calculateTax(-1)
+      val result = PriceCalculator.calculateTax(-1)
 \end_layout
 
 \begin_layout LyX-Code
-result shouldBe a [Left[_,
+      result shouldBe a [Left[_,
  _]] // Checking the "shape" of the data
 \end_layout
 
 \begin_layout LyX-Code
-}
+    }
 \end_layout
 
 \begin_layout LyX-Code
-}
+  }
 \end_layout
 
 \begin_layout Standard
@@ -184,51 +196,59 @@ Testing asynchronous code (like our Futures from Chapter 11) is notoriously diff
 \end_layout
 
 \begin_layout LyX-Code
-Scala
-\end_layout
-
-\begin_layout LyX-Code
 import org.scalatest.concurrent.ScalaFutures
+\begin_inset Newline newline
+\end_inset
+
+
 \end_layout
 
 \begin_layout LyX-Code
 class ApiSpec extends AnyWordSpec with ScalaFutures:
+\begin_inset Newline newline
+\end_inset
+
+
 \end_layout
 
 \begin_layout LyX-Code
-"The API" should {
+  "The API" should {
 \end_layout
 
 \begin_layout LyX-Code
-"fetch data eventually" in {
+    "fetch data eventually" in {
 \end_layout
 
 \begin_layout LyX-Code
-val eventualData = mySttpClient.getData() // Returns a Future
+      val eventualData = mySttpClient.getData() // Returns a Future
+\begin_inset Newline newline
+\end_inset
+
+
 \end_layout
 
 \begin_layout LyX-Code
-// 'whenReady' handles the waiting for you
+      // 'whenReady' handles the waiting for you
 \end_layout
 
 \begin_layout LyX-Code
-whenReady(eventualData) { data =>
+      whenReady(eventualData) { data =>
 \end_layout
 
 \begin_layout LyX-Code
-data.name shouldBe "Renaissance"
+        data.name shouldBe "Renaissance"
 \end_layout
 
 \begin_layout LyX-Code
-}
+      }
 \end_layout
 
 \begin_layout LyX-Code
-}
+    }
 \end_layout
 
 \begin_layout LyX-Code
-}
+  }
 \end_layout
 
 \begin_layout Subsection*
@@ -249,10 +269,6 @@ Property-based testing (often using a tool called ScalaCheck alongside ScalaTest
 \end_layout
 
 \begin_layout LyX-Code
-Scala
-\end_layout
-
-\begin_layout LyX-Code
 // Conceptual Example:
 \end_layout
 
@@ -261,24 +277,24 @@ Scala
 \end_layout
 
 \begin_layout LyX-Code
-"always return a positive number when squaring" in {
+  "always return a positive number when squaring" in {
 \end_layout
 
 \begin_layout LyX-Code
-forAll { (n:
+    forAll { (n:
  Int) => 
 \end_layout
 
 \begin_layout LyX-Code
-Calculator.square(n) should be >= 0
+      Calculator.square(n) should be >= 0
 \end_layout
 
 \begin_layout LyX-Code
-}
+    }
 \end_layout
 
 \begin_layout LyX-Code
-}
+  }
 \end_layout
 
 \begin_layout LyX-Code

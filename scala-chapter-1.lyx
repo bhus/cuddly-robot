@@ -209,19 +209,19 @@ echo ---------------------------------------
 \end_layout
 
 \begin_layout LyX-Code
-echo // project.scala
+  echo // project.scala
 \end_layout
 
 \begin_layout LyX-Code
-echo //> using javaOpt "--sun-misc-unsafe-memory-access=allow"
+  echo //> using javaOpt "--sun-misc-unsafe-memory-access=allow"
 \end_layout
 
 \begin_layout LyX-Code
-echo //> using javaOpt "--add-opens=java.base/java.lang=ALL-UNNAMED"
+  echo //> using javaOpt "--add-opens=java.base/java.lang=ALL-UNNAMED"
 \end_layout
 
 \begin_layout LyX-Code
-echo //> using dep com.lihaoyi::pprint:0.9.6
+  echo //> using dep com.lihaoyi::pprint:0.9.6
 \end_layout
 
 \begin_layout LyX-Code
@@ -282,15 +282,19 @@ def response(mood:
 \end_layout
 
 \begin_layout LyX-Code
-case Mood.Happy => "Keep coding!"
+  case Mood.Happy => "Keep coding!"
 \end_layout
 
 \begin_layout LyX-Code
-case Mood.Curious => "Let's explore the source code."
+  case Mood.Curious => "Let's explore the source code."
 \end_layout
 
 \begin_layout LyX-Code
-case Mood.Caffeinated => "Compiling at the speed of light!"
+  case Mood.Caffeinated => "Compiling at the speed of light!"
+\begin_inset Newline newline
+\end_inset
+
+
 \end_layout
 
 \begin_layout LyX-Code

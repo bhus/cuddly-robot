@@ -114,10 +114,6 @@ In many languages,
 \end_layout
 
 \begin_layout LyX-Code
-Scala
-\end_layout
-
-\begin_layout LyX-Code
 class Company(val name:
  String,
  val revenue:
@@ -148,10 +144,6 @@ isn't very helpful.
 \end_layout
 
 \begin_layout LyX-Code
-Scala
-\end_layout
-
-\begin_layout LyX-Code
 class Company(val name:
  String,
  val revenue:
@@ -159,14 +151,18 @@ class Company(val name:
 \end_layout
 
 \begin_layout LyX-Code
-override def toString:
+  override def toString:
  String = 
 \end_layout
 
 \begin_layout LyX-Code
-s"[Company:
+    s"[Company:
  $name | MRR:
  $$$revenue]"
+\begin_inset Newline newline
+\end_inset
+
+
 \end_layout
 
 \begin_layout LyX-Code
@@ -197,10 +193,6 @@ Inheritance allows us to create specialized versions of a general concept.
 \end_layout
 
 \begin_layout LyX-Code
-Scala
-\end_layout
-
-\begin_layout LyX-Code
 class StartupCompany(name:
  String,
  revenue:
@@ -210,24 +202,32 @@ class StartupCompany(name:
 \end_layout
 
 \begin_layout LyX-Code
-extends Company(name,
+  extends Company(name,
  revenue):
+\begin_inset Newline newline
+\end_inset
+
+
 \end_layout
 
 \begin_layout LyX-Code
-override def toString:
+  override def toString:
  String =
 \end_layout
 
 \begin_layout LyX-Code
-val parentText = super.toString()
+    val parentText = super.toString()
 \end_layout
 
 \begin_layout LyX-Code
-s"[Startup:
+    s"[Startup:
  $name | Seed:
  $$$seedMoney] (Parent Info:
  $parentText)"
+\begin_inset Newline newline
+\end_inset
+
+
 \end_layout
 
 \begin_layout LyX-Code
@@ -276,14 +276,14 @@ var (Variable):
 \end_layout
 
 \begin_layout LyX-Code
-Scala
-\end_layout
-
-\begin_layout LyX-Code
 class FlexibleCompany(val name:
  String,
  var revenue:
  Int)
+\begin_inset Newline newline
+\end_inset
+
+
 \end_layout
 
 \begin_layout LyX-Code
@@ -316,10 +316,6 @@ If you create an object with the same name as your class in the same file,
 \end_layout
 
 \begin_layout LyX-Code
-Scala
-\end_layout
-
-\begin_layout LyX-Code
 class Company(val name:
  String,
  val revenue:
@@ -331,22 +327,26 @@ object Company:
 \end_layout
 
 \begin_layout LyX-Code
-// A Factory Method
+  // A Factory Method
 \end_layout
 
 \begin_layout LyX-Code
-def buildBootstrapped(name:
+  def buildBootstrapped(name:
  String):
  Company =
 \end_layout
 
 \begin_layout LyX-Code
-println(s"Building $name with zero outside capital...")
+    println(s"Building $name with zero outside capital...")
 \end_layout
 
 \begin_layout LyX-Code
-new Company(name,
+    new Company(name,
  0)
+\begin_inset Newline newline
+\end_inset
+
+
 \end_layout
 
 \begin_layout LyX-Code
@@ -382,11 +382,15 @@ object AppConfig:
 \end_layout
 
 \begin_layout LyX-Code
-val apiBase = "https://api.startup.io"
+  val apiBase = "https://api.startup.io"
 \end_layout
 
 \begin_layout LyX-Code
-var debugMode = true
+  var debugMode = true
+\begin_inset Newline newline
+\end_inset
+
+
 \end_layout
 
 \begin_layout LyX-Code
@@ -398,7 +402,7 @@ if AppConfig.debugMode then
 \end_layout
 
 \begin_layout LyX-Code
-println(s"Connecting to ${AppConfig.apiBase}")
+  println(s"Connecting to ${AppConfig.apiBase}")
 \end_layout
 
 \begin_layout Standard

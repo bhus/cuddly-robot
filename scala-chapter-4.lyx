@@ -127,10 +127,6 @@ A List is an ordered sequence,
 \end_layout
 
 \begin_layout LyX-Code
-Scala
-\end_layout
-
-\begin_layout LyX-Code
 val fruit = List("Apple",
  "Banana",
  "Cherry")
@@ -224,12 +220,12 @@ val meal = Map(
 \end_layout
 
 \begin_layout LyX-Code
-"main" -> "Lobster",
+  "main" -> "Lobster",
  
 \end_layout
 
 \begin_layout LyX-Code
-"starter" -> "Escargots"
+  "starter" -> "Escargots"
 \end_layout
 
 \begin_layout LyX-Code
@@ -265,21 +261,21 @@ class CompanyList(companies:
 \end_layout
 
 \begin_layout LyX-Code
-def withBrand(brand:
+  def withBrand(brand:
  String):
  Option[Company] =
 \end_layout
 
 \begin_layout LyX-Code
-companies.find { c => 
+    companies.find { c => 
 \end_layout
 
 \begin_layout LyX-Code
-c.name == brand 
+      c.name == brand 
 \end_layout
 
 \begin_layout LyX-Code
-}
+    }
 \end_layout
 
 \begin_layout Standard
@@ -343,17 +339,13 @@ We can take this a step further.
 \end_layout
 
 \begin_layout LyX-Code
-Scala
-\end_layout
-
-\begin_layout LyX-Code
 def findFlex(check:
  Company => Boolean):
  Option[Company] =
 \end_layout
 
 \begin_layout LyX-Code
-companies.find { c => check(c) }
+  companies.find { c => check(c) }
 \end_layout
 
 \begin_layout Standard
@@ -364,10 +356,6 @@ The type Company => Boolean tells the compiler:
 \begin_layout Standard
 Now,
  we can call it with whatever logic we want:
-\end_layout
-
-\begin_layout LyX-Code
-Scala
 \end_layout
 
 \begin_layout LyX-Code

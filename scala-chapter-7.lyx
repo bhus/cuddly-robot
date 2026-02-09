@@ -118,10 +118,6 @@ Scala allows you to redefine operators like +,
 \end_layout
 
 \begin_layout LyX-Code
-Scala
-\end_layout
-
-\begin_layout LyX-Code
 case class Position(x:
  Int,
  y:
@@ -129,14 +125,18 @@ case class Position(x:
 \end_layout
 
 \begin_layout LyX-Code
-def +(other:
+  def +(other:
  Position):
  Position =
 \end_layout
 
 \begin_layout LyX-Code
-Position(this.x + other.x,
+    Position(this.x + other.x,
  this.y + other.y)
+\begin_inset Newline newline
+\end_inset
+
+
 \end_layout
 
 \begin_layout LyX-Code
@@ -167,10 +167,6 @@ Since Scala shuns null,
 \end_layout
 
 \begin_layout LyX-Code
-Scala
-\end_layout
-
-\begin_layout LyX-Code
 val storedName:
  Option[String] = None
 \end_layout
@@ -194,10 +190,6 @@ An
 \end_layout
 
 \begin_layout LyX-Code
-Scala
-\end_layout
-
-\begin_layout LyX-Code
 val numbers = List(1,
  2,
  3,
@@ -210,11 +202,11 @@ for
 \end_layout
 
 \begin_layout LyX-Code
-n <- numbers 
+  n <- numbers 
 \end_layout
 
 \begin_layout LyX-Code
-if n > 5 // This is the guard
+  if n > 5 // This is the guard
 \end_layout
 
 \begin_layout LyX-Code
@@ -222,7 +214,7 @@ do
 \end_layout
 
 \begin_layout LyX-Code
-println(s"Large number:
+  println(s"Large number:
  $n")
 \end_layout
 
@@ -238,12 +230,12 @@ Pattern matching is the defining feature of Scala.
 \end_layout
 
 \begin_layout LyX-Code
-Scala
-\end_layout
-
-\begin_layout LyX-Code
 val toTest:
  Any = "Success"
+\begin_inset Newline newline
+\end_inset
+
+
 \end_layout
 
 \begin_layout LyX-Code
@@ -251,20 +243,20 @@ toTest match
 \end_layout
 
 \begin_layout LyX-Code
-case 0 => "It's a zero" // Constant match
+  case 0 => "It's a zero" // Constant match
 \end_layout
 
 \begin_layout LyX-Code
-case "Success" => "It's a win!" // Value match
+  case "Success" => "It's a win!" // Value match
 \end_layout
 
 \begin_layout LyX-Code
-case s:
+  case s:
  String => s"It's a string of length ${s.length}" // Type match
 \end_layout
 
 \begin_layout LyX-Code
-case _ => "Fallback" // The Wildcard
+  case _ => "Fallback" // The Wildcard
 \end_layout
 
 \begin_layout Subsubsection*
@@ -282,10 +274,6 @@ destructuring
 \end_layout
 
 \begin_layout LyX-Code
-Scala
-\end_layout
-
-\begin_layout LyX-Code
 case class User(name:
  String,
  role:
@@ -295,6 +283,10 @@ case class User(name:
 \begin_layout LyX-Code
 val user = User("Alice",
  "Admin")
+\begin_inset Newline newline
+\end_inset
+
+
 \end_layout
 
 \begin_layout LyX-Code
@@ -302,18 +294,18 @@ user match
 \end_layout
 
 \begin_layout LyX-Code
-case User("Alice",
+  case User("Alice",
  _) => "Hi Alice!" // Ignore the role
 \end_layout
 
 \begin_layout LyX-Code
-case User(name,
+  case User(name,
  "Admin") => s"Alert:
  Admin $name is here."
 \end_layout
 
 \begin_layout LyX-Code
-case User(name,
+  case User(name,
  role) => s"User $name is a $role"
 \end_layout
 
@@ -326,13 +318,13 @@ shape of a List
 \end_layout
 
 \begin_layout LyX-Code
-Scala
-\end_layout
-
-\begin_layout LyX-Code
 val list = List(1,
  2,
  3)
+\begin_inset Newline newline
+\end_inset
+
+
 \end_layout
 
 \begin_layout LyX-Code
@@ -340,16 +332,16 @@ list match
 \end_layout
 
 \begin_layout LyX-Code
-case Nil => "Empty"
+  case Nil => "Empty"
 \end_layout
 
 \begin_layout LyX-Code
-case List(x) => s"Just one item:
+  case List(x) => s"Just one item:
  $x"
 \end_layout
 
 \begin_layout LyX-Code
-case head ::
+  case head ::
  tail => s"Starts with $head,
  followed by $tail"
 \end_layout
@@ -377,10 +369,6 @@ We use do when we want to interact with the outside world (I/O,
 \end_layout
 
 \begin_layout LyX-Code
-Scala
-\end_layout
-
-\begin_layout LyX-Code
 val apps = List("sttp",
  "Doobie",
  "Tapir")
@@ -391,7 +379,7 @@ for app <- apps do
 \end_layout
 
 \begin_layout LyX-Code
-println(s"Learning $app...")
+  println(s"Learning $app...")
 \end_layout
 
 \begin_layout Subsubsection*
@@ -405,10 +393,6 @@ When we want to create a new list from an old one,
 \end_layout
 
 \begin_layout LyX-Code
-Scala
-\end_layout
-
-\begin_layout LyX-Code
 val names = List("alice",
  "bob",
  "charlie")
@@ -419,11 +403,11 @@ val capitalizedAdmins = for
 \end_layout
 
 \begin_layout LyX-Code
-name <- names
+  name <- names
 \end_layout
 
 \begin_layout LyX-Code
-if name.startsWith("a") // The Guard:
+  if name.startsWith("a") // The Guard:
  Filters the input
 \end_layout
 
@@ -432,8 +416,12 @@ yield
 \end_layout
 
 \begin_layout LyX-Code
-name.capitalize // The Yield:
+  name.capitalize // The Yield:
  Transforms the result
+\begin_inset Newline newline
+\end_inset
+
+
 \end_layout
 
 \begin_layout LyX-Code

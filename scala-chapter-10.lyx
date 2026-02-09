@@ -110,15 +110,15 @@ The most common mistake in I/O is opening a file and forgetting to close it.
 \end_layout
 
 \begin_layout LyX-Code
-Scala
-\end_layout
-
-\begin_layout LyX-Code
 import scala.io.Source
 \end_layout
 
 \begin_layout LyX-Code
 import scala.util.Using
+\begin_inset Newline newline
+\end_inset
+
+
 \end_layout
 
 \begin_layout LyX-Code
@@ -136,11 +136,15 @@ val lines:
 \end_layout
 
 \begin_layout LyX-Code
-source.getLines().toList
+  source.getLines().toList
 \end_layout
 
 \begin_layout LyX-Code
 }
+\begin_inset Newline newline
+\end_inset
+
+
 \end_layout
 
 \begin_layout LyX-Code
@@ -148,11 +152,11 @@ lines match
 \end_layout
 
 \begin_layout LyX-Code
-case Success(content) => println(s"Read ${content.size} lines.")
+  case Success(content) => println(s"Read ${content.size} lines.")
 \end_layout
 
 \begin_layout LyX-Code
-case Failure(e) => println(s"Failed to read file:
+  case Failure(e) => println(s"Failed to read file:
  ${e.getMessage}")
 \end_layout
 
@@ -176,16 +180,16 @@ For writing data,
 \end_layout
 
 \begin_layout LyX-Code
-Scala
-\end_layout
-
-\begin_layout LyX-Code
 import java.nio.file.{Files,
  Paths}
 \end_layout
 
 \begin_layout LyX-Code
 import java.nio.charset.StandardCharsets
+\begin_inset Newline newline
+\end_inset
+
+
 \end_layout
 
 \begin_layout LyX-Code
@@ -197,6 +201,10 @@ val data = "Hello,
  Renaissance!
 \backslash
 nThis is Scala 3."
+\begin_inset Newline newline
+\end_inset
+
+
 \end_layout
 
 \begin_layout LyX-Code
@@ -219,10 +227,6 @@ The Modern Approach:
 \begin_layout Standard
 If you just need to grab the entire contents of a file as a single string (common for config files or templates),
  Scala makes it a one-liner:
-\end_layout
-
-\begin_layout LyX-Code
-Scala
 \end_layout
 
 \begin_layout LyX-Code
@@ -255,16 +259,16 @@ Instead of treating file locations as messy strings like "C:/users/docs/file.txt
 \end_layout
 
 \begin_layout LyX-Code
-Scala
-\end_layout
-
-\begin_layout LyX-Code
 val dir = Paths.get("data",
  "logs")
 \end_layout
 
 \begin_layout LyX-Code
 val file = dir.resolve("app.log") // Automatically handles separators
+\begin_inset Newline newline
+\end_inset
+
+
 \end_layout
 
 \begin_layout LyX-Code

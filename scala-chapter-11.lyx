@@ -95,10 +95,6 @@ Because Scala lives on the JVM,
 \end_layout
 
 \begin_layout LyX-Code
-Scala
-\end_layout
-
-\begin_layout LyX-Code
 val thread = new Thread(() => println("Running on a raw thread..."))
 \end_layout
 
@@ -136,10 +132,6 @@ Future
 \end_layout
 
 \begin_layout LyX-Code
-Scala
-\end_layout
-
-\begin_layout LyX-Code
 import scala.concurrent.Future
 \end_layout
 
@@ -157,15 +149,15 @@ val eventualData = Future {
 \end_layout
 
 \begin_layout LyX-Code
-// This block runs on a background thread
+  // This block runs on a background thread
 \end_layout
 
 \begin_layout LyX-Code
-Thread.sleep(1000) 
+  Thread.sleep(1000) 
 \end_layout
 
 \begin_layout LyX-Code
-"The secret ingredient"
+  "The secret ingredient"
 \end_layout
 
 \begin_layout LyX-Code
@@ -177,12 +169,12 @@ eventualData.onComplete {
 \end_layout
 
 \begin_layout LyX-Code
-case Success(value) => println(s"Order up:
+  case Success(value) => println(s"Order up:
  $value")
 \end_layout
 
 \begin_layout LyX-Code
-case Failure(e) => println(s"The kitchen crashed:
+  case Failure(e) => println(s"The kitchen crashed:
  ${e.getMessage}")
 \end_layout
 
@@ -229,10 +221,6 @@ Usually,
 \end_layout
 
 \begin_layout LyX-Code
-Scala
-\end_layout
-
-\begin_layout LyX-Code
 import scala.concurrent.Await
 \end_layout
 
@@ -268,19 +256,15 @@ The real magic happens when you have multiple async tasks that depend on each ot
 \end_layout
 
 \begin_layout LyX-Code
-Scala
-\end_layout
-
-\begin_layout LyX-Code
 val result = for {
 \end_layout
 
 \begin_layout LyX-Code
-user <- fetchUserFromApi(id) // Start task 1
+  user <- fetchUserFromApi(id) // Start task 1
 \end_layout
 
 \begin_layout LyX-Code
-dbStatus <- saveToDatabase(user) // Once task 1 finishes,
+  dbStatus <- saveToDatabase(user) // Once task 1 finishes,
  start task 2
 \end_layout
 
@@ -289,7 +273,7 @@ dbStatus <- saveToDatabase(user) // Once task 1 finishes,
 \end_layout
 
 \begin_layout LyX-Code
-s"Successfully saved ${user.name}"
+  s"Successfully saved ${user.name}"
 \end_layout
 
 \begin_layout LyX-Code
@@ -315,11 +299,11 @@ By adding a simple !
 \end_layout
 
 \begin_layout LyX-Code
-Scala
-\end_layout
-
-\begin_layout LyX-Code
 import sys.process.*
+\begin_inset Newline newline
+\end_inset
+
+
 \end_layout
 
 \begin_layout LyX-Code
@@ -331,6 +315,10 @@ import sys.process.*
 \begin_layout LyX-Code
 "ls -al".!
  
+\begin_inset Newline newline
+\end_inset
+
+
 \end_layout
 
 \begin_layout LyX-Code
@@ -340,6 +328,10 @@ import sys.process.*
 
 \begin_layout LyX-Code
 val myIp = "curl -s https://api.ipify.org".!!
+\begin_inset Newline newline
+\end_inset
+
+
 \end_layout
 
 \begin_layout LyX-Code
@@ -354,6 +346,10 @@ val myIp = "curl -s https://api.ipify.org".!!
 
 \begin_layout LyX-Code
 val userCount = ("cat names.txt" #| "grep Alice" #| "wc -l").!!
+\begin_inset Newline newline
+\end_inset
+
+
 \end_layout
 
 \begin_layout LyX-Code

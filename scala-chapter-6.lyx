@@ -115,18 +115,18 @@ Sometimes,
 \end_layout
 
 \begin_layout LyX-Code
-Scala
-\end_layout
-
-\begin_layout LyX-Code
 def printAll(names:
  String*):
  Unit =
 \end_layout
 
 \begin_layout LyX-Code
-names.foreach(name => println(s"Hello,
+  names.foreach(name => println(s"Hello,
  $name"))
+\begin_inset Newline newline
+\end_inset
+
+
 \end_layout
 
 \begin_layout LyX-Code
@@ -177,10 +177,6 @@ To solve this,
 \end_layout
 
 \begin_layout LyX-Code
-Scala
-\end_layout
-
-\begin_layout LyX-Code
 val developers = List("Scala",
  "Python",
  "Rust")
@@ -214,10 +210,6 @@ We can use this to create methods that look and feel like a configuration block:
 \end_layout
 
 \begin_layout LyX-Code
-Scala
-\end_layout
-
-\begin_layout LyX-Code
 def bulkUpdate(pairs:
  (String,
  String)*):
@@ -225,15 +217,19 @@ def bulkUpdate(pairs:
 \end_layout
 
 \begin_layout LyX-Code
-// Convert those pairs into a Map for easy lookup
+  // Convert those pairs into a Map for easy lookup
 \end_layout
 
 \begin_layout LyX-Code
-val dataMap = pairs.toMap 
+  val dataMap = pairs.toMap 
 \end_layout
 
 \begin_layout LyX-Code
-println(s"Updating ${dataMap.size} fields...")
+  println(s"Updating ${dataMap.size} fields...")
+\begin_inset Newline newline
+\end_inset
+
+
 \end_layout
 
 \begin_layout LyX-Code
@@ -245,15 +241,15 @@ bulkUpdate(
 \end_layout
 
 \begin_layout LyX-Code
-"email" -> "alice@startup.io",
+  "email" -> "alice@startup.io",
 \end_layout
 
 \begin_layout LyX-Code
-"status" -> "active",
+  "status" -> "active",
 \end_layout
 
 \begin_layout LyX-Code
-"plan" -> "pro"
+  "plan" -> "pro"
 \end_layout
 
 \begin_layout LyX-Code
@@ -291,8 +287,12 @@ def configureApp(port:
 \end_layout
 
 \begin_layout LyX-Code
-println(s"Starting on $port (Debug:
+  println(s"Starting on $port (Debug:
  $debug)")
+\begin_inset Newline newline
+\end_inset
+
+
 \end_layout
 
 \begin_layout LyX-Code
@@ -301,6 +301,10 @@ println(s"Starting on $port (Debug:
 
 \begin_layout LyX-Code
 configureApp() 
+\begin_inset Newline newline
+\end_inset
+
+
 \end_layout
 
 \begin_layout LyX-Code

@@ -113,15 +113,11 @@ If you’ve used Java or C#,
 \end_layout
 
 \begin_layout LyX-Code
-Scala
-\end_layout
-
-\begin_layout LyX-Code
 try {
 \end_layout
 
 \begin_layout LyX-Code
-// A risky Doobie database call
+  // A risky Doobie database call
 \end_layout
 
 \begin_layout LyX-Code
@@ -129,22 +125,22 @@ try {
 \end_layout
 
 \begin_layout LyX-Code
-case ex:
+  case ex:
  java.sql.SQLException if ex.getErrorCode == 101 => 
 \end_layout
 
 \begin_layout LyX-Code
-println("Specific DB Error:
+    println("Specific DB Error:
  Check your permissions.")
 \end_layout
 
 \begin_layout LyX-Code
-case ex:
+  case ex:
  Exception => 
 \end_layout
 
 \begin_layout LyX-Code
-println(s"Generic Error:
+    println(s"Generic Error:
  ${ex.getMessage}")
 \end_layout
 
@@ -163,10 +159,6 @@ You can throw exceptions exactly as you’d expect.
 \end_layout
 
 \begin_layout LyX-Code
-Scala
-\end_layout
-
-\begin_layout LyX-Code
 case class DatabaseException(msg:
  String,
  code:
@@ -180,12 +172,12 @@ def getUser(id:
 \end_layout
 
 \begin_layout LyX-Code
-if id < 0 then throw DatabaseException("Invalid ID",
+  if id < 0 then throw DatabaseException("Invalid ID",
  400)
 \end_layout
 
 \begin_layout LyX-Code
-else "Alice"
+  else "Alice"
 \end_layout
 
 \begin_layout Subsection*
@@ -204,18 +196,22 @@ While try/catch works,
 \end_layout
 
 \begin_layout LyX-Code
-Scala
-\end_layout
-
-\begin_layout LyX-Code
 import scala.util.{Try,
  Success,
  Failure}
+\begin_inset Newline newline
+\end_inset
+
+
 \end_layout
 
 \begin_layout LyX-Code
 val result:
  Try[Int] = Try("123".toInt)
+\begin_inset Newline newline
+\end_inset
+
+
 \end_layout
 
 \begin_layout LyX-Code
@@ -223,12 +219,12 @@ result match
 \end_layout
 
 \begin_layout LyX-Code
-case Success(num) => println(s"Value is:
+  case Success(num) => println(s"Value is:
  $num")
 \end_layout
 
 \begin_layout LyX-Code
-case Failure(ex) => println(s"Conversion failed:
+  case Failure(ex) => println(s"Conversion failed:
  ${ex.getMessage}")
 \end_layout
 
@@ -260,10 +256,6 @@ Right
 \end_layout
 
 \begin_layout LyX-Code
-Scala
-\end_layout
-
-\begin_layout LyX-Code
 def divide(a:
  Int,
  b:
@@ -273,11 +265,15 @@ def divide(a:
 \end_layout
 
 \begin_layout LyX-Code
-if b == 0 then Left("Cannot divide by zero!")
+  if b == 0 then Left("Cannot divide by zero!")
 \end_layout
 
 \begin_layout LyX-Code
-else Right(a / b)
+  else Right(a / b)
+\begin_inset Newline newline
+\end_inset
+
+
 \end_layout
 
 \begin_layout LyX-Code
@@ -300,10 +296,6 @@ the app is going to crash.
 \end_layout
 
 \begin_layout LyX-Code
-Scala
-\end_layout
-
-\begin_layout LyX-Code
 import scala.util.control.NonFatal
 \end_layout
 
@@ -312,7 +304,7 @@ try {
 \end_layout
 
 \begin_layout LyX-Code
-// Risky System Access
+  // Risky System Access
 \end_layout
 
 \begin_layout LyX-Code
@@ -320,12 +312,12 @@ try {
 \end_layout
 
 \begin_layout LyX-Code
-case NonFatal(ex) => println(s"Recoverable error:
+  case NonFatal(ex) => println(s"Recoverable error:
  $ex")
 \end_layout
 
 \begin_layout LyX-Code
-// OutOfMemoryError will bypass this and crash the app safely
+  // OutOfMemoryError will bypass this and crash the app safely
 \end_layout
 
 \begin_layout LyX-Code
@@ -344,10 +336,6 @@ When you open a file or a database connection,
 \end_layout
 
 \begin_layout LyX-Code
-Scala
-\end_layout
-
-\begin_layout LyX-Code
 val source = scala.io.Source.fromFile("renaissance.txt")
 \end_layout
 
@@ -356,7 +344,7 @@ try
 \end_layout
 
 \begin_layout LyX-Code
-println(source.mkString)
+  println(source.mkString)
 \end_layout
 
 \begin_layout LyX-Code
@@ -364,11 +352,11 @@ finally
 \end_layout
 
 \begin_layout LyX-Code
-source.close() // This runs NO MATTER WHAT
+  source.close() // This runs NO MATTER WHAT
 \end_layout
 
 \begin_layout LyX-Code
-println("Resource safely closed.")
+  println("Resource safely closed.")
 \end_layout
 
 \end_body

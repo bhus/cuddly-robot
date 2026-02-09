@@ -115,22 +115,18 @@ concrete
 \end_layout
 
 \begin_layout LyX-Code
-Scala
-\end_layout
-
-\begin_layout LyX-Code
 trait Logger:
 \end_layout
 
 \begin_layout LyX-Code
-def log(msg:
+  def log(msg:
  String):
  Unit // Abstract:
  You must define this later
 \end_layout
 
 \begin_layout LyX-Code
-def info(msg:
+  def info(msg:
  String) = log(s"[INFO] $msg") // Concrete:
  This logic is shared
 \end_layout
@@ -146,15 +142,11 @@ extends
 \end_layout
 
 \begin_layout LyX-Code
-Scala
-\end_layout
-
-\begin_layout LyX-Code
 class GenericService extends Logger:
 \end_layout
 
 \begin_layout LyX-Code
-def log(msg:
+  def log(msg:
  String) = println(msg) // We provide the 'how' for the log
 \end_layout
 
@@ -169,12 +161,12 @@ In Scala 3,
 \end_layout
 
 \begin_layout LyX-Code
-Scala
-\end_layout
-
-\begin_layout LyX-Code
 trait DatabaseConfig(val dbName:
  String)
+\begin_inset Newline newline
+\end_inset
+
+
 \end_layout
 
 \begin_layout LyX-Code
@@ -183,7 +175,7 @@ class DoobieRepository(name:
 \end_layout
 
 \begin_layout LyX-Code
-def connect() = println(s"Connecting to $dbName")
+  def connect() = println(s"Connecting to $dbName")
 \end_layout
 
 \begin_layout Subsection*
@@ -200,15 +192,15 @@ Sometimes you want to write a Trait that only works if it’s mixed into a speci
 \end_layout
 
 \begin_layout LyX-Code
-Scala
-\end_layout
-
-\begin_layout LyX-Code
 class WebService:
 \end_layout
 
 \begin_layout LyX-Code
-val apiKey = "SECRET_123"
+  val apiKey = "SECRET_123"
+\begin_inset Newline newline
+\end_inset
+
+
 \end_layout
 
 \begin_layout LyX-Code
@@ -216,21 +208,29 @@ trait MetricCollector:
 \end_layout
 
 \begin_layout LyX-Code
-self:
+  self:
  WebService => // This trait now 'thinks' it IS a WebService
+\begin_inset Newline newline
+\end_inset
+
+
 \end_layout
 
 \begin_layout LyX-Code
-def logUsage() = 
+  def logUsage() = 
 \end_layout
 
 \begin_layout LyX-Code
-// It has direct access to the WebService's apiKey!
+    // It has direct access to the WebService's apiKey!
 \end_layout
 
 \begin_layout LyX-Code
-println(s"Sending metrics for API Key:
+    println(s"Sending metrics for API Key:
  $apiKey")
+\begin_inset Newline newline
+\end_inset
+
+
 \end_layout
 
 \begin_layout LyX-Code

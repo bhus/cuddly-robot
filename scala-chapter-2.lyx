@@ -146,13 +146,17 @@ object Jukebox:
 \end_layout
 
 \begin_layout LyX-Code
-val brand = "Vintage 1970"
+  val brand = "Vintage 1970"
 \end_layout
 
 \begin_layout LyX-Code
-def play(song:
+  def play(song:
  String) = println(s"The $brand Jukebox plays:
  $song")
+\begin_inset Newline newline
+\end_inset
+
+
 \end_layout
 
 \begin_layout LyX-Code
@@ -184,7 +188,11 @@ trait Speakable:
 \end_layout
 
 \begin_layout LyX-Code
-def sayHi() = println("Hi!")
+  def sayHi() = println("Hi!")
+\begin_inset Newline newline
+\end_inset
+
+
 \end_layout
 
 \begin_layout LyX-Code
@@ -214,6 +222,10 @@ val rawUsers = List("boop_ai",
  "sttp_dev",
  "scala_fan",
  "doobie_pro")
+\begin_inset Newline newline
+\end_inset
+
+
 \end_layout
 
 \begin_layout LyX-Code
@@ -221,26 +233,26 @@ val result = rawUsers
 \end_layout
 
 \begin_layout LyX-Code
-.map(_.replace("_",
+  .map(_.replace("_",
  " ")) // 1.
  Transform:
  Swap underscores for spaces
 \end_layout
 
 \begin_layout LyX-Code
-.map(_.capitalize) // 2.
+  .map(_.capitalize) // 2.
  Transform:
  Uppercase the names
 \end_layout
 
 \begin_layout LyX-Code
-.filter(_.length > 8) // 3.
+  .filter(_.length > 8) // 3.
  Filter:
  Keep the long ones
 \end_layout
 
 \begin_layout LyX-Code
-.sorted // 4.
+  .sorted // 4.
  Sort:
  Alphabetical order
 \end_layout
@@ -422,11 +434,11 @@ mario.age match
 \end_layout
 
 \begin_layout LyX-Code
-case n if n > 25 => println("Veteran status")
+  case n if n > 25 => println("Veteran status")
 \end_layout
 
 \begin_layout LyX-Code
-case _ => println("Rookie")
+  case _ => println("Rookie")
 \end_layout
 
 \begin_layout Subsection*
