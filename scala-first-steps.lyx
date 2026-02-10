@@ -430,5 +430,98 @@ literal "false"
 
 \end_layout
 
+\begin_layout Part
+Scala Surroundings
+\end_layout
+
+\begin_layout Chapter
+Scala and Its World
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset include
+LatexCommand input
+filename "scala-chapter-13.lyx"
+literal "false"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Chapter
+Interactive Scala
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset include
+LatexCommand input
+filename "scala-chapter-14.lyx"
+literal "false"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Chapter
+Documenting Scala
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset include
+LatexCommand input
+filename "scala-chapter-15.lyx"
+literal "false"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Chapter
+Package Management with Scala
+\end_layout
+
+\begin_layout Chapter
+Scala & the Web
+\end_layout
+
+\begin_layout Chapter
+Extending Scala
+\end_layout
+
+\begin_layout Part
+Scala Distilled
+\end_layout
+
+\begin_layout Chapter
+From the Ground Up
+\end_layout
+
+\begin_layout Chapter
+Core Constructs
+\end_layout
+
+\begin_layout Chapter
+Functional Things
+\end_layout
+
+\begin_layout Chapter
+Classes & Objects
+\end_layout
+
+\begin_layout Chapter
+Run Levels & Safety (??)
+\end_layout
+
+\begin_layout Chapter
+Reflection & Other Power Features
+\end_layout
+
+\begin_layout Part
+References & Appendices
+\end_layout
+
 \end_body
 \end_document

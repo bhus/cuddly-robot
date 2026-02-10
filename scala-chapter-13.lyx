@@ -1,0 +1,620 @@
+#LyX 2.4 created this file. For more info see https://www.lyx.org/
+\lyxformat 620
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass book
+\use_default_options true
+\maintain_unincluded_children no
+\language american
+\language_package default
+\inputencoding utf8
+\fontencoding auto
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_roman_osf false
+\font_sans_osf false
+\font_typewriter_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\float_placement class
+\float_alignment class
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\use_formatted_ref 0
+\use_minted 0
+\use_lineno 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tablestyle default
+\tracking_changes false
+\output_changes false
+\change_bars false
+\postpone_fragile_content true
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\docbook_table_output 0
+\docbook_mathml_prefix 1
+\end_header
+
+\begin_body
+
+\begin_layout Section*
+scala-cli & command-line options
+\end_layout
+
+\begin_layout Standard
+Before you even run a single line of your code,
+ you have to talk to the scala-cli tool.
+ This tool is responsible for fetching your libraries,
+ choosing your Scala version,
+ and packaging your app.
+\end_layout
+
+\begin_layout Subsection*
+The Essentials:
+ Running and Checking
+\end_layout
+
+\begin_layout Standard
+The most basic commands allow you to check your environment and run your scripts instantly.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Check Version
+\series default
+:
+
+\emph on
+ scala-cli version
+\emph default
+ (Tells you the tool version).
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Check Scala Version
+\series default
+:
+
+\emph on
+ scala-cli .
+ --scala-version
+\emph default
+ (Tells you which Scala version is currently active).
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Run a Script
+\series default
+:
+
+\emph on
+ scala-cli MyScript.scala
+\emph default
+ (Compiles and runs in one go).
+\end_layout
+
+\begin_layout Subsection*
+Dependency Management on the Fly
+\end_layout
+
+\begin_layout Standard
+One of the best "Pragmatic" features of scala-cli is that you don't need a complex build file to test a library.
+ You can "require" it directly from the command line.
+\end_layout
+
+\begin_layout LyX-Code
+# Run a script while pulling in the sttp library instantly
+\end_layout
+
+\begin_layout LyX-Code
+scala-cli MyScript.scala --dep com.softwaremill.sttp.client3::core:3.9.0
+\end_layout
+
+\begin_layout Subsection*
+Log Levels and Debugging
+\end_layout
+
+\begin_layout Standard
+If your build is failing or a library isn't downloading,
+ you need to see what's happening under the hood.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Verbose Mode
+\series default
+:
+ 
+\emph on
+-v or -vv or -vvv
+\emph default
+.
+ Adding more vs increases the "chatter" from the tool.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Log Level
+\series default
+:
+
+\emph on
+ --log-level debug
+\emph default
+ (Gives you the surgical details of the compilation process).
+\end_layout
+
+\begin_layout Subsection*
+Directing the Output (Packaging)
+\end_layout
+
+\begin_layout Standard
+When you are ready to move from "scripting" to "shipping," scala-cli can package your code into different formats.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Create a Lightweight Runner
+\series default
+:
+
+\emph on
+ scala-cli package .
+ -o my-app
+\emph default
+ (Creates a launcher script).
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Create an Assembly (Fat Jar)
+\series default
+:
+
+\emph on
+ scala-cli package .
+ --assembly -o app.jar 
+\emph default
+(Everything in one file).
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Create a Native Image
+\series default
+:
+
+\emph on
+ scala-cli package .
+ --native-image -o fast-app 
+\emph default
+(Uses GraalVM for instant startup).
+\end_layout
+
+\begin_layout Subsection*
+Using Directives (The "In-File" Args)
+\end_layout
+
+\begin_layout Standard
+While you can pass all these as command-line arguments,
+ it’s much more "Pragmatic" to put them at the top of your file using Using Directives.
+ This ensures that anyone who runs your file has the exact same settings.
+\end_layout
+
+\begin_layout LyX-Code
+//> using scala "3.3.1"
+\end_layout
+
+\begin_layout LyX-Code
+//> using dep "com.softwaremill.sttp.client3::core:3.9.0"
+\end_layout
+
+\begin_layout LyX-Code
+//> using dep "com.lihaoyi::pprint:0.8.1"
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+@main def hello = pprint.log("Directives make this script self-contained!")
+\end_layout
+
+\begin_layout Subsection*
+Common Developer Flags
+\end_layout
+
+\begin_layout Standard
+
+\emph on
+--watch
+\emph default
+:
+ The "Developer's Best Friend." It keeps the process alive and re-runs your code every time you save the file.
+\end_layout
+
+\begin_layout Standard
+
+\emph on
+--jvm
+\emph default
+:
+ Allows you to specify a specific JVM version (e.g.,
+
+\emph on
+ --jvm 17
+\emph default
+).
+\end_layout
+
+\begin_layout Standard
+
+\emph on
+--repl
+\emph default
+:
+ Opens an interactive shell with all your libraries and code pre-loaded.
+\end_layout
+
+\begin_layout Section*
+your code & the command-line
+\end_layout
+
+\begin_layout Standard
+A great tool should be configurable from the outside.
+ Whether you are passing a file path,
+ a database URL,
+ or a debug flag,
+ your application needs to parse the "intent" of the user from the terminal.
+\end_layout
+
+\begin_layout Subsection*
+The @main Entry Point
+\end_layout
+
+\begin_layout Standard
+In the old days,
+ you had to define a specific main method inside an object.
+ In Scala 3,
+ you simply annotate a method with @main.
+ Scala automatically handles the conversion of string arguments into the data types you specify.
+\end_layout
+
+\begin_layout LyX-Code
+@main def runScanner(path:
+ String,
+ iterations:
+ Int):
+ Unit =
+\end_layout
+
+\begin_layout LyX-Code
+  println(s"Scanning $path for $iterations cycles...")
+\end_layout
+
+\begin_layout Standard
+If you run this from your terminal:
+ 
+\emph on
+scala runScanner.scala /var/logs 5
+\end_layout
+
+\begin_layout Standard
+Scala sees that iterations should be an Int and performs the conversion for you.
+ If the user passes "five" instead of "5",
+ Scala will provide a helpful error message automatically.
+\end_layout
+
+\begin_layout Subsection*
+Handling Multiple Arguments (Varargs)
+\end_layout
+
+\begin_layout Standard
+Sometimes you want to accept an unknown number of inputs—
+like a list of files to process.
+ We use the "Splat" syntax (*) we learned in Chapter 6.
+\end_layout
+
+\begin_layout LyX-Code
+@main def bulkDelete(files:
+ String*):
+ Unit =
+\end_layout
+
+\begin_layout LyX-Code
+  println(s"Deleting ${files.length} files...")
+\end_layout
+
+\begin_layout LyX-Code
+  files.foreach(f => println(s"Removing $f"))
+\end_layout
+
+\begin_layout Subsection*
+Optional Arguments and Defaults
+\end_layout
+
+\begin_layout Standard
+Not every argument should be mandatory.
+ By providing a default value in your method signature,
+ you make that command-line flag optional.
+\end_layout
+
+\begin_layout LyX-Code
+@main def startServer(port:
+ Int = 8080,
+ verbose:
+ Boolean = false):
+ Unit =
+\end_layout
+
+\begin_layout LyX-Code
+  if verbose then println("Verbose mode active.")
+\end_layout
+
+\begin_layout LyX-Code
+  println(s"Server starting on port $port")
+\end_layout
+
+\begin_layout Subsection*
+Raw Access:
+ The args Array
+\end_layout
+
+\begin_layout Standard
+If you need total control—
+perhaps to build a complex CLI with nested commands—
+you can still access the raw array of strings exactly as they were typed.
+\end_layout
+
+\begin_layout LyX-Code
+@main def rawHandler(args:
+ String*):
+ Unit =
+\end_layout
+
+\begin_layout LyX-Code
+  args.toList match
+\end_layout
+
+\begin_layout LyX-Code
+    case "start" ::
+ path ::
+ Nil => println(s"Starting at $path")
+\end_layout
+
+\begin_layout LyX-Code
+    case "stop" ::
+ Nil => println("Stopping...")
+\end_layout
+
+\begin_layout LyX-Code
+    case _ => println("Usage:
+ start <path> | stop")
+\end_layout
+
+\begin_layout Standard
+This uses the
+\series bold
+ Pattern Matching
+\series default
+ on Lists that we covered in Chapter 7,
+ turning the command line into a clean,
+ readable dispatch table.
+\end_layout
+
+\begin_layout Subsection*
+Best Practices for CLI Tools
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Fail Fast
+\series default
+:
+ Use the types (like Int or Boolean) in your @main signature so the program crashes with a usage message before any heavy logic starts.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Use help
+\series default
+:
+ While Scala 3 provides basic errors,
+ for complex tools,
+ the community often reaches for libraries like 
+\series bold
+MainArgs
+\series default
+ or 
+\series bold
+Decline
+\series default
+ to generate "help" menus automatically.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Environment Variables
+\series default
+:
+ For sensitive data (like our 
+\series bold
+Doobie
+\series default
+ database passwords),
+ never use command-line args.
+ Use 
+\emph on
+sys.env.get("DB_PASSWORD")
+\emph default
+ instead to keep them out of the process list.
+\end_layout
+
+\begin_layout Section*
+Dependencies
+\end_layout
+
+\begin_layout Standard
+When you use a 
+\emph on
+//> using dep
+\emph default
+ directive or a 
+\emph on
+--dep
+\emph default
+ flag,
+ scala-cli isn't just wishing those libraries into existence;
+ it's using a specialized engine called Coursier.
+\end_layout
+
+\begin_layout Standard
+Where do the modules go?
+\end_layout
+
+\begin_layout Standard
+Scala-cli doesn't litter your project folder with a node_modules or 
+\emph on
+vendor
+\emph default
+ directory.
+ Instead,
+ it uses a
+\series bold
+ Global Central Cache
+\series default
+.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+The Fetch
+\series default
+:
+ When you run your code,
+ scala-cli calls Coursier.
+ It looks at "Maven Central" (the massive,
+ global library of JVM jars) and downloads the specific version you requested.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+The Cache
+\series default
+:
+ The JAR files are stored in a hidden folder in your home directory:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+
+\series bold
+macOS/Linux
+\series default
+:
+
+\emph on
+ ~/Library/Caches/Coursier/v1
+\emph default
+ or 
+\emph on
+~/.cache/coursier
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Windows
+\series default
+:
+ 
+\emph on
+%LOCALAPPDATA%
+\backslash
+Coursier
+\backslash
+Cache
+\backslash
+v1
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+
+\series bold
+The Link
+\series default
+:
+ When you compile,
+ scala-cli simply "points" your project to these JARs in the cache.
+\end_layout
+
+\end_body
+\end_document

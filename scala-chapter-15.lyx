@@ -1,0 +1,319 @@
+#LyX 2.4 created this file. For more info see https://www.lyx.org/
+\lyxformat 620
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass book
+\use_default_options true
+\maintain_unincluded_children no
+\language american
+\language_package default
+\inputencoding utf8
+\fontencoding auto
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_roman_osf false
+\font_sans_osf false
+\font_typewriter_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\float_placement class
+\float_alignment class
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\use_formatted_ref 0
+\use_minted 0
+\use_lineno 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tablestyle default
+\tracking_changes false
+\output_changes false
+\change_bars false
+\postpone_fragile_content true
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\docbook_table_output 0
+\docbook_mathml_prefix 1
+\end_header
+
+\begin_body
+
+\begin_layout Standard
+Good documentation in Scala lives directly above your methods and classes.
+ By using a specific comment syntax (/** ...
+ */),
+ you allow the scaladoc tool to extract your thoughts into a professional documentation suite.
+\end_layout
+
+\begin_layout Section*
+The Scaladoc Syntax
+\end_layout
+
+\begin_layout Standard
+Scaladoc uses Markdown-style formatting inside the comments.
+ This means you can use backticks for code and asterisks for bold text without learning a complex new language.
+\end_layout
+
+\begin_layout LyX-Code
+/** Represents a company in the Renaissance system.
+\end_layout
+
+\begin_layout LyX-Code
+*
+\end_layout
+
+\begin_layout LyX-Code
+* @param name The legal name of the entity
+\end_layout
+
+\begin_layout LyX-Code
+* @param revenue The current MRR in USD
+\end_layout
+
+\begin_layout LyX-Code
+*/
+\end_layout
+
+\begin_layout LyX-Code
+case class Company(name:
+ String,
+ revenue:
+ Int)
+\end_layout
+
+\begin_layout Section*
+Linking and Referencing
+\end_layout
+
+\begin_layout Standard
+One of the most powerful features of Scaladoc is the ability to link to other parts of your code.
+ Instead of telling someone to "see the Product class," you can link to it directly using double square brackets.
+ The tool will verify that the class actually exists.
+\end_layout
+
+\begin_layout LyX-Code
+/**
+\end_layout
+
+\begin_layout LyX-Code
+* Processes payments for a [[Company]].
+\end_layout
+
+\begin_layout LyX-Code
+* * If the transaction fails,
+ it returns a [[scala.util.Failure]].
+\end_layout
+
+\begin_layout LyX-Code
+*/
+\end_layout
+
+\begin_layout LyX-Code
+def processPayment(c:
+ Company):
+ Unit = ???
+\end_layout
+
+\begin_layout Section*
+Common Tags
+\end_layout
+
+\begin_layout Standard
+To keep your docs organized,
+ use the standard "at" tags.
+ These create specific sections in the generated output:
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+@param
+\emph default
+:
+ Describes a method or constructor parameter.
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+@return
+\emph default
+:
+ Describes what the caller can expect back.
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+@throws
+\emph default
+:
+ Documents the exceptions that might be raised (see Chapter 8).
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+@note
+\emph default
+:
+ Adds a critical piece of information or a "Gotcha."
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+@see
+\emph default
+:
+ Points to external documentation or related classes.
+\end_layout
+
+\begin_layout Section*
+Generating the Site
+\end_layout
+
+\begin_layout Standard
+With
+\emph on
+ scala-cli
+\emph default
+,
+ you don't need to install a separate documentation engine.
+ You can generate your entire documentation site with a single command:
+\end_layout
+
+\begin_layout LyX-Code
+scala-cli doc .
+ -o ./my-docs
+\end_layout
+
+\begin_layout Standard
+This will scan your project,
+ resolve all your links,
+ and spit out a folder containing a static website.
+ You can open 
+\emph on
+index.html
+\emph default
+ in any browser to see your work.
+\end_layout
+
+\begin_layout Section*
+Documenting with Directives
+\end_layout
+
+\begin_layout Standard
+Just as we use
+\emph on
+ //> using
+\emph default
+ for dependencies,
+ we can use them to configure how our documentation is built.
+ You can set the project name,
+ version,
+ and even include a custom logo.
+\end_layout
+
+\begin_layout LyX-Code
+//> using docName "Renaissance App"
+\end_layout
+
+\begin_layout LyX-Code
+//> using docVersion "1.0.0"
+\end_layout
+
+\begin_layout Section*
+The "Pragmatic" Minimum
+\end_layout
+
+\begin_layout Standard
+You don't need to document every single private method.
+ Focus your energy on:
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Public APIs
+\series default
+:
+ Anything another developer (or you,
+ six months from now) will call.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+The "Why"
+\series default
+:
+ Code explains how;
+ comments should explain why.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Examples
+\series default
+:
+ Using the
+\emph on
+ @example
+\emph default
+ tag to show a snippet of the method in action is often more helpful than three paragraphs of text.
+\end_layout
+
+\end_body
+\end_document
