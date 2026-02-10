@@ -1,0 +1,418 @@
+#LyX 2.4 created this file. For more info see https://www.lyx.org/
+\lyxformat 620
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass book
+\use_default_options true
+\maintain_unincluded_children no
+\language american
+\language_package default
+\inputencoding utf8
+\fontencoding auto
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_roman_osf false
+\font_sans_osf false
+\font_typewriter_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\float_placement class
+\float_alignment class
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\use_formatted_ref 0
+\use_minted 0
+\use_lineno 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tablestyle default
+\tracking_changes false
+\output_changes false
+\change_bars false
+\postpone_fragile_content true
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\docbook_table_output 0
+\docbook_mathml_prefix 1
+\end_header
+
+\begin_body
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+section*{Chapter 17:
+ The Java Bridge}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+One of Scala’s greatest strengths is its "Zero-Overhead" interoperability with Java.
+ You don't need a wrapper,
+ a foreign function interface (FFI),
+ or a translation layer.
+ To Scala,
+ a Java class is just another type.
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+subsection*{Is it Necessary?}
+\end_layout
+
+\begin_layout Plain Layout
+
+Technically,
+ no.
+ Scala can do everything Java can do (and usually more concisely).
+ However,
+ it is 
+\backslash
+textbf{strategically vital} because it gives you instant access to 25 years of JVM libraries.
+ If there isn't a Scala-specific library for a task,
+ you can use the Java one without a second thought.
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+subsection*{Using Java from Scala}
+\end_layout
+
+\begin_layout Plain Layout
+
+Using a Java library in Scala is transparent.
+ You import it and call it exactly like Scala code.
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+// Using the standard Java Time API inside Scala
+\end_layout
+
+\begin_layout Plain Layout
+
+import java.time.LocalDateTime
+\end_layout
+
+\begin_layout Plain Layout
+
+import java.time.format.DateTimeFormatter
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+val now = LocalDateTime.now()
+\end_layout
+
+\begin_layout Plain Layout
+
+val formatted = now.format(DateTimeFormatter.ISO_DATE)
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+subsection*{Extending Scala with Java Classes}
+\end_layout
+
+\begin_layout Plain Layout
+
+Sometimes you might want to write a high-performance routine in Java or use a Java-based framework that requires you to extend its classes.
+ Scala handles this effortlessly.
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+// A Scala class extending a Java Base Class
+\end_layout
+
+\begin_layout Plain Layout
+
+class MyServlet extends javax.servlet.http.HttpServlet:
+\end_layout
+
+\begin_layout Plain Layout
+
+  override def doGet(req:
+ HttpServletRequest,
+ resp:
+ HttpServletResponse):
+ Unit =
+\end_layout
+
+\begin_layout Plain Layout
+
+    resp.getWriter.write("Hello from Scala via Java Servlet!")
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+subsection*{The "Pragmatic" Conversion:
+ Java Converters}
+\end_layout
+
+\begin_layout Plain Layout
+
+The only "friction" between the two is in the Collection libraries (e.g.,
+ a 
+\backslash
+texttt{java.util.List} is not the same as a Scala 
+\backslash
+texttt{List}).
+ Fortunately,
+ Scala provides a bridge to convert them automatically.
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+import scala.jdk.CollectionConverters.*
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+val javaList = new java.util.ArrayList[String]()
+\end_layout
+
+\begin_layout Plain Layout
+
+javaList.add("Java Item")
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+// Convert to a Scala-friendly Buffer
+\end_layout
+
+\begin_layout Plain Layout
+
+val scalaList = javaList.asScala
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+subsection*{When to Write Java}
+\end_layout
+
+\begin_layout Plain Layout
+
+You might choose to write a portion of your project in Java if:
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{itemize}
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+item 
+\backslash
+textbf{Team Skills}:
+ You have a legacy team that knows Java intimately.
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+item 
+\backslash
+textbf{Micro-Optimizations}:
+ In extremely rare cases,
+ the way Java handles certain low-level arrays can be slightly more predictable for the JIT compiler.
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+item 
+\backslash
+textbf{Framework Requirements}:
+ Some older Java frameworks use heavy "Reflection" that is occasionally easier to satisfy with a small Java "stub" class.
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{itemize}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document

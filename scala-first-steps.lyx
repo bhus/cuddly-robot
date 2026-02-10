@@ -483,12 +483,45 @@ literal "false"
 Package Management with Scala
 \end_layout
 
+\begin_layout Standard
+\begin_inset CommandInset include
+LatexCommand input
+filename "scala-chapter-16.lyx"
+literal "false"
+
+\end_inset
+
+
+\end_layout
+
 \begin_layout Chapter
 Scala & the Web
 \end_layout
 
+\begin_layout Standard
+\begin_inset CommandInset include
+LatexCommand input
+filename "scala-chapter-17.lyx"
+literal "false"
+
+\end_inset
+
+
+\end_layout
+
 \begin_layout Chapter
 Extending Scala
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset include
+LatexCommand input
+filename "scala-chapter-18.lyx"
+literal "false"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Part

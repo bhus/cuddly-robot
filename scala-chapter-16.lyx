@@ -1,0 +1,502 @@
+#LyX 2.4 created this file. For more info see https://www.lyx.org/
+\lyxformat 620
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass book
+\use_default_options true
+\maintain_unincluded_children no
+\language american
+\language_package default
+\inputencoding utf8
+\fontencoding auto
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_roman_osf false
+\font_sans_osf false
+\font_typewriter_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\float_placement class
+\float_alignment class
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\use_formatted_ref 0
+\use_minted 0
+\use_lineno 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tablestyle default
+\tracking_changes false
+\output_changes false
+\change_bars false
+\postpone_fragile_content true
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\docbook_table_output 0
+\docbook_mathml_prefix 1
+\end_header
+
+\begin_body
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+Once your code works on your machine,
+ the next challenge is getting it to work on someone else’s.
+ This involves two things:
+ managing your internal code structure (Packages) and bundling your application for the world (Publishing).
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+subsection*{The Internal Structure:
+ Packages}
+\end_layout
+
+\begin_layout Plain Layout
+
+As we touched on in Chapter 9,
+ packages are the "folders" of your logic.
+ They prevent name collisions and organize your code into logical domains.
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+package io.startup.renaissance.auth
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+class Authenticator:
+\end_layout
+
+\begin_layout Plain Layout
+
+  def login() = ???
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+The 
+\backslash
+textbf{Pragmatic} rule:
+ Your package names should usually mirror your folder structure (e.g.,
+ 
+\backslash
+texttt{src/auth/Authenticator.scala}),
+ making it easy for developers to find files just by looking at the import statements.
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+subsection*{The project.scala File:
+ The Source of Truth}
+\end_layout
+
+\begin_layout Plain Layout
+
+Instead of scattering settings across multiple files,
+ we centralize everything in 
+\backslash
+texttt{project.scala}.
+ This is your manifest.
+ It tells 
+\backslash
+texttt{scala-cli} who you are,
+ what version you’re on,
+ and what you need.
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+//> using scala "3.3.1"
+\end_layout
+
+\begin_layout Plain Layout
+
+//> using dep "com.softwaremill.sttp.client3::core:3.9.0"
+\end_layout
+
+\begin_layout Plain Layout
+
+//> using dep "org.tpolecat::doobie-core:1.0.0-RC4"
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+// Publishing metadata
+\end_layout
+
+\begin_layout Plain Layout
+
+//> using publish.name "renaissance-core"
+\end_layout
+
+\begin_layout Plain Layout
+
+//> using publish.organization "io.startup"
+\end_layout
+
+\begin_layout Plain Layout
+
+//> using publish.version "0.1.0"
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+subsection*{Creating an Executable (Fat JARs)}
+\end_layout
+
+\begin_layout Plain Layout
+
+The most common way to share a Scala app is a "Fat JAR" (or Assembly).
+ This is a single file that contains your code 
+\backslash
+textbf{plus} every library it needs to run (like 
+\backslash
+texttt{sttp} and 
+\backslash
+texttt{Doobie}).
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+scala-cli package .
+ --assembly -o renaissance.jar
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+Now,
+ anyone with a JVM can run your app with:
+ 
+\backslash
+texttt{java -jar renaissance.jar}.
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+subsection*{Native Binaries:
+ No JVM Required}
+\end_layout
+
+\begin_layout Plain Layout
+
+For CLI tools where you want "instant-on" performance,
+ you can package your app as a native binary.
+ This uses GraalVM to compile your Scala code down to machine code (like C++ or Go).
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+scala-cli package .
+ --native-image -o renaissance
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+This produces a file that runs natively on the target OS,
+ with no Java installation required by the end-user.
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+subsection*{Publishing to the World}
+\end_layout
+
+\begin_layout Plain Layout
+
+If you’ve built a library that others should use,
+ you’ll want to "publish" it to a repository (like Maven Central or a private GitHub Packages repo).
+ 
+\backslash
+texttt{scala-cli} makes this surprisingly simple:
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+# This prepares your library for a repository
+\end_layout
+
+\begin_layout Plain Layout
+
+scala-cli publish .
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+subsection*{Managing Versions with "Directives"}
+\end_layout
+
+\begin_layout Plain Layout
+
+One of Scala’s greatest strengths is "Typelevel" versioning.
+ When you see a double colon 
+\backslash
+texttt{::} in a dependency,
+ it tells Scala to look for the version of the library that matches your specific Scala version.
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{itemize}
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+item 
+\backslash
+texttt{com.lihaoyi::pprint:0.8.1} $
+\backslash
+rightarrow$ "Get me the version of pprint built for Scala 3."
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{itemize}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document
