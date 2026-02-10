@@ -181,52 +181,166 @@ There has never been a better time to be picky about your backend language.
  you won't want to go back.
 \end_layout
 
-\begin_layout Subsection*
-How to Read This Book
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+section*{How to Read This Book}
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
 In the spirit of the great pragmatic manuals,
  we aren't going to bury you in category theory on page one.
+ Scala is a language of action,
+ and this book is designed to be a conversation between your keyboard and the compiler.
 \end_layout
 
-\begin_layout Enumerate
+\begin_layout Plain Layout
 
-\series bold
-Get Moving
-\series default
-:
- We start by getting you up and running with a working example.
 \end_layout
 
-\begin_layout Enumerate
+\begin_layout Plain Layout
 
-\series bold
-The Landscape
-\series default
-:
- We’ll take a tour of the "Big Ideas"—
-data types,
- control structures,
- and the powerful matching paradigm.
 \end_layout
 
-\begin_layout Enumerate
+\begin_layout Plain Layout
 
-\series bold
-The Deep Dive
-\series default
-:
- Once you're comfortable,
- we’ll explore the nuances of I/O,
- blocks,
- and iteration.
 \end_layout
 
-\begin_layout Standard
+\begin_layout Plain Layout
+
+The book is organized into three distinct movements:
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+subsection*{Part I:
+ The Elements of Scala}
+\end_layout
+
+\begin_layout Plain Layout
+
+We begin by getting you up and running immediately.
+ You won't find dry lists of keywords here.
+ Instead,
+ we introduce the fundamental building blocks—
+Types,
+ Functions,
+ and Objects—
+as the raw materials of your craft.
+ You will learn to write "Honest" code using immutable data and pattern matching,
+ moving from a single script to a cohesive application.
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+subsection*{Part II:
+ The Scala Surroundings}
+\end_layout
+
+\begin_layout Plain Layout
+
+A language does not exist in a vacuum.
+ In this section,
+ we step into the "Pragmatic Stack." We explore how Scala interacts with the outside world:
+ querying databases with 
+\backslash
+textbf{Doobie},
+ driving web services with 
+\backslash
+textbf{Tapir},
+ and performing high-performance HTTP calls with 
+\backslash
+textbf{sttp}.
+ We also bridge the gap to the Java ecosystem,
+ ensuring you can leverage the full power of the JVM.
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+subsection*{Part III:
+ Scala Distilled}
+\end_layout
+
+\begin_layout Plain Layout
+
+Once you are comfortable with the "How," we move to the "Why." This part is the deep dive into the engine room.
+ We revisit the language constructs with surgical precision—
+exploring the nuances of the Type System,
+ Metaprogramming,
+ and Safety Modes.
+ This is where we distill the philosophy that makes Scala "The Scalable Language."
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+subsection*{The Appendices:
+ The Developer's Atlas}
+\end_layout
+
+\begin_layout Plain Layout
+
+At the back of the book,
+ you will find a comprehensive reference to the Standard Library,
+ a dictionary for those coming from other languages like Ruby or Java,
+ and a guide to the tools that keep the Renaissance ecosystem humming.
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
 Whether you are a veteran looking for a more expressive tool or a newcomer looking for a solid foundation,
  this book is designed to meet you where you are.
  Let’s get to work.
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Part
