@@ -532,6 +532,17 @@ Scala Distilled
 From the Ground Up
 \end_layout
 
+\begin_layout Standard
+\begin_inset CommandInset include
+LatexCommand input
+filename "scala-chapter-19.lyx"
+literal "false"
+
+\end_inset
+
+
+\end_layout
+
 \begin_layout Chapter
 Core Constructs
 \end_layout
