@@ -1,0 +1,516 @@
+#LyX 2.4 created this file. For more info see https://www.lyx.org/
+\lyxformat 620
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass book
+\use_default_options true
+\maintain_unincluded_children no
+\language american
+\language_package default
+\inputencoding utf8
+\fontencoding auto
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_roman_osf false
+\font_sans_osf false
+\font_typewriter_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\float_placement class
+\float_alignment class
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\use_formatted_ref 0
+\use_minted 0
+\use_lineno 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tablestyle default
+\tracking_changes false
+\output_changes false
+\change_bars false
+\postpone_fragile_content true
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\docbook_table_output 0
+\docbook_mathml_prefix 1
+\end_header
+
+\begin_body
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+section*{Chapter 24:
+ Reflection,
+ Marshalling,
+ and Metaprogramming}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+In the Renaissance era,
+ we avoid "Runtime Reflection" because it is a black box that hides errors until the program crashes.
+ Instead,
+ we use 
+\backslash
+textbf{Derivation} and 
+\backslash
+textbf{Macros}.
+ This allows the compiler to look at your classes and write the boring "glue code" for you.
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+subsection*{Automatic Marshalling (Type-class Derivation)}
+\end_layout
+
+\begin_layout Plain Layout
+
+Marshalling is the process of turning a memory object into a format like JSON or XML.
+ In the past,
+ this required slow reflection.
+ In Scala 3,
+ we use the 
+\backslash
+texttt{derives} keyword.
+ The compiler "reflects" on the structure of your class at compile-time and generates the Marshaller automatically.
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+import zio.json.*
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+// The 'derives' keyword tells Scala to write the JSON logic for you
+\end_layout
+
+\begin_layout Plain Layout
+
+case class User(name:
+ String,
+ email:
+ String) derives JsonCodec
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+val user = User("Alice",
+ "alice@startup.io")
+\end_layout
+
+\begin_layout Plain Layout
+
+val json = user.toJson // "{"name":"Alice","email":"alice@startup.io"}"
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+subsection*{Mirrors:
+ The New Reflection}
+\end_layout
+
+\begin_layout Plain Layout
+
+Scala 3 introduces 
+\backslash
+texttt{Mirror}.
+ A Mirror is a compile-time representation of a class's shape.
+ It tells you the names of the fields and their types without ever needing to "instantiate" the class.
+ This is how libraries like 
+\backslash
+texttt{Doobie} map database rows to your Case Classes.
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+import scala.deriving.Mirror
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+// A Mirror lets you inspect Task without using Java Reflection
+\end_layout
+
+\begin_layout Plain Layout
+
+val m = summon[Mirror.Of[User]]
+\end_layout
+
+\begin_layout Plain Layout
+
+// m.MirroredElemLabels contains ("name",
+ "email")
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+subsection*{Inlining:
+ Reflection without the Cost}
+\end_layout
+
+\begin_layout Plain Layout
+
+The 
+\backslash
+texttt{inline} keyword is a request to the compiler to "copy-paste" the code at the call site.
+ When combined with 
+\backslash
+texttt{if} statements,
+ the compiler can perform "Constant Folding"—
+evaluating logic during compilation and removing dead code.
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+inline def log(msg:
+ String):
+ Unit =
+\end_layout
+
+\begin_layout Plain Layout
+
+  inline if Thread.currentThread().getName == "main" then
+\end_layout
+
+\begin_layout Plain Layout
+
+    println(s"[MAIN] $msg")
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+// If called outside 'main',
+ the compiler removes the entire call!
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+subsection*{Macros:
+ Inspecting Code as Data}
+\end_layout
+
+\begin_layout Plain Layout
+
+While Ruby uses 
+\backslash
+texttt{eval} to run strings as code,
+ Scala 3 uses 
+\backslash
+texttt{Quotes} and 
+\backslash
+texttt{Splices} (as seen in Chapter 23).
+ This is "Safe Reflection." You can inspect the AST (Abstract Syntax Tree) of a piece of code,
+ validate it,
+ and then transform it.
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+// A macro that prints the name of a variable at compile-time
+\end_layout
+
+\begin_layout Plain Layout
+
+inline def debug(inline expr:
+ Any):
+ Unit = 
+\end_layout
+
+\begin_layout Plain Layout
+
+  ${ debugImpl('expr) }
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+// The implementation uses reflection to see the source code name
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+subsection*{Pickling and Unpickling}
+\end_layout
+
+\begin_layout Plain Layout
+
+In some contexts,
+ you'll hear about "Pickling." This is a high-performance form of marshalling used for distributed systems (like Spark or Akka).
+ It serializes objects into a binary format.
+ Because Scala 3 has a unified type system,
+ "unpickling" a binary stream back into a typed object is safer than ever.
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+subsection*{Summary:
+ The Death of the Runtime Error}
+\end_layout
+
+\begin_layout Plain Layout
+
+The Renaissance philosophy of reflection is simple:
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{itemize}
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+item 
+\backslash
+textbf{Marshalling}:
+ Should be derived,
+ not manually written.
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+item 
+\backslash
+textbf{Reflection}:
+ Should happen at compile-time via Mirrors.
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+item 
+\backslash
+textbf{Metaprogramming}:
+ Should be typed and quoted,
+ never raw strings.
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{itemize}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document

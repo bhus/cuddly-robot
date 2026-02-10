@@ -1,0 +1,569 @@
+#LyX 2.4 created this file. For more info see https://www.lyx.org/
+\lyxformat 620
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass book
+\use_default_options true
+\maintain_unincluded_children no
+\language american
+\language_package default
+\inputencoding utf8
+\fontencoding auto
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_roman_osf false
+\font_sans_osf false
+\font_typewriter_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\float_placement class
+\float_alignment class
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\use_formatted_ref 0
+\use_minted 0
+\use_lineno 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tablestyle default
+\tracking_changes false
+\output_changes false
+\change_bars false
+\postpone_fragile_content true
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\docbook_table_output 0
+\docbook_mathml_prefix 1
+\end_header
+
+\begin_body
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+section*{Chapter 19:
+ The Pragmatic "Other" Constructs}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+Beyond the classic battle between Objects and Functions lies a set of constructs that make Scala truly "The Scalable Language." These features allow us to define domain-specific rules,
+ optimize performance,
+ and handle data with surgical precision.
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+subsection*{Opaque Type Aliases}
+\end_layout
+
+\begin_layout Plain Layout
+
+Sometimes you want the performance of a simple type (like a 
+\backslash
+texttt{String} or 
+\backslash
+texttt{Int}) but the safety of a full class.
+ Opaque types allow you to wrap a value so the compiler treats it as a unique type,
+ but at runtime,
+ the wrapper vanishes entirely.
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+object Domain:
+\end_layout
+
+\begin_layout Plain Layout
+
+  opaque type AccountId = String
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  object AccountId:
+\end_layout
+
+\begin_layout Plain Layout
+
+    def apply(id:
+ String):
+ AccountId = id
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  extension (id:
+ AccountId)
+\end_layout
+
+\begin_layout Plain Layout
+
+    def value:
+ String = id
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+// Outside,
+ you cannot use AccountId as a String accidentally!
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+subsection*{Enums (ADTs)}
+\end_layout
+
+\begin_layout Plain Layout
+
+Scala 3 enums are far more than just lists of constants.
+ They are Algebraic Data Types (ADTs).
+ They allow you to define a fixed set of states,
+ where each state can carry its own specific data.
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+enum ConnectionStatus:
+\end_layout
+
+\begin_layout Plain Layout
+
+  case Connected(ip:
+ String)
+\end_layout
+
+\begin_layout Plain Layout
+
+  case Disconnected(reason:
+ String)
+\end_layout
+
+\begin_layout Plain Layout
+
+  case Connecting
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+subsection*{Extension Methods}
+\end_layout
+
+\begin_layout Plain Layout
+
+In many languages,
+ if you want to add a method to a class you didn't write (like 
+\backslash
+texttt{String}),
+ you're out of luck.
+ In Scala,
+ you can "extend" existing types with new functionality without modifying their source code.
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+extension (s:
+ String)
+\end_layout
+
+\begin_layout Plain Layout
+
+  def shout:
+ String = s.toUpperCase + "!!!"
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+// Usage:
+ "hello".shout returns "HELLO!!!"
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+subsection*{Contextual Abstractions (Given/Using)}
+\end_layout
+
+\begin_layout Plain Layout
+
+This is Scala’s answer to Dependency Injection.
+ It allows the compiler to "fill in the blanks" for you.
+ If a function needs a specific context (like a Database connection or a JSON encoder),
+ the compiler looks for a "given" instance in the current scope and passes it automatically.
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+case class Config(port:
+ Int)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+def startServer(using conf:
+ Config) =
+\end_layout
+
+\begin_layout Plain Layout
+
+  println(s"Starting on ${conf.port}")
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+given standardConfig:
+ Config = Config(8080)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+startServer // The compiler sees the 'given' and inserts it here
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+subsection*{Pattern Matching on Types (The Match Type)}
+\end_layout
+
+\begin_layout Plain Layout
+
+Scala can perform logic not just on values,
+ but on types themselves.
+ This allows for extremely advanced "Generic" programming where the return type of a function changes based on the input type.
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+type Elem[X] = X match
+\end_layout
+
+\begin_layout Plain Layout
+
+  case String => Char
+\end_layout
+
+\begin_layout Plain Layout
+
+  case Array[t] => t
+\end_layout
+
+\begin_layout Plain Layout
+
+  case Iterable[t] => t
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+// Elem[String] is Char,
+ Elem[List[Int]] is Int
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+subsection*{The Export Clause}
+\end_layout
+
+\begin_layout Plain Layout
+
+Instead of writing "wrapper" methods to delegate calls to an internal object,
+ you can use 
+\backslash
+texttt{export}.
+ This "promotes" the methods of an internal object to the public interface of the current class.
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+class Printer:
+\end_layout
+
+\begin_layout Plain Layout
+
+  def print(msg:
+ String) = println(msg)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+class Office:
+\end_layout
+
+\begin_layout Plain Layout
+
+  val p = Printer()
+\end_layout
+
+\begin_layout Plain Layout
+
+  export p.print // Office now has a print() method automatically
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document

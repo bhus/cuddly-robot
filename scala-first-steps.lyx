@@ -547,16 +547,60 @@ literal "false"
 Core Constructs
 \end_layout
 
+\begin_layout Standard
+\begin_inset CommandInset include
+LatexCommand input
+filename "scala-chapter-20.lyx"
+literal "false"
+
+\end_inset
+
+
+\end_layout
+
 \begin_layout Chapter
 Functional Things
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset include
+LatexCommand input
+filename "scala-chapter-21.lyx"
+literal "false"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Chapter
 Classes & Objects
 \end_layout
 
+\begin_layout Standard
+\begin_inset CommandInset include
+LatexCommand input
+filename "scala-chapter-22.lyx"
+literal "false"
+
+\end_inset
+
+
+\end_layout
+
 \begin_layout Chapter
-Run Levels & Safety (??)
+Data Safety
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset include
+LatexCommand input
+filename "scala-chapter-23.lyx"
+literal "false"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Chapter

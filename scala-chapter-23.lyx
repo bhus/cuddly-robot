@@ -1,0 +1,476 @@
+#LyX 2.4 created this file. For more info see https://www.lyx.org/
+\lyxformat 620
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass book
+\use_default_options true
+\maintain_unincluded_children no
+\language american
+\language_package default
+\inputencoding utf8
+\fontencoding auto
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_roman_osf false
+\font_sans_osf false
+\font_typewriter_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\float_placement class
+\float_alignment class
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\use_formatted_ref 0
+\use_minted 0
+\use_lineno 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tablestyle default
+\tracking_changes false
+\output_changes false
+\change_bars false
+\postpone_fragile_content true
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\docbook_table_output 0
+\docbook_mathml_prefix 1
+\end_header
+
+\begin_body
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+section*{Chapter 23.5:
+ From Ruby Taint to Scala Types}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+Ruby developers will remember 
+\backslash
+texttt{
+\backslash
+$SAFE} levels and "Tainted" objects—
+a system where the interpreter tracked whether a string came from a risky source (like a web form) and blocked it from reaching dangerous methods (like 
+\backslash
+texttt{eval}).
+ 
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+In Scala,
+ we achieve "Safe Levels" through 
+\backslash
+textbf{Type-Level Domain Modeling}.
+ Instead of the runtime checking a "taint flag" on a string,
+ the compiler ensures that untrusted data is wrapped in a type that the rest of the system refuses to touch.
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+subsection*{The Ruby Way:
+ Runtime Tracking}
+\end_layout
+
+\begin_layout Plain Layout
+
+In Ruby,
+ a string is just a string,
+ but it might have a hidden "taint" bit flipped.
+ 
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+subsection*{The Scala Way:
+ Type Separation}
+\end_layout
+
+\begin_layout Plain Layout
+
+In Scala,
+ we don't use flags.
+ We use 
+\backslash
+textbf{Opaque Types} (from Chapter 19).
+ We define a type for "Raw Input" and a type for "Sanitized Data." A function that executes SQL will 
+\backslash
+textit{only} accept 
+\backslash
+texttt{SanitizedData}.
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+object Security:
+\end_layout
+
+\begin_layout Plain Layout
+
+  opaque type RawInput = String
+\end_layout
+
+\begin_layout Plain Layout
+
+  opaque type SanitizedData = String
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  def markAsRaw(s:
+ String):
+ RawInput = s
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\end_layout
+
+\begin_layout Plain Layout
+
+  def sanitize(input:
+ RawInput):
+ SanitizedData = 
+\end_layout
+
+\begin_layout Plain Layout
+
+    input.replaceAll("[';]",
+ "") // Basic example
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+// Your Database logic
+\end_layout
+
+\begin_layout Plain Layout
+
+def executeQuery(query:
+ SanitizedData):
+ Unit = ???
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+// This fails to compile!
+ You can't pass RawInput where Sanitized is needed.
+\end_layout
+
+\begin_layout Plain Layout
+
+val userPath = Security.markAsRaw("';
+ DROP TABLE Users;--")
+\end_layout
+
+\begin_layout Plain Layout
+
+executeQuery(userPath) 
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+subsection*{Implicit Safety:
+ The "Taint" of Options}
+\end_layout
+
+\begin_layout Plain Layout
+
+The closest spiritual successor to Ruby's "Safe Levels" in Scala is how we handle 
+\backslash
+texttt{null}.
+ In Ruby,
+ calling a method on 
+\backslash
+texttt{nil} causes a crash.
+ In Scala's 
+\backslash
+textbf{Strict Nulls} mode (Chapter 23),
+ the compiler "taints" any value that could be null by forcing it into a 
+\backslash
+texttt{String | Null} union type.
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+subsection*{Taint Checking via Contextual Abstractions}
+\end_layout
+
+\begin_layout Plain Layout
+
+We can also replicate "Safe Levels" using 
+\backslash
+texttt{given} and 
+\backslash
+texttt{using}.
+ We can define a "Security Capability" that must be present in the scope for certain actions to be allowed.
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+case class SecurityLevel[L <:
+ Int]()
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+// This function only runs if the "Level 2" capability is in the room
+\end_layout
+
+\begin_layout Plain Layout
+
+def deleteSystemFile()(using SecurityLevel[2]):
+ Unit = 
+\end_layout
+
+\begin_layout Plain Layout
+
+  println("File deleted")
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+// If this 'given' isn't in scope,
+ the code above won't even compile
+\end_layout
+
+\begin_layout Plain Layout
+
+given currentLevel:
+ SecurityLevel[1] = SecurityLevel[1]()
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+subsection*{Summary:
+ Prevention vs.
+ Detection}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{itemize}
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+item 
+\backslash
+textbf{Ruby Taint}:
+ A "Safety Net" that catches you when you make a mistake at runtime.
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+item 
+\backslash
+textbf{Scala Types}:
+ A "Guardrail" that prevents you from even steering toward the cliff at compile-time.
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{itemize}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+---
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+textit{Reviewer’s Notes:
+ Moving security from runtime to compile-time is the ultimate "Pragmatic" move.
+ It turns a potential 3:00 AM security breach into a 3:00 PM compiler error.}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document

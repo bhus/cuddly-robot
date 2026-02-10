@@ -1,0 +1,558 @@
+#LyX 2.4 created this file. For more info see https://www.lyx.org/
+\lyxformat 620
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass book
+\use_default_options true
+\maintain_unincluded_children no
+\language american
+\language_package default
+\inputencoding utf8
+\fontencoding auto
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_roman_osf false
+\font_sans_osf false
+\font_typewriter_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\float_placement class
+\float_alignment class
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\use_formatted_ref 0
+\use_minted 0
+\use_lineno 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tablestyle default
+\tracking_changes false
+\output_changes false
+\change_bars false
+\postpone_fragile_content true
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\docbook_table_output 0
+\docbook_mathml_prefix 1
+\end_header
+
+\begin_body
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+section*{Chapter 22:
+ Classes,
+ Objects,
+ and Traits}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+While Functional Programming handles the logic of transformations,
+ Object-Oriented Programming (OOP) handles the 
+\backslash
+textbf{architecture} of our data.
+ In Scala,
+ every value is an object,
+ and every operation is a method call.
+ This chapter explores how we define these entities and how they collaborate.
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+subsection*{Classes:
+ The Basic Blueprints}
+\end_layout
+
+\begin_layout Plain Layout
+
+A class in Scala is more than just a container for data.
+ It defines a type and the behavior associated with it.
+ Unlike many other languages,
+ Scala 3 allows for a very concise syntax where the constructor is defined right in the class header.
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+class Project(val name:
+ String,
+ var budget:
+ Int):
+\end_layout
+
+\begin_layout Plain Layout
+
+  def increaseBudget(amount:
+ Int):
+ Unit =
+\end_layout
+
+\begin_layout Plain Layout
+
+    budget += amount
+\end_layout
+
+\begin_layout Plain Layout
+
+    println(s"New budget for $name is $budget")
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+val p = Project("Renaissance",
+ 1000)
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+subsection*{Case Classes:
+ Data Carriers}
+\end_layout
+
+\begin_layout Plain Layout
+
+For most of your domain modeling,
+ you will use 
+\backslash
+texttt{case classes}.
+ These are specialized classes that automatically provide structural equality (comparing by data,
+ not memory address),
+ a readable 
+\backslash
+texttt{toString},
+ and the 
+\backslash
+texttt{copy} method we saw in the functional chapter.
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+case class Task(description:
+ String,
+ priority:
+ Int)
+\end_layout
+
+\begin_layout Plain Layout
+
+val t1 = Task("Write Chapter 21",
+ 1)
+\end_layout
+
+\begin_layout Plain Layout
+
+val t2 = Task("Write Chapter 21",
+ 1)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+// t1 == t2 is true!
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+subsection*{Traits:
+ The Ultimate Composables}
+\end_layout
+
+\begin_layout Plain Layout
+
+Traits are the "Renaissance" version of Interfaces.
+ They allow you to define a set of methods that a class must implement,
+ but unlike Java interfaces,
+ they can also contain fields and implemented logic.
+ You "mix" them into classes to build complex behavior from simple parts.
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+trait Searchable:
+\end_layout
+
+\begin_layout Plain Layout
+
+  def slug:
+ String
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+trait Auditable:
+\end_layout
+
+\begin_layout Plain Layout
+
+  def lastModified:
+ Long = System.currentTimeMillis()
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+class Document(val title:
+ String) extends Searchable with Auditable:
+\end_layout
+
+\begin_layout Plain Layout
+
+  def slug = title.toLowerCase.replace(" ",
+ "-")
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+subsection*{Objects:
+ Singletons and Companions}
+\end_layout
+
+\begin_layout Plain Layout
+
+In Scala,
+ we don't have 
+\backslash
+texttt{static} members.
+ Instead,
+ we have the 
+\backslash
+texttt{object} keyword,
+ which defines a 
+\backslash
+textbf{Singleton}—
+a class that has exactly one instance.
+ When an object shares the same name as a class,
+ it is called a 
+\backslash
+textbf{Companion Object}.
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+class DatabaseConnection(val url:
+ String)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+object DatabaseConnection:
+\end_layout
+
+\begin_layout Plain Layout
+
+  // A factory method in the companion object
+\end_layout
+
+\begin_layout Plain Layout
+
+  def local:
+ DatabaseConnection = 
+\end_layout
+
+\begin_layout Plain Layout
+
+    new DatabaseConnection("jdbc:postgresql://localhost:5432/db")
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+subsection*{Opaque Types vs.
+ Classes}
+\end_layout
+
+\begin_layout Plain Layout
+
+As we saw in Chapter 19,
+ sometimes a class is "too heavy" for a simple ID or wrapper.
+ We use 
+\backslash
+texttt{opaque type} when we want the type safety of a class without the memory overhead of creating an actual object instance.
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+subsection*{Inheritance and Open Classes}
+\end_layout
+
+\begin_layout Plain Layout
+
+Scala 3 encourages composition over inheritance.
+ By default,
+ classes are "non-open." If you want someone to be able to inherit from your class,
+ you must explicitly mark it as 
+\backslash
+texttt{open}.
+ This prevents the "Fragile Base Class" problem where changes in a parent class unexpectedly break children.
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+open class BaseRenderer:
+\end_layout
+
+\begin_layout Plain Layout
+
+  def render():
+ Unit = println("Default render")
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+class WebRenderer extends BaseRenderer:
+\end_layout
+
+\begin_layout Plain Layout
+
+  override def render():
+ Unit = println("HTML render")
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+---
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+textit{Reviewer’s Notes:
+ By combining Case Classes for data and Traits for behavior,
+ Scala developers create systems that are incredibly modular and easy to refactor.}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document

@@ -1,0 +1,548 @@
+#LyX 2.4 created this file. For more info see https://www.lyx.org/
+\lyxformat 620
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass book
+\use_default_options true
+\maintain_unincluded_children no
+\language american
+\language_package default
+\inputencoding utf8
+\fontencoding auto
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_roman_osf false
+\font_sans_osf false
+\font_typewriter_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\float_placement class
+\float_alignment class
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\use_formatted_ref 0
+\use_minted 0
+\use_lineno 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tablestyle default
+\tracking_changes false
+\output_changes false
+\change_bars false
+\postpone_fragile_content true
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\docbook_table_output 0
+\docbook_mathml_prefix 1
+\end_header
+
+\begin_body
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+section*{Chapter 21:
+ The Functional Core}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+Functional Programming (FP) in Scala is a way of writing programs by combining 
+\backslash
+textbf{pure functions} and 
+\backslash
+textbf{immutable data}.
+ By treating logic as a series of transformations rather than a series of state changes,
+ we create "Honest" code that does exactly what its signature says it will do.
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+subsection*{Purity:
+ No Spooky Action at a Distance}
+\end_layout
+
+\begin_layout Plain Layout
+
+A function is "pure" if it always returns the same output for the same input and has no side effects (like modifying a global variable or writing to a database).
+ This makes your code incredibly easy to test because you don't need to "set up the world" before calling a function.
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+// Pure:
+ Predictable and honest
+\end_layout
+
+\begin_layout Plain Layout
+
+def add(a:
+ Int,
+ b:
+ Int):
+ Int = a + b
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+// Impure:
+ Unpredictable (depends on external state)
+\end_layout
+
+\begin_layout Plain Layout
+
+var total = 0
+\end_layout
+
+\begin_layout Plain Layout
+
+def addToTotal(a:
+ Int):
+ Unit = total += a
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+subsection*{Immutability:
+ The Power of Persistent Data}
+\end_layout
+
+\begin_layout Plain Layout
+
+In the functional world,
+ we don't "change" an object;
+ we create a new version of it.
+ This is why 
+\backslash
+texttt{case classes} provide a 
+\backslash
+texttt{copy} method.
+ This prevents bugs where one part of your program accidentally breaks another part by changing shared data.
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+case class Point(x:
+ Int,
+ y:
+ Int)
+\end_layout
+
+\begin_layout Plain Layout
+
+val p1 = Point(1,
+ 2)
+\end_layout
+
+\begin_layout Plain Layout
+
+val p2 = p1.copy(x = 10) // p1 remains (1,
+ 2),
+ p2 is (10,
+ 2)
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+subsection*{Higher-Order Functions:
+ Functions as Data}
+\end_layout
+
+\begin_layout Plain Layout
+
+In Scala,
+ functions are "first-class citizens." You can pass a function into another function as an argument,
+ or return one as a result.
+ This allows us to write highly generic logic for processing data.
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+val numbers = List(1,
+ 2,
+ 3,
+ 4,
+ 5)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+// map,
+ filter,
+ and fold are the "Big Three" of FP
+\end_layout
+
+\begin_layout Plain Layout
+
+val doubled = numbers.map(n => n * 2)
+\end_layout
+
+\begin_layout Plain Layout
+
+val evens = numbers.filter(n => n % 2 == 0)
+\end_layout
+
+\begin_layout Plain Layout
+
+val sum = numbers.foldLeft(0)((acc,
+ n) => acc + n)
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+subsection*{Pattern Matching:
+ Deconstructing Reality}
+\end_layout
+
+\begin_layout Plain Layout
+
+Pattern matching is the functional equivalent of a 
+\backslash
+texttt{switch} statement on steroids.
+ It allows you to "un-apply" data structures to look inside them.
+ It is the primary way we handle different shapes of data in functional Scala.
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+sealed trait Shape
+\end_layout
+
+\begin_layout Plain Layout
+
+case class Circle(radius:
+ Double) extends Shape
+\end_layout
+
+\begin_layout Plain Layout
+
+case class Rect(w:
+ Double,
+ h:
+ Double) extends Shape
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+def area(s:
+ Shape):
+ Double = s match
+\end_layout
+
+\begin_layout Plain Layout
+
+  case Circle(r) => Math.PI * r * r
+\end_layout
+
+\begin_layout Plain Layout
+
+  case Rect(w,
+ h) => w * h
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+subsection*{Managing Effects:
+ The Option and Either types}
+\end_layout
+
+\begin_layout Plain Layout
+
+Functional programmers don't like throwing exceptions because they break the flow of the program.
+ Instead,
+ we represent "Errors" or "Absence" as data types.
+ This forces the caller to acknowledge the possibility of failure at compile time.
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+// Option:
+ Represents a value that might not be there
+\end_layout
+
+\begin_layout Plain Layout
+
+def findUser(id:
+ Int):
+ Option[User] = ???
+ 
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+// Either:
+ Represents a result or an error
+\end_layout
+
+\begin_layout Plain Layout
+
+def divide(a:
+ Int,
+ b:
+ Int):
+ Either[String,
+ Int] =
+\end_layout
+
+\begin_layout Plain Layout
+
+  if b == 0 then Left("Cannot divide by zero")
+\end_layout
+
+\begin_layout Plain Layout
+
+  else Right(a / b)
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+subsection*{Referential Transparency}
+\end_layout
+
+\begin_layout Plain Layout
+
+The "Gold Standard" of FP.
+ If you can replace a function call with its resulting value without changing the behavior of your program,
+ your code is 
+\backslash
+textbf{Referentially Transparent}.
+ This makes refactoring a breeze—
+you can move code around with total confidence.
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document

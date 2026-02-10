@@ -1,0 +1,958 @@
+#LyX 2.4 created this file. For more info see https://www.lyx.org/
+\lyxformat 620
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass book
+\use_default_options true
+\maintain_unincluded_children no
+\language american
+\language_package default
+\inputencoding utf8
+\fontencoding auto
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_roman_osf false
+\font_sans_osf false
+\font_typewriter_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\float_placement class
+\float_alignment class
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\use_formatted_ref 0
+\use_minted 0
+\use_lineno 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tablestyle default
+\tracking_changes false
+\output_changes false
+\change_bars false
+\postpone_fragile_content true
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\docbook_table_output 0
+\docbook_mathml_prefix 1
+\end_header
+
+\begin_body
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+section*{Chapter 25:
+ The Standard Library Atlas}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+A language is only as useful as its toolkit.
+ Scala's standard library is designed to be "batteries included" but "type-safe by default." This reference covers the essential modules you will touch every day.
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+subsection*{1.
+ Any,
+ AnyVal,
+ and AnyRef:
+ The Hierarchy}
+\end_layout
+
+\begin_layout Plain Layout
+
+At the top of the world sits 
+\backslash
+texttt{Any}.
+ Everything in Scala inherits from it.
+ It splits into two branches:
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{itemize}
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+item 
+\backslash
+textbf{AnyVal}:
+ Primitive types like 
+\backslash
+texttt{Int},
+ 
+\backslash
+texttt{Double},
+ 
+\backslash
+texttt{Boolean},
+ and 
+\backslash
+texttt{Unit}.
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+item 
+\backslash
+textbf{AnyRef}:
+ All objects (the equivalent of 
+\backslash
+texttt{java.lang.Object}).
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{itemize}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+subsection*{2.
+ The Collection Module (
+\backslash
+texttt{scala.collection})}
+\end_layout
+
+\begin_layout Plain Layout
+
+The "Crown Jewel" of the library.
+ It is split into 
+\backslash
+textbf{immutable} (default) and 
+\backslash
+textbf{mutable} packages.
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{itemize}
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+item 
+\backslash
+textbf{Seq / List}:
+ Ordered sequences.
+ Use 
+\backslash
+texttt{List} for functional recursion and 
+\backslash
+texttt{Vector} for random access performance.
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+item 
+\backslash
+textbf{Set}:
+ Unordered collections of unique elements.
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+item 
+\backslash
+textbf{Map}:
+ Key-value pairs.
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{itemize}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+val fruits = List("Apple",
+ "Banana")
+\end_layout
+
+\begin_layout Plain Layout
+
+val prices = Map("Apple" -> 0.99,
+ "Banana" -> 0.50)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+// The power of the library is in the combinators:
+\end_layout
+
+\begin_layout Plain Layout
+
+val shoppingList = fruits.flatMap(f => prices.get(f).map(p => s"$f:
+ $p"))
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+subsection*{3.
+ The Option,
+ Either,
+ and Try Modules}
+\end_layout
+
+\begin_layout Plain Layout
+
+These are the "Safety" containers that replace 
+\backslash
+texttt{null} and 
+\backslash
+texttt{exceptions}.
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{itemize}
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+item 
+\backslash
+textbf{Option}:
+ 
+\backslash
+texttt{Some(value)} or 
+\backslash
+texttt{None}.
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+item 
+\backslash
+textbf{Either}:
+ 
+\backslash
+texttt{Right(value)} (the "right" way) or 
+\backslash
+texttt{Left(error)}.
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+item 
+\backslash
+textbf{Try}:
+ 
+\backslash
+texttt{Success(value)} or 
+\backslash
+texttt{Failure(exception)}.
+ Use this when interacting with legacy Java code that throws.
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{itemize}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+subsection*{4.
+ Future and Concurrency (
+\backslash
+texttt{scala.concurrent})}
+\end_layout
+
+\begin_layout Plain Layout
+
+Scala makes asynchronous programming "Pragmatic" using 
+\backslash
+texttt{Future}.
+ It represents a value that will eventually be available.
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+import scala.concurrent.Future
+\end_layout
+
+\begin_layout Plain Layout
+
+import scala.concurrent.ExecutionContext.Implicits.global
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+val asyncTask = Future {
+\end_layout
+
+\begin_layout Plain Layout
+
+  Thread.sleep(1000)
+\end_layout
+
+\begin_layout Plain Layout
+
+  "Data Loaded"
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+subsection*{5.
+ StringOps:
+ The String Extension}
+\end_layout
+
+\begin_layout Plain Layout
+
+In Scala,
+ a 
+\backslash
+texttt{String} is technically a 
+\backslash
+texttt{java.lang.String},
+ but Scala uses 
+\backslash
+textbf{Extension Methods} to give it functional powers like 
+\backslash
+texttt{.map},
+ 
+\backslash
+texttt{.filter},
+ and 
+\backslash
+texttt{.splitAt}.
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+subsection*{6.
+ Numeric and Math (
+\backslash
+texttt{scala.math})}
+\end_layout
+
+\begin_layout Plain Layout
+
+Standard mathematical functions (sin,
+ cos,
+ max,
+ min) and 
+\backslash
+texttt{BigDecimal} / 
+\backslash
+texttt{BigInt} for high-precision financial calculations.
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+subsection*{7.
+ The Predef Object}
+\end_layout
+
+\begin_layout Plain Layout
+
+There is a secret object called 
+\backslash
+texttt{Predef} that is imported automatically into every Scala file.
+ It provides:
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{itemize}
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+item 
+\backslash
+texttt{println} (aliased from 
+\backslash
+texttt{Console.println})
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+item 
+\backslash
+texttt{identity} (a function that returns its input)
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+item Type aliases like 
+\backslash
+texttt{String},
+ 
+\backslash
+texttt{Map},
+ and 
+\backslash
+texttt{Set}.
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{itemize}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+section*{Chapter 25.1:
+ The Digital Library (External References)}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+While this book covers the core patterns,
+ the Scala ecosystem moves quickly.
+ To be a truly effective Renaissance developer,
+ you should keep these specific digital references at your fingertips.
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+subsection*{The "Gold Standards" for Documentation}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{itemize}
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+item 
+\backslash
+textbf{The Scala 3 Standard Library API (Scaladoc)}:
+ This is the definitive source for every method on every class.
+ Use the search bar to find combinators like 
+\backslash
+texttt{groupBy},
+ 
+\backslash
+texttt{zipWithIndex},
+ or 
+\backslash
+texttt{collect}.
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+textit{Link:
+ https://scala-lang.org/api/3.x/}
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+item 
+\backslash
+textbf{The Scala 3 Book (Online Version)}:
+ An excellent,
+ community-driven guide that goes deep into the specific syntax changes from Scala 2 to Scala 3.
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+textit{Link:
+ https://docs.scala-lang.org/scala3/book/introduction.html}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{itemize}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+subsection*{Library-Specific References (Our Recommended Stack)}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+Because we have standardized our application on 
+\backslash
+textbf{sttp},
+ 
+\backslash
+textbf{Doobie},
+ and 
+\backslash
+textbf{Tapir},
+ you will need their specific "Cheatsheets":
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{itemize}
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+item 
+\backslash
+textbf{Tapir Documentation}:
+ Essential for looking up different endpoint inputs (headers,
+ cookies,
+ multipart forms).
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+textit{Link:
+ https://tapir.softwaremill.com/}
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+item 
+\backslash
+textbf{sttp Client Reference}:
+ Details on how to handle proxies,
+ retries,
+ and different backends (like Pekko or OkHttp).
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+textit{Link:
+ https://sttp.softwaremill.com/}
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+item 
+\backslash
+textbf{Doobie Microsite}:
+ The go-to for learning how to map custom SQL types or handle complex transaction boundaries.
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+textit{Link:
+ https://tpolecat.github.io/doobie/}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{itemize}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+subsection*{Community and "Pragmatic" Help}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{itemize}
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+item 
+\backslash
+textbf{Scala Times}:
+ A weekly newsletter that tracks the most important library updates and blog posts in the ecosystem.
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+item 
+\backslash
+textbf{Scaladex}:
+ The "Package Index" for Scala.
+ If you are looking for a library to handle a specific task (e.g.,
+ "AWS SDK" or "CSV Parsing"),
+ Scaladex will show you the most popular and up-to-date options for Scala 3.
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+textit{Link:
+ https://index.scala-lang.org/}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{itemize}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+subsection*{Visual Cheat Sheet:
+ The Collection Hierarchy}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+textit{Note:
+ When in doubt,
+ start with an immutable 
+\backslash
+texttt{List}.
+ If you need to search by key,
+ move to a 
+\backslash
+texttt{Map}.
+ If you need uniqueness,
+ use a 
+\backslash
+texttt{Set}.
+ The standard library makes it trivial to convert between them using 
+\backslash
+texttt{.toList},
+ 
+\backslash
+texttt{.toMap},
+ or 
+\backslash
+texttt{.toSet}.}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document
