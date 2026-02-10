@@ -97,6 +97,15 @@ customHeadersFooters
 Dive into Scala
 \end_layout
 
+\begin_layout Standard
+\begin_inset CommandInset toc
+LatexCommand tableofcontents
+
+\end_inset
+
+
+\end_layout
+
 \begin_layout Section*
 Preface
 \end_layout
@@ -607,8 +616,30 @@ literal "false"
 Reflection & Other Power Features
 \end_layout
 
+\begin_layout Standard
+\begin_inset CommandInset include
+LatexCommand input
+filename "scala-chapter-24.lyx"
+literal "false"
+
+\end_inset
+
+
+\end_layout
+
 \begin_layout Part
 References & Appendices
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset include
+LatexCommand input
+filename "scala-chapter-25.lyx"
+literal "false"
+
+\end_inset
+
+
 \end_layout
 
 \end_body
