@@ -170,10 +170,6 @@ For Windows
 \end_layout
 
 \begin_layout LyX-Code
-Code snippet
-\end_layout
-
-\begin_layout LyX-Code
 @echo off
 \end_layout
 
@@ -254,10 +250,6 @@ hello.sc
  in your folder and type in the following:
 \end_layout
 
-\begin_layout Standard
-Scala
-\end_layout
-
 \begin_layout LyX-Code
 // Programmer moods
 \end_layout
@@ -320,22 +312,14 @@ Run your launch.bat file to open your localized command prompt.
  tell Scala CLI to run everything in the current directory:
 \end_layout
 
-\begin_layout Standard
-Bash
-\end_layout
-
 \begin_layout LyX-Code
 % scala-cli .
 \end_layout
 
-\begin_layout LyX-Code
+\begin_layout Standard
 You should see Scala spring to life,
  download the necessary dependencies (like pprint),
  and output:
-\end_layout
-
-\begin_layout LyX-Code
-Plaintext
 \end_layout
 
 \begin_layout LyX-Code

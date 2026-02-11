@@ -37,7 +37,16 @@ customHeadersFooters
 \float_alignment class
 \paperfontsize 12
 \spacing single
-\use_hyperref false
+\use_hyperref true
+\pdf_bookmarks true
+\pdf_bookmarksnumbered false
+\pdf_bookmarksopen false
+\pdf_bookmarksopenlevel 1
+\pdf_breaklinks true
+\pdf_pdfborder true
+\pdf_colorlinks false
+\pdf_backref false
+\pdf_pdfusetitle true
 \papersize default
 \use_geometry false
 \use_package amsmath 1
@@ -111,7 +120,7 @@ Preface
 \end_layout
 
 \begin_layout Standard
-For as long as I’ve been in the industry,
+From it's inception,
  Scala has been a constant,
  quiet powerhouse.
  While the Java ecosystem was still finding its legs,
@@ -119,25 +128,54 @@ For as long as I’ve been in the industry,
  It has consistently attracted the brightest minds in computer science—
 not just for the sake of academic theory,
  but to solve the most grueling problems in distributed systems and data.
+ 
 \end_layout
 
 \begin_layout Standard
-But Scala has a secret:
- despite its "academic" reputation,
- it is arguably the most versatile tool a developer can wield.
- It refused to pick a side in the war between Object-Oriented and Functional programming,
+It was not until more recently that I took the time to take it for a spin.
+ All I can say is that I should have taken a closer look years ago.
+ The language is maximally clean and clear,
+ with a focus on versatility and practical problem solving.
+ It takes everything I loved about the mathematics and computer science academics – clarity,
+ precision and intelligence – and married it with a very easy to understand syntax.
+ In terms of paradigms,
+ it took a radically pragmatic approach,
+ refusing to pick a side in the war between Object-Oriented and Functional programming,
  choosing instead to marry them.
+ in a way that is very intentional,
+ allowing each to naturally develop in the areas it was best suited.
+ All of this translates into a language that allows you to focus on the problem you are trying to solve,
+ fading into the background while acting as guardrails to guide you to solutions that are clear & well structured.
+ It helps you become a better developer:
+ giving you the chance to write cleaner,
+ more expressive code for your users *and* for future maintainers,
+ not for the compiler.
 \end_layout
 
 \begin_layout Standard
 The tragedy is that Scala has always been better at being a language than talking about it.
  For too long,
  the barrier to entry was a lack of clear,
- iconic messaging.
- This book changes that.
- It isn't just a manual;
- it’s an invitation to a cleaner,
- more expressive way of thinking.
+ iconic messaging,
+ not the language itself.
+ It took me an embarrassingly long time to take a look at this language – scala has been around almost as long as the JVM,
+ but I only started taking a look a couple of years ago – but since picking it up I use it for every little programming job I have now.
+ I should have known this would be the case.
+\end_layout
+
+\begin_layout Standard
+Scala is a language of very high repute in the academic world–it is one of the most heavily researched by post-grad Computer Science researchers.
+ It has immense staying power,
+ with a very robust ecosystem surrounding it.
+ There is now a library for most every task you could think of.
+ And it's used in some of the most high demand developer jobs anywhere in high volume,
+ precision-critical tasks worldwide (after all,
+ scala derives it's name from SCAlable LAnguage).
+\end_layout
+
+\begin_layout Standard
+One issue scala currently suffers from is quality documentation and a coherent framework around it's latest features.
+ That's where this book comes in.
 \end_layout
 
 \begin_layout Section*
@@ -148,8 +186,9 @@ A Language for the Next Era
 
 \begin_layout Standard
 Scala is often described as "difficult," but that reputation is a dusty artifact of a bygone era.
- If Scala feels familiar today,
- it’s because the rest of the world finally caught up.
+ If anything,
+ Scala likely feels familiar today,
+ since the rest of the world has finally caught up.
  Features that Scala pioneered years ago have now become the "modern" additions to languages like Java,
  C#,
  and Python.
@@ -181,86 +220,49 @@ There has never been a better time to be picky about your backend language.
  you won't want to go back.
 \end_layout
 
+\begin_layout Section*
+How to Read This Book
+\end_layout
+
 \begin_layout Standard
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-section*{How to Read This Book}
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
 In the spirit of the great pragmatic manuals,
  we aren't going to bury you in category theory on page one.
  Scala is a language of action,
  and this book is designed to be a conversation between your keyboard and the compiler.
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout Standard
 The book is organized into three distinct movements:
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout Subsection*
+Part I:
+ The Elements of Scala
 \end_layout
 
-\begin_layout Plain Layout
-
-
-\backslash
-subsection*{Part I:
- The Elements of Scala}
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout Standard
 We begin by getting you up and running immediately.
  You won't find dry lists of keywords here.
- Instead,
- we introduce the fundamental building blocks—
+ We will give you enough to get going,
+ in terms of terminology & concepts.
+ We will give an overview of key features,
+ with enought detail of the fundamental building blocks—
 Types,
  Functions,
  and Objects—
-as the raw materials of your craft.
+as you will need to get moving.
+ You will learn to write concise and clean object-oriented code.
  You will learn to write "Honest" code using immutable data and pattern matching,
- moving from a single script to a cohesive application.
+ moving from a single script to a cohesive application that interacts with your OS and environment.
+ We will finish out by outlining how scala testing is done.
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout Subsection*
+Part II:
+ The Scala Surroundings
 \end_layout
 
-\begin_layout Plain Layout
-
-
-\backslash
-subsection*{Part II:
- The Scala Surroundings}
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout Standard
 A language does not exist in a vacuum.
  In this section,
  we step into the "Pragmatic Stack." We explore how Scala interacts with the outside world:
@@ -275,72 +277,39 @@ textbf{Tapir},
 textbf{sttp}.
  We also bridge the gap to the Java ecosystem,
  ensuring you can leverage the full power of the JVM.
+ We will touch on how scala packages things so that developers write modules that play nice with each other.
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout Subsection*
+Part III:
+ Scala Distilled
 \end_layout
 
-\begin_layout Plain Layout
-
-
-\backslash
-subsection*{Part III:
- Scala Distilled}
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout Standard
 Once you are comfortable with the "How," we move to the "Why." This part is the deep dive into the engine room.
- We revisit the language constructs with surgical precision—
+ We revisit the language constructs—
 exploring the nuances of the Type System,
  Metaprogramming,
  and Safety Modes.
  This is where we distill the philosophy that makes Scala "The Scalable Language."
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout Subsection*
+The Appendices:
+ The Developer's Atlas
 \end_layout
 
-\begin_layout Plain Layout
-
-
-\backslash
-subsection*{The Appendices:
- The Developer's Atlas}
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout Standard
 At the back of the book,
- you will find a comprehensive reference to the Standard Library,
+ you will find a reference to the Standard Library,
  a dictionary for those coming from other languages like Ruby or Java,
  and a guide to the tools that keep the Renaissance ecosystem humming.
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout Standard
 Whether you are a veteran looking for a more expressive tool or a newcomer looking for a solid foundation,
  this book is designed to meet you where you are.
  Let’s get to work.
-\end_layout
-
-\end_inset
-
-
 \end_layout
 
 \begin_layout Part
@@ -727,7 +696,7 @@ literal "false"
 \end_layout
 
 \begin_layout Chapter
-Reflection & Other Power Features
+Reflection & Metaprogramming
 \end_layout
 
 \begin_layout Standard
