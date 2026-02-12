@@ -5,6 +5,9 @@
 \save_transient_properties true
 \origin unavailable
 \textclass book
+\begin_preamble
+\usepackage{dirtree}
+\end_preamble
 \use_default_options true
 \begin_modules
 customHeadersFooters
@@ -110,6 +113,10 @@ Dive into Scala
 \begin_inset CommandInset toc
 LatexCommand tableofcontents
 
+\end_inset
+
+
+\begin_inset Newpage newpage
 \end_inset
 
 

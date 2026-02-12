@@ -5,6 +5,9 @@
 \save_transient_properties true
 \origin unavailable
 \textclass book
+\begin_preamble
+\usepackage{dirtree}
+\end_preamble
 \use_default_options true
 \master scala-first-steps.lyx
 \maintain_unincluded_children no
@@ -90,6 +93,14 @@
 \begin_body
 
 \begin_layout Standard
+Let's get you get scala up and going so that you can follow along with the code as we go.
+\end_layout
+
+\begin_layout Subsection*
+The Sandbox Setup
+\end_layout
+
+\begin_layout Standard
 Scala is a moving target.
  Because it is so actively researched,
  the environment around it evolves quickly.
@@ -112,28 +123,73 @@ Portable Sandbox
  This keeps your project self-contained and your system clean.
 \end_layout
 
-\begin_layout Subsection*
-The Sandbox Setup
-\end_layout
-
 \begin_layout Standard
 You only need two things to get started.
- Create a folder for this book (let’s call it scala-sandbox) and follow these steps:
+ Create a folder for this book (let’s call it 
+\emph on
+scala-sandbox
+\emph default
+) and follow these steps:
 \end_layout
 
 \begin_layout Enumerate
 
 \series bold
-The Engine (The JDK)
+Setup The Engine (The JDK)
 \series default
 :
  Grab a "Portable" or "Archive" version of the Java Development Kit (we recommend 
 \series bold
 Eclipse Temurin
 \series default
- from adoptium.net).
- Unzip it directly into your folder.
+ from adoptium.net,
+ which can be found at https://adoptium.net/en-GB/temurin/releases.
+ Make sure to grab 
+\series bold
+.ZIP
+\series default
+ file for the JDK for your platform - Windows (or whatever platform you're using)).
+ Make a subdirectory under the root called 
+\begin_inset Quotes eld
+\end_inset
+
+jvm
+\begin_inset Quotes erd
+\end_inset
+
+,
+ unzip the ZIP file and put it directly into that folder (you should end up with a directory something like 
+\begin_inset Quotes eld
+\end_inset
+
+scala-sandbox
+\backslash
+jvm
+\backslash
+jdk-25.0.1+8
+\begin_inset Quotes erd
+\end_inset
+
+,
+ with a bunch of folders in it like 
+\begin_inset Quotes eld
+\end_inset
+
+bin
+\begin_inset Quotes erd
+\end_inset
+
+,
  
+\begin_inset Quotes eld
+\end_inset
+
+conf
+\begin_inset Quotes erd
+\end_inset
+
+,
+ ...).
 \end_layout
 
 \begin_layout Enumerate
@@ -146,9 +202,15 @@ The Pilot (Scala CLI
 \series bold
 Scala CLI
 \series default
- binary (from VirtusLab).
+ binary (from VirtusLab's repo,
+ eg.
+ https://github.com/VirtusLab/scala-cli/releases/download/v1.12.2/scala-cli-x86_64-pc-win32.zip).
  This is the Swiss Army Knife of modern Scala.
- Drop the executable into a subfolder named bin.
+ Download the zip file and extract it,
+ then move it into the bin subfolder (eg.
+ scala-sandbox
+\backslash
+bin).
 \end_layout
 
 \begin_layout Subsection*
@@ -159,6 +221,15 @@ The Launch Script
 To make this environment "alive," we'll create a small script.
  This tells your computer to use the local Java and Scala versions you just downloaded,
  rather than searching the whole house for them.
+ Put the resulting code in a 
+\begin_inset Quotes eld
+\end_inset
+
+launch.bat
+\begin_inset Quotes erd
+\end_inset
+
+ file in the project root.
 \end_layout
 
 \begin_layout Standard
@@ -231,13 +302,205 @@ cmd /k
 \begin_layout Standard
 
 \emph on
-(Note:
+(Note that you will need to substitute in the relative path where you put the jdk directory (eg.
+ set "JAVA_HOME=%~dp0jdk
+\backslash
+jdk-25.0.2+10").
+ 
+\end_layout
+
+\begin_layout Standard
+
+\emph on
+(Also Note:
  For Mac or Linux users,
  you can achieve the same by sourcing a simple .sh script to export these paths.)
 \end_layout
 
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+So we should now have something like:
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+dirtree{%
+\end_layout
+
+\begin_layout Plain Layout
+
+.1 /.
+\end_layout
+
+\begin_layout Plain Layout
+
+.2 bin.
+\end_layout
+
+\begin_layout Plain Layout
+
+.3 scala-cli.
+\end_layout
+
+\begin_layout Plain Layout
+
+.2 jdk.
+\end_layout
+
+\begin_layout Plain Layout
+
+.3 jdk-25.0.2+10.
+\end_layout
+
+\begin_layout Plain Layout
+
+.4 bin.
+\end_layout
+
+\begin_layout Plain Layout
+
+.4 conf.
+\end_layout
+
+\begin_layout Plain Layout
+
+.4 ...(other jdk stuff).
+\end_layout
+
+\begin_layout Plain Layout
+
+.2 launch.bat.
+\end_layout
+
+\begin_layout Plain Layout
+
+.2 ...
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
 \begin_layout Subsection*
-Write & Run
+Writing & Running Scala
+\end_layout
+
+\begin_layout Subsubsection*
+Interactive scala
+\end_layout
+
+\begin_layout Standard
+
+\emph on
+scala-cli console
+\emph default
+ is the modern choice to executing scala interactively.
+ It's a scala console complete with command-line history and job control (we will cover it later in more depth).
+ After loadiing our environment with launch.bat,
+ `scala-cli console` will run it from the command line.
+ Once it starts,
+ start typing scala code!
+\end_layout
+
+\begin_layout LyX-Code
+...
+\backslash
+scala-book>scala-cli console
+\end_layout
+
+\begin_layout LyX-Code
+scala> def hiNumbers(n1:
+ Integer,
+ n2:
+ Integer) =
+\end_layout
+
+\begin_layout LyX-Code
+         n1 + n2
+\end_layout
+
+\begin_layout LyX-Code
+scala> hiNumbers(3,
+ 4)
+\end_layout
+
+\begin_layout LyX-Code
+val res1:
+ Int = 7
+\end_layout
+
+\begin_layout Standard
+scala-cli console is super useful,
+ and the more you use it the more handy it becomes
+\end_layout
+
+\begin_layout Standard
+Additionally,
+ you can load your local code to test out the code therein:
+\end_layout
+
+\begin_layout LyX-Code
+...
+\backslash
+scala-book>scala-cli console
+\end_layout
+
+\begin_layout LyX-Code
+scala> :load hello.sc
+\end_layout
+
+\begin_layout LyX-Code
+Keep coding!
+\end_layout
+
+\begin_layout LyX-Code
+Compiling at the speed of light!
+\end_layout
+
+\begin_layout LyX-Code
+// defined class Mood
+\end_layout
+
+\begin_layout LyX-Code
+def response(mood:
+ Mood):
+ String
+\end_layout
+
+\begin_layout LyX-Code
+val sequence:
+ List[Mood] = List(Happy,
+ Caffeinated)
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+scala> 
+\end_layout
+
+\begin_layout Subsubsection*
+Scala Programs
 \end_layout
 
 \begin_layout Standard
@@ -251,7 +514,31 @@ hello.sc
 \end_layout
 
 \begin_layout LyX-Code
+//> using scala "3.3"
+\end_layout
+
+\begin_layout LyX-Code
 // Programmer moods
+\end_layout
+
+\begin_layout LyX-Code
+/**
+\end_layout
+
+\begin_layout LyX-Code
+ * Represents a developer's state of mind.
+\end_layout
+
+\begin_layout LyX-Code
+ * * @param intensity How strongly the mood is felt (1-10)
+\end_layout
+
+\begin_layout LyX-Code
+ * @note Use [[Mood.Caffeinated]] for high-performance tasks.
+\end_layout
+
+\begin_layout LyX-Code
+ */
 \end_layout
 
 \begin_layout LyX-Code
@@ -259,7 +546,7 @@ enum Mood:
 \end_layout
 
 \begin_layout LyX-Code
-case Happy,
+  case Happy,
  Curious,
  Caffeinated
 \end_layout
@@ -270,23 +557,20 @@ case Happy,
 
 \begin_layout LyX-Code
 def response(mood:
- Mood) = mood match
+ Mood):
+ String = mood match
 \end_layout
 
 \begin_layout LyX-Code
-  case Mood.Happy => "Keep coding!"
+  case Mood.Happy       => "Keep coding!"
 \end_layout
 
 \begin_layout LyX-Code
-  case Mood.Curious => "Let's explore the source code."
+  case Mood.Curious     => "Let's explore the source code."
 \end_layout
 
 \begin_layout LyX-Code
   case Mood.Caffeinated => "Compiling at the speed of light!"
-\begin_inset Newline newline
-\end_inset
-
-
 \end_layout
 
 \begin_layout LyX-Code
@@ -302,14 +586,9 @@ val sequence = List(Mood.Happy,
 sequence.map(response).foreach(println)
 \end_layout
 
-\begin_layout Subsection*
-The Moment of Truth
-\end_layout
-
 \begin_layout Standard
-Run your launch.bat file to open your localized command prompt.
- Now,
- tell Scala CLI to run everything in the current directory:
+Now in your shell,
+ cd to the scala-sandox root and tell Scala CLI to run everything in the current directory:
 \end_layout
 
 \begin_layout LyX-Code
@@ -340,6 +619,67 @@ Congratulations
  No installers,
  no registry keys,
  just code.
+\end_layout
+
+\begin_layout Subsection*
+Scala Documentation
+\end_layout
+
+\begin_layout Standard
+Documentation of source files isn't just for folks mucking around in your code – it can easily be summoned in the console to see what author's of any code had to say.
+ For example,
+ our Mood enum above is meticulously documented for maximum comprehension.
+ The format is similar to a lot of other lanugaes :
+ /** ...
+ */,
+ with some keywords to help.
+ 
+\end_layout
+
+\begin_layout Standard
+The secret trick here is that you can easily summon this documentation *in the console* with 
+\end_layout
+
+\begin_layout LyX-Code
+scala> :doc Mood
+\end_layout
+
+\begin_layout LyX-Code
+Represents a developer's state of mind.
+\end_layout
+
+\begin_layout LyX-Code
+ * @param intensity How strongly the mood is felt (1-10)
+\end_layout
+
+\begin_layout LyX-Code
+Note
+\end_layout
+
+\begin_layout LyX-Code
+ - Use [[Mood.Caffeinated]] for high-performance tasks.
+\end_layout
+
+\begin_layout Standard
+However,
+ if you do prefer the nicely marked up we version,
+ you can build it with
+\end_layout
+
+\begin_layout LyX-Code
+./scala-cli doc .
+ -o ./my-docs
+\end_layout
+
+\begin_layout Standard
+from within your directory,
+ and it will generate a full,
+ searchable docs website in you my-docs folder (open my-docs/index.html in a browser to start navigating).
+\end_layout
+
+\begin_layout Standard
+Give it a try in your command line – it may be a bit off-putting first,
+ but is quite powerful the more you get used to it!
 \end_layout
 
 \end_body
