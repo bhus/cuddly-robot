@@ -89,9 +89,65 @@
 \begin_body
 
 \begin_layout Standard
-The best way to learn a language is to build small things that showcase big ideas.
- Scala is unique because it doesn’t force you to choose between being an "Object-Oriented" programmer or a "Functional" programmer.
- It assumes you want the best of both worlds.
+One of the goals of this book was to bring a de-mystified,
+ solid introduction to the reader of the scala language.
+ As we have mentioned,
+ from a layman,
+ outsider view scala is viewed as academic.
+ Not the 
+\begin_inset Quotes eld
+\end_inset
+
+well-organized
+\begin_inset Quotes erd
+\end_inset
+
+,
+ 
+\begin_inset Quotes eld
+\end_inset
+
+well-thought out
+\begin_inset Quotes erd
+\end_inset
+
+ sense,
+ but in the 
+\begin_inset Quotes eld
+\end_inset
+
+it's very theoretical and inaccessible to non-enlightened folks
+\begin_inset Quotes erd
+\end_inset
+
+ sense.
+ This is tragic,
+ and we think can and should be remedied by a prioritized,
+ pragmatic,
+ 
+\begin_inset Quotes eld
+\end_inset
+
+work with the code first
+\begin_inset Quotes erd
+\end_inset
+
+ approach.
+\end_layout
+
+\begin_layout Standard
+So,
+ now that we have our environment set up,
+ let's build a few small things and take a 
+\begin_inset Quotes eld
+\end_inset
+
+high level
+\begin_inset Quotes erd
+\end_inset
+
+ tour of the language.
+ We can dissect more rigorously later.
 \end_layout
 
 \begin_layout Subsection*
@@ -101,20 +157,52 @@ Scala is Object-Oriented
 \begin_layout Standard
 In Scala,
  everything is an object.
- We use classes to define the "blueprints" of our data.
+ Variables.
+ Values.
+ Everything.
+ Of course,
+ there are a ton of languages that make that claim – let's run through what this means for scala.
 \end_layout
 
 \begin_layout Standard
-Scala
+We use classes to define the "blueprints" of data (that aren't already defined as a base class – with some exceptions).
+ The classic example is a jukebox,
+ where each *song* could be considered a class instance.
+ You could store the name of the song,
+ and the artist,
+ as attributes.
+ We could also define methods,
+ such as 
+\begin_inset Quotes eld
+\end_inset
+
+play
+\begin_inset Quotes erd
+\end_inset
+
+,
+ that could be formed by the instance.
+ The word object is used interchangeably with class instances.
+ 
+\end_layout
+
+\begin_layout Standard
+In scala,
+ these objects usually created by calling the special 
+\emph on
+constructor
+\emph default
+ for the class,
+ which is just the class name followed by parameters in parentheses:
 \end_layout
 
 \begin_layout LyX-Code
 class Song(val title:
- String)
+ String)          // define the constructor
 \end_layout
 
 \begin_layout LyX-Code
-val favorite = Song("Bad Moon Rising")
+val favorite = Song("Bad Moon Rising") // call the constructor
 \end_layout
 
 \begin_layout LyX-Code
@@ -122,11 +210,143 @@ println(favorite.title)
 \end_layout
 
 \begin_layout Standard
-But sometimes,
+You can see that we define the Song class as taking a String parameter called *title*.
+ We then call that constructor with a string value for the title (
+\begin_inset Quotes eld
+\end_inset
+
+Bad Moon Rising
+\begin_inset Quotes erd
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Standard
+We define multiple class instances by calling the constructor with different parameters.
+\end_layout
+
+\begin_layout LyX-Code
+val favorite = Song(
+\begin_inset Quotes eld
+\end_inset
+
+Fire It Up
+\begin_inset Quotes erd
+\end_inset
+
+)
+\end_layout
+
+\begin_layout LyX-Code
+val secondFavorite = Song(
+\begin_inset Quotes eld
+\end_inset
+
+Smells like Teen Spirit
+\begin_inset Quotes erd
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Standard
+We add methods to a class with the 
+\begin_inset Quotes eld
+\end_inset
+
+def
+\begin_inset Quotes erd
+\end_inset
+
+ keyword (that you may recognize from other languages like Ruby).
+\end_layout
+
+\begin_layout LyX-Code
+class Book(val title:
+ String,
+ val author:
+ String)
+\end_layout
+
+\begin_layout LyX-Code
+  def getIndexInfo() =
+\end_layout
+
+\begin_layout LyX-Code
+    s"Book title:
+ $title.
+ Written by:
+ $author"
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+val book = Book("The Stand",
+ "Stephen King")
+\end_layout
+
+\begin_layout LyX-Code
+println(book.getIndexInfo()) // -> Book title:
+ The Stand.
+ Written by:
+ Stephen King
+\end_layout
+
+\begin_layout Standard
+Note there's no return call needed – the last value is assumed to be the result.
+\end_layout
+
+\begin_layout Standard
+Note also the return string is enclosed in 
+\series bold
+s"...".
+ 
+\series default
+This tells us the string contains variable values (prefixed with a $),
+ along with other substitutions like newline ( 
+\backslash
+n ).
+\end_layout
+
+\begin_layout Standard
+Like we said,
+ everything in scala is an object,
+ so variables and literals alike can have the methods invoked on them:
+\end_layout
+
+\begin_layout LyX-Code
+favorite.toUpperCase() // -> FIRE IT UP
+\end_layout
+
+\begin_layout LyX-Code
+\begin_inset Quotes eld
+\end_inset
+
+Dude
+\begin_inset Quotes erd
+\end_inset
+
+.toLowerCase()   // -> dude
+\end_layout
+
+\begin_layout Standard
+Here's where it gets a little tricky :
+ you can also create *single* objects,
+ without requiring a class.
+ After all,
+ sometimes,
  you don't need a blueprint;
  you just need a single,
  specific thing.
- For that,
+ 
+\end_layout
+
+\begin_layout Standard
+For this,
  Scala has the 
 \series bold
 Object
@@ -137,12 +357,9 @@ creating a "Singleton" in one line.
  no complex patterns.
 \end_layout
 
-\begin_layout Standard
-Scala
-\end_layout
-
 \begin_layout LyX-Code
 object Jukebox:
+  // define the object
 \end_layout
 
 \begin_layout LyX-Code
@@ -160,12 +377,26 @@ object Jukebox:
 \end_layout
 
 \begin_layout LyX-Code
-Jukebox.play("My Song") 
+Jukebox.play("My Song") // call the play method on the object
 \end_layout
 
-\begin_layout Subsubsection*
-Traits:
- The Secret Ingredient
+\begin_layout Standard
+Now that we have some multiline code,
+ we will point out something - notice that,
+ after we declare the object,
+ all of the code that belongs to it on subsequent lines is indented.
+ This is a pattern from other languages like python,
+ which allows for cleaner code due to the absence of braces you typically find in C-inspired languages (*cough* java *cough*) – the body of the method does not have braces,
+ or even and 
+\begin_inset Quotes eld
+\end_inset
+
+end
+\begin_inset Quotes erd
+\end_inset
+
+.
+ The body is simply denoted by being indented.
 \end_layout
 
 \begin_layout Standard
@@ -197,6 +428,26 @@ trait Speakable:
 
 \begin_layout LyX-Code
 class Human extends Speakable
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+val baby = Human()
+\end_layout
+
+\begin_layout LyX-Code
+vaby.sayHi()
+\end_layout
+
+\begin_layout Standard
+In practice,
+ what this means is that we can add behaviour to classes without a mess of complex hierarchies.
+ Want a function from a class?
+ Just add it in – no need to think about which relative to add it to.
+ Traits can also define & contain state – but we will talk about that later.
 \end_layout
 
 \begin_layout Subsection*
@@ -210,11 +461,12 @@ While objects hold our data,
 Functions
 \series default
  transform it.
- Scala encourages "chains" of logic where data flows through a pipeline like water through a filter.
+ Where other languages shy away,
+ scala full embraces this duality of object orientedness and functional focus.
 \end_layout
 
 \begin_layout Standard
-Scala
+Scala encourages "chains" of logic where data flows through a pipeline like water through a filter.
 \end_layout
 
 \begin_layout LyX-Code
@@ -258,154 +510,22 @@ val result = rawUsers
 \end_layout
 
 \begin_layout Standard
-
-\series bold
-Two things to notice here:
-\end_layout
-
-\begin_layout Standard
-
-\series bold
-The Underscore (_)
-\series default
-:
- This is Scala’s shorthand for "whatever item I’m currently looking at." It keeps your code incredibly lean.
-\end_layout
-
-\begin_layout Standard
-
-\series bold
-Interpolation
-\series default
-:
- The s"..." syntax lets you drop variables directly into strings.
+The Underscore (_) is Scala’s shorthand for "whatever item I’m currently looking at." It keeps your code incredibly lean.
 \end_layout
 
 \begin_layout Subsection*
-Comprehensions:
- The Logic Engine
+Scala is a Duality
 \end_layout
 
 \begin_layout Standard
-While .map and .filter are great for simple chains,
- sometimes you need to combine data from multiple sources.
- This is where the for-comprehension shines.
- It looks like a loop,
- but it’s actually a powerful way to yield new data from existing lists.
-\end_layout
-
-\begin_layout Standard
-Scala
-\end_layout
-
-\begin_layout LyX-Code
-val numbers = List(1,
- 2,
- 3)
-\end_layout
-
-\begin_layout LyX-Code
-// For every 'n' in numbers,
- yield 'n * 2'
-\end_layout
-
-\begin_layout LyX-Code
-val doubled = for n <- numbers yield n * 2
-\end_layout
-
-\begin_layout LyX-Code
-// Result:
- List(2,
- 4,
- 6)
-\end_layout
-
-\begin_layout Standard
-The syntax is deliberate:
-\end_layout
-
-\begin_layout Itemize
-The 
-\series bold
-for
-\series default
- starts the expression.
-\end_layout
-
-\begin_layout Itemize
-The 
-\series bold
-n <- numbers
-\series default
- (the generator) pulls each value out of the list one by one.
-\end_layout
-
-\begin_layout Itemize
-The 
-\series bold
-yield
-\series default
- keyword tells Scala:
- "Take the result of this calculation and put it into a brand new list."
-\end_layout
-
-\begin_layout Subsection*
-The "No-Null" Policy:
- Options
-\end_layout
-
-\begin_layout Standard
-In most languages,
- null is a landmine.
- You never know when a variable is empty until your program crashes.
- Scala solves this with the Option type.
- An Option is a box:
- it either contains Some(value) or it is None.
-\end_layout
-
-\begin_layout Standard
-Scala
-\end_layout
-
-\begin_layout LyX-Code
-val user:
- Option[String] = Some("Albertus")
-\end_layout
-
-\begin_layout LyX-Code
-val unknown:
- Option[String] = None
-\end_layout
-
-\begin_layout LyX-Code
-// You are forced to decide what happens if it's empty
-\end_layout
-
-\begin_layout LyX-Code
-println(user.getOrElse("Guest")) // Prints:
- Albertus
-\end_layout
-
-\begin_layout LyX-Code
-println(unknown.getOrElse("Guest")) // Prints:
- Guest
-\end_layout
-
-\begin_layout Subsection*
-Scala is Both:
- The Case Class & Pattern Match
-\end_layout
-
-\begin_layout Standard
-The "Killer Feature" of Scala is the Case Class.
- It’s a class that comes pre-packaged with everything you need:
+Case classes are a special class that comes pre-packaged with everything you need:
  instant instantiation,
- pretty-printing,
- and the ability to be "unpacked" via Pattern Matching.
+ pretty-printing.
 \end_layout
 
 \begin_layout Standard
-Scala
+In particular,
+ case class variables can be easily "unpacked":
 \end_layout
 
 \begin_layout LyX-Code
@@ -413,6 +533,10 @@ case class Player(name:
  String,
  age:
  Int)
+\begin_inset Newline newline
+\end_inset
+
+
 \end_layout
 
 \begin_layout LyX-Code
@@ -421,39 +545,36 @@ val mario = Player("Mario",
 \end_layout
 
 \begin_layout LyX-Code
-val luigi = Player("Luigi",
- 29)
+\begin_inset Newline newline
+\end_inset
+
+val User(m_name,
+ m_age) = mario    // -> we get m_name = 
+\begin_inset Quotes eld
+\end_inset
+
+Mario
+\begin_inset Quotes erd
+\end_inset
+
+,
+ m_age = 27
 \end_layout
 
-\begin_layout LyX-Code
-// The "Match" is the crown jewel of Scala control flow
-\end_layout
-
-\begin_layout LyX-Code
-mario.age match
-\end_layout
-
-\begin_layout LyX-Code
-  case n if n > 25 => println("Veteran status")
-\end_layout
-
-\begin_layout LyX-Code
-  case _ => println("Rookie")
+\begin_layout Standard
+We can see that we cleanly now get values from inside the object assigned to variables.
 \end_layout
 
 \begin_layout Subsection*
-Bringing it All Together
+Some Basic Scala
 \end_layout
 
 \begin_layout Standard
-What does a "real" Scala service look like?
- It mixes all these concepts into a clean,
+So what does this all mean?
+ What does a "real" Scala service look like?
+ It mixes these concepts into a clean,
  readable file.
  Here is a small database interaction using Doobie and our favorite "Functional-Light" patterns.
-\end_layout
-
-\begin_layout Standard
-Scala
 \end_layout
 
 \begin_layout LyX-Code
@@ -470,6 +591,10 @@ import doobie.implicits.*
 
 \begin_layout LyX-Code
 import cats.effect.IO
+\begin_inset Newline newline
+\end_inset
+
+
 \end_layout
 
 \begin_layout LyX-Code
@@ -494,6 +619,10 @@ trait DBConfig:
 
 \begin_layout LyX-Code
   )
+\begin_inset Newline newline
+\end_inset
+
+
 \end_layout
 
 \begin_layout LyX-Code
@@ -506,6 +635,10 @@ case class Product(id:
  Int,
  name:
  String)
+\begin_inset Newline newline
+\end_inset
+
+
 \end_layout
 
 \begin_layout LyX-Code
@@ -515,6 +648,7 @@ case class Product(id:
 
 \begin_layout LyX-Code
 object ProductService extends DBConfig:
+ // Mixes in DBConfig trait from above
 \end_layout
 
 \begin_layout LyX-Code
@@ -528,7 +662,7 @@ object ProductService extends DBConfig:
 \end_layout
 
 \begin_layout LyX-Code
-      .query[Product] // Map the SQL columns directly to our Case Class
+      .query[Product]                   // Map the SQL columns directly to our Case Class
 \end_layout
 
 \begin_layout LyX-Code
@@ -536,7 +670,7 @@ object ProductService extends DBConfig:
 \end_layout
 
 \begin_layout LyX-Code
-      .transact(xa)
+      .transact(xa)                     // Chain methods to get everything we need
 \end_layout
 
 \begin_layout Standard
@@ -544,6 +678,183 @@ In just a few lines,
  we’ve defined a data model,
  set up a database connection,
  and written a type-safe query that maps SQL directly to a Scala object.
+\end_layout
+
+\begin_layout Subsection*
+Pattern Matching
+\end_layout
+
+\begin_layout Standard
+At a first glance,
+ matching in scala looks much the same:
+ take a variable,
+ define a match,
+ then add cases and how to handle them.
+\end_layout
+
+\begin_layout Standard
+However,
+ Pattern Matching
+\series bold
+ is what many consider a defining feature of scala.
+
+\series default
+ And that's because it's a lot more robust that in other languages.
+ 
+\end_layout
+
+\begin_layout Standard
+One particular strength of scala is the ability to combine "unpacking" with Pattern Matching:
+\end_layout
+
+\begin_layout LyX-Code
+mario match {
+\end_layout
+
+\begin_layout LyX-Code
+  case User(name,
+ age) => s"$name is $age years old."
+\end_layout
+
+\begin_layout LyX-Code
+}
+\end_layout
+
+\begin_layout Standard
+We get the ability to make decisions based on attributes *inside* the object.
+ This can be used recursively to pull apart members of objects that are themselves objects.
+\end_layout
+
+\begin_layout Standard
+Matches go much further,
+ however,
+ enabling condition checks in each case,
+ unpacking of list elements,
+ and more.
+\end_layout
+
+\begin_layout LyX-Code
+user match {
+\end_layout
+
+\begin_layout LyX-Code
+  case User("Alice",
+ _) => "Found the boss!"
+\end_layout
+
+\begin_layout LyX-Code
+  case User(name,
+ age) if age < 18 => s"$name is a minor."
+\end_layout
+
+\begin_layout LyX-Code
+  case User(name,
+ _) => s"Regular user:
+ $name"
+\end_layout
+
+\begin_layout LyX-Code
+}
+\end_layout
+
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+val numbers = List(1,
+ 2,
+ 3,
+ 4)
+\end_layout
+
+\begin_layout LyX-Code
+numbers match {
+\end_layout
+
+\begin_layout LyX-Code
+  case head ::
+ second ::
+ tail => s"Starts with $head and $second,
+ then the rest:
+ $tail"
+\end_layout
+
+\begin_layout LyX-Code
+  case head ::
+ Nil            => s"Only one element:
+ $head"
+\end_layout
+
+\begin_layout LyX-Code
+  case Nil                    => "The list is empty"
+\end_layout
+
+\begin_layout LyX-Code
+}
+\end_layout
+
+\begin_layout Standard
+We can see here how much scala depends on classes.
+ Moreso than other languages,
+ they are a central element of the language,
+ using class equivalence as major decision-making mechanisms.
+\end_layout
+
+\begin_layout Subsection*
+A Mathematical Heritage
+\end_layout
+
+\begin_layout Standard
+There's no getting around it - Scala evolved from a very mathematical worldview.
+ Treating code as a language that encapsulates a comprehensive view of the world can lead to some innovative approaches.
+ 
+\end_layout
+
+\begin_layout Subsubsection*
+The "No-Null" Policy:
+ Options
+\end_layout
+
+\begin_layout Standard
+In most languages,
+ null/nil is a landmine.
+ You never know when a variable is empty until your program crashes.
+ 
+\end_layout
+
+\begin_layout Standard
+Scala solves this with the Option type.
+ An Option is a box:
+ it either contains Some(value) or it is None.
+ This forces any code that deals with the value to explicitly state what happens when it's null.
+\end_layout
+
+\begin_layout LyX-Code
+val user:
+ Option[String] = Some("Albertus")
+\end_layout
+
+\begin_layout LyX-Code
+val unknown:
+ Option[String] = None
+\end_layout
+
+\begin_layout LyX-Code
+// You are forced to decide what happens if it's empty
+\end_layout
+
+\begin_layout LyX-Code
+println(user.getOrElse("Guest")) // Prints:
+ Albertus
+\end_layout
+
+\begin_layout LyX-Code
+println(unknown.getOrElse("Guest")) // Prints:
+ Guest
 \end_layout
 
 \end_body

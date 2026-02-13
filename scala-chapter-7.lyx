@@ -429,6 +429,82 @@ yield
  List("Alice")
 \end_layout
 
+\begin_layout Standard
+While .map and .filter are concise for simple operations,
+ the for-comprehension provides a more readable,
+ declarative syntax for chaining transformations.
+ It isn't a traditional loop;
+ it is a powerful way to "sequence" operations—
+like pulling values out of a container and yielding a new result.
+\end_layout
+
+\begin_layout LyX-Code
+val numbers = List(1,
+ 2,
+ 3)
+\end_layout
+
+\begin_layout LyX-Code
+// For each value 'n' extracted from the numbers list,
+ 
+\end_layout
+
+\begin_layout LyX-Code
+// transform it and yield the result into a new list.
+\end_layout
+
+\begin_layout LyX-Code
+val doubled = 
+\end_layout
+
+\begin_layout LyX-Code
+  for 
+\end_layout
+
+\begin_layout LyX-Code
+    n <- numbers 
+\end_layout
+
+\begin_layout LyX-Code
+  yield n * 2
+\end_layout
+
+\begin_layout LyX-Code
+// Result:
+ List(2,
+ 4,
+ 6)
+\end_layout
+
+\begin_layout Standard
+The syntax is deliberate:
+\end_layout
+
+\begin_layout Itemize
+The 
+\series bold
+for
+\series default
+ starts the expression.
+\end_layout
+
+\begin_layout Itemize
+The 
+\series bold
+n <- numbers
+\series default
+ (the generator) pulls each value out of the list one by one.
+\end_layout
+
+\begin_layout Itemize
+The 
+\series bold
+yield
+\series default
+ keyword tells Scala:
+ "Take the result of this calculation and put it into a brand new list."
+\end_layout
+
 \begin_layout Subsection*
 Why the "Mind Shift" Matters
 \end_layout
