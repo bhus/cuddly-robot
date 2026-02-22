@@ -97,7 +97,13 @@ In some circles,
 \end_layout
 
 \begin_layout Standard
-Let's look at how Scala takes the "boilerplate" out of objects.
+Let's start by looking at how Scala takes the "boilerplate" out of objects.
+ Subsequently,
+ we will more formally define val vs var declarations.
+ Finally,
+ we will jump into object creation patterns and static content,
+ and then take a deeper look at how class hierarchies are handled,
+ along with with privacy level modifiers.
 \end_layout
 
 \begin_layout Subsection*
@@ -105,12 +111,15 @@ The Lean Class
 \end_layout
 
 \begin_layout Standard
-In many languages,
+Let's start by imagining we want to model a portfolio of companies for an imaginary trading firm.
+ We are interested in knowing how the companies we are tracking are performing,
+ so we will create a company class that records the company's name and revenue over the last year.
+ In many languages,
  creating a simple data class requires a constructor,
  field definitions,
  and assignments.
  In Scala,
- the class header does all three at once.
+ the class header does all three at once:
 \end_layout
 
 \begin_layout LyX-Code
@@ -120,9 +129,13 @@ class Company(val name:
  Int)
 \end_layout
 
+\begin_layout Standard
+We can use this to create objects for each company we are interested in:
+\end_layout
+
 \begin_layout LyX-Code
 val myCompany = Company("saas-o-rama",
- 7000)
+ 7000) // create a company object
 \end_layout
 
 \begin_layout LyX-Code
@@ -136,11 +149,11 @@ pprint.pprintln(myCompany)
 
 \begin_layout Standard
 That output—
-the "raw dump"—
+the "raw dump" that's output to the screen—
 isn't very helpful.
  In the Pickaxe tradition,
  we want our objects to be communicative.
- Let’s override the default toString to give us a professional readout.
+ Let’s override the default toString to give us a professional readout:
 \end_layout
 
 \begin_layout LyX-Code
@@ -159,10 +172,75 @@ class Company(val name:
     s"[Company:
  $name | MRR:
  $$$revenue]"
-\begin_inset Newline newline
+\end_layout
+
+\begin_layout Standard
+We can see we create a toString method to return a string representation for the object.
+ The 
+\begin_inset Quotes eld
+\end_inset
+
+override
+\begin_inset Quotes erd
+\end_inset
+
+ keyword is there for an unintuitive reason:
+ every class defined inherits a few methods from a fundamental base class.
+ This base class defines several default method that every subclass inherits,
+ one of which is the 
+\begin_inset Quotes eld
+\end_inset
+
+toString
+\begin_inset Quotes erd
+\end_inset
+
+ method which returns a string.
+ However,
+ because we want to define our own toString,
+ we need to 
+\series bold
+override
+\series default
+ the one we inherited - which we denote by starting with 
+\begin_inset Quotes eld
+\end_inset
+
+override
+\begin_inset Quotes erd
+\end_inset
+
+ to define the method.
+\end_layout
+
+\begin_layout Standard
+The string we return uses the substitution string format s
+\begin_inset Quotes erd
 \end_inset
 
 
+\begin_inset Quotes erd
+\end_inset
+
+,
+ which allows us to use variable values within the string.
+ (eg.
+ $name,
+ $revenue).
+ You will also notice the $revenue is actually prefaced with 2 additional dollar signs (eg.
+ $$$revenue) – this is how we prefix the $revenue value with an actual dollar sign in the final about put (eg.
+ [Company:
+ saas-o-rama | MRR:
+ $7000]).
+\end_layout
+
+\begin_layout Standard
+We covered something subtle here that's worth mentioning as well – we can use the fields passed into the constructor as instance variables,
+ with each getting their own getter and setter (if they are passed in as vars) by default with no additional code.
+\end_layout
+
+\begin_layout Standard
+So we can now write:
 \end_layout
 
 \begin_layout LyX-Code
@@ -179,6 +257,10 @@ pprint.pprintln(myCompany)
  [Company:
  saas-o-rama | MRR:
  $7000]
+\end_layout
+
+\begin_layout Standard
+To use our new toString methods.
 \end_layout
 
 \begin_layout Subsection*
@@ -224,10 +306,37 @@ class StartupCompany(name:
  $name | Seed:
  $$$seedMoney] (Parent Info:
  $parentText)"
-\begin_inset Newline newline
+\end_layout
+
+\begin_layout Standard
+In our StartupCompany,
+ we see that we have specified that we want to get all of the variables and methods of Company by declaring 
+\begin_inset Quotes eld
 \end_inset
 
+extends Company(name,
+ revenue)
+\begin_inset Quotes erd
+\end_inset
 
+.
+ However,
+ we also would like to know how much the company got in seed funding,
+ so we add that to the fields list.
+\end_layout
+
+\begin_layout Standard
+We would again like to be able to have our own custom string representation,
+ but what we inherited is a good starting point we want to keep.
+ To do this,
+ we can override the toString method again,
+ but this time we will start by getting the inherited method's value with 
+\series bold
+super.toString()
+\series default
+,
+ and then prefix it with our own goodness ( startup name again and seed money).
+ So StartupCompany instances can now be rendered as a string that still makes use of the inherited value:
 \end_layout
 
 \begin_layout LyX-Code
@@ -237,7 +346,11 @@ val myStartup = StartupCompany("startup-o-rama",
 \end_layout
 
 \begin_layout LyX-Code
-pprint.pprintln(myStartup)
+pprint.pprintln(myStartup) // -> [Startup:
+ startup-o-rama | Seed:
+ $80000] (Parent Info [Company:
+ saas-o-rama | MRR:
+ $7000])
 \end_layout
 
 \begin_layout Standard
@@ -300,8 +413,121 @@ c.revenue = 5000 // Perfectly legal because it's a 'var'
 \end_layout
 
 \begin_layout Subsection*
+Objects & Attributes
+\end_layout
+
+\begin_layout Standard
+In Scala,
+ we take a very open stance when it comes to access level.
+ By default,
+ all fields are *public*.
+ In fact,
+ there is no public keyword.
+ 
+\end_layout
+
+\begin_layout Standard
+We can have private members though.
+ We declare like this:
+\end_layout
+
+\begin_layout LyX-Code
+class Company:
+\end_layout
+
+\begin_layout LyX-Code
+  private val secret = "hidden"
+\end_layout
+
+\begin_layout Standard
+Similarly,
+ protected is also available,
+ which makes visible to the class and subclasses:
+\end_layout
+
+\begin_layout LyX-Code
+protected def calculateTax = ...
+\end_layout
+
+\begin_layout Standard
+Companion objects (outlined below) can access any internal members of their associated class:
+\end_layout
+
+\begin_layout LyX-Code
+class Company private (val name:
+ String)
+\end_layout
+
+\begin_layout LyX-Code
+object Company:
+\end_layout
+
+\begin_layout LyX-Code
+  def create(name:
+ String) =
+\end_layout
+
+\begin_layout LyX-Code
+    new Company(name)
+\end_layout
+
+\begin_layout Standard
+A note on virtual attributes:
+\end_layout
+
+\begin_layout Standard
+We can indeed create new getters and setters with custom behavior with:
+\end_layout
+
+\begin_layout LyX-Code
+trait Company:
+\end_layout
+
+\begin_layout LyX-Code
+  var revenue:
+ Int
+\end_layout
+
+\begin_layout LyX-Code
+class Startup extends Company:
+\end_layout
+
+\begin_layout LyX-Code
+  private var internalRevenue = 0
+\end_layout
+
+\begin_layout LyX-Code
+  def revenue:
+ Int = internalRevenue
+\end_layout
+
+\begin_layout LyX-Code
+  def revenue_=(value:
+ Int):
+ Unit =
+\end_layout
+
+\begin_layout LyX-Code
+    println(s"Setting revenue to $value")
+\end_layout
+
+\begin_layout LyX-Code
+    internalRevenue = value
+\end_layout
+
+\begin_layout Standard
+Where revenue gives use the getter (x.revenue // -> 2000) and the underscore method gives us setter (x.revenue = 4000).
+\end_layout
+
+\begin_layout Subsection*
 Companion Objects:
  The Better "Static"
+\end_layout
+
+\begin_layout Standard
+For our company info tracker,
+ it would be nice if we could keep track of the total number of companies (eg.
+ to calculate average values for example).
 \end_layout
 
 \begin_layout Standard
@@ -319,11 +545,58 @@ If you create an object with the same name as your class in the same file,
 class Company(val name:
  String,
  val revenue:
- Int)
+ Int):
+\begin_inset Newline newline
+\end_inset
+
+  Company.increment()
+\begin_inset Newline newline
+\end_inset
+
+
 \end_layout
 
 \begin_layout LyX-Code
 object Company:
+  // aka 
+\begin_inset Quotes eld
+\end_inset
+
+Companion
+\begin_inset Quotes erd
+\end_inset
+
+ object
+\begin_inset Newline newline
+\end_inset
+
+  private var count = 0
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+  private def increment():
+ Unit =
+\end_layout
+
+\begin_layout LyX-Code
+    count += 1
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+  def totalCreated:
+ Int = count
+\begin_inset Newline newline
+\end_inset
+
+
 \end_layout
 
 \begin_layout LyX-Code
@@ -342,7 +615,7 @@ object Company:
 
 \begin_layout LyX-Code
     new Company(name,
- 0)
+ 0)  // returns a new instance of Company class
 \begin_inset Newline newline
 \end_inset
 
@@ -354,14 +627,54 @@ object Company:
 \end_layout
 
 \begin_layout LyX-Code
-val myNewCo = Company.buildBootstrapped("Funco")
+val myNewCo = Company.buildBootstrapped("Funco") // returns a new Company instance,
+ for company Funco
 \end_layout
 
 \begin_layout Standard
-When you call Company.buildBootstrapped,
- you are talking to the Object (the singleton).
+So here we have done a couple of things we weren't able to before.
+\end_layout
+
+\begin_layout Standard
+First,
+ we can see we now have a 
+\begin_inset Quotes eld
+\end_inset
+
+buildBootstrapped
+\begin_inset Quotes erd
+\end_inset
+
+ method.
+ We now use this to get new Company objects,
+ which we can used to populate some values with defaults (such as total starting revenue starting at .
+ When you call Company.buildBootstrapped,
+ you are talking to the companion Object (the singleton).
  When it returns a value,
  it gives you an instance of the Class.
+\end_layout
+
+\begin_layout Standard
+Secondly,
+ we can see that the Company class constructor gets some code that is invoked whenever a new instance of the class is made.
+ In this case,
+ it invokes the increment() method on the companion Company global object – which in turn increments the Company global attribute 
+\begin_inset Quotes eld
+\end_inset
+
+count
+\begin_inset Quotes erd
+\end_inset
+
+.
+ This allows us to keep track of the total # of objects that have been created.
+\end_layout
+
+\begin_layout Standard
+Thirdly,
+ we can see our count member and increment() member method are private members of the companion object to Company,
+ however the Company *class* has access to them.
+ 
 \end_layout
 
 \begin_layout Subsection*
@@ -371,10 +684,6 @@ Global State and App Configuration
 \begin_layout Standard
 Not every object needs a "class" counterpart.
  Sometimes you just need a place to store global settings or utility functions that stay consistent across your entire application.
-\end_layout
-
-\begin_layout LyX-Code
-Scala
 \end_layout
 
 \begin_layout LyX-Code
@@ -391,6 +700,21 @@ object AppConfig:
 \end_inset
 
 
+\begin_inset Newline newline
+\end_inset
+
+  def log(message):
+\end_layout
+
+\begin_layout LyX-Code
+    println(s"[INFO] $message")
+\end_layout
+
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
 \end_layout
 
 \begin_layout LyX-Code
@@ -403,6 +727,22 @@ if AppConfig.debugMode then
 
 \begin_layout LyX-Code
   println(s"Connecting to ${AppConfig.apiBase}")
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+AppConfig.log(
+\begin_inset Quotes eld
+\end_inset
+
+We finished
+\begin_inset Quotes erd
+\end_inset
+
+)
 \end_layout
 
 \begin_layout Standard
@@ -410,6 +750,71 @@ This is the ultimate Pragmatic tool:
  it’s clean,
  it’s always there when you need it,
  and it doesn't require complex "Singleton Pattern" boilerplate.
+\end_layout
+
+\begin_layout Standard
+Note the name following the object is just that:
+ the name.
+ Not the a class.
+\end_layout
+
+\begin_layout Subsection*
+Variables
+\end_layout
+
+\begin_layout Standard
+Scala works much the same as other languages.
+ When an object is assigned to a variable,
+ the variable actually contains a *reference* to the object created.
+ We can assign a class instance to a variable,
+ then if we assign a secondary variable the value of the first,
+ both will point to the same object:
+\end_layout
+
+\begin_layout LyX-Code
+val myNewCo = Company.buildBootstrapped("Funco")
+\end_layout
+
+\begin_layout LyX-Code
+val secondCo = myNewCo
+\end_layout
+
+\begin_layout LyX-Code
+myNewCo.name // -> Funco
+\end_layout
+
+\begin_layout LyX-Code
+secondCo.name // -> Funco
+\end_layout
+
+\begin_layout Standard
+Scala also gives a built in method to copy
+\end_layout
+
+\begin_layout LyX-Code
+val thirdCo = myNewCo.copy(name = 
+\begin_inset Quotes eld
+\end_inset
+
+three co
+\begin_inset Quotes erd
+\end_inset
+
+)
+\end_layout
+
+\begin_layout LyX-Code
+thirdCo.name // three co
+\end_layout
+
+\begin_layout LyX-Code
+thirdCo.revenue // 0
+\end_layout
+
+\begin_layout Standard
+So that's a little more in depth dive into objects.
+ However,
+ objects get even more interesting when you group them into collections.
 \end_layout
 
 \end_body

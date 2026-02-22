@@ -97,6 +97,23 @@ Scala is the undisputed heavyweight champion of big data.
  Scala treats them as high-speed engines for transformation.
 \end_layout
 
+\begin_layout Standard
+In our company example,
+ it would be nice if we had a way to track collections of companies so we didn't need to keep a rolodex around.
+ In addition to a list of all companies,
+ it would also be nice if we had a way to keep track of the companies we planned to meet with in the upcoming week.
+ Both of these are containers that hold one or more objects.
+\end_layout
+
+\begin_layout Standard
+Both of these will need similar sets of methods:
+ add a company,
+ remove a company,
+ and give us a list of companies,
+ etc.
+ Let's work on building a ComanyList class to handle these things.
+\end_layout
+
 \begin_layout Subsection*
 The Big Three:
  Lists,
@@ -114,16 +131,23 @@ In Scala,
  refined version of it.
 \end_layout
 
-\begin_layout Subsubsection*
+\begin_layout Standard
+For our CompanyList,
+ we will explore the first 2 as options.
+\end_layout
+
+\begin_layout Subsection*
 Lists:
  The Bread and Butter
 \end_layout
 
 \begin_layout Standard
-A List is an ordered sequence,
+A List is an ordered sequence of items,
  ideal for small to medium-sized data.
- Scala uses () for indexing rather than [],
- a small departure from C-style languages that hints at Scala's mathematical roots.
+ Each item occupies a spot in the list,
+ referenced by non-negative integers.
+ You can create lists with literals,
+ but you can also create from existing ones - specifying what should change in the new one.
 \end_layout
 
 \begin_layout LyX-Code
@@ -155,11 +179,31 @@ val kiwiList = fruit.updated(2,
 \end_layout
 
 \begin_layout Standard
-Scala provides powerful tools like .patch to perform surgery on your data:
+Scala uses () for indexing rather than [],
+ a small departure from C-style languages that hints at Scala's mathematical roots.
+ In general,
+ though,
+ we want to use the lift/get operator which returns a nice option (giving us 
+\begin_inset Quotes eld
+\end_inset
+
+Some
+\begin_inset Quotes erd
+\end_inset
+
+ / 
+\begin_inset Quotes eld
+\end_inset
+
+None
+\begin_inset Quotes erd
+\end_inset
+
+ instead).
 \end_layout
 
-\begin_layout LyX-Code
-Scala
+\begin_layout Standard
+Scala also provides powerful tools like .patch to perform surgery on your data as you create new lists:
 \end_layout
 
 \begin_layout LyX-Code
@@ -171,48 +215,136 @@ Scala
 val citruses = fruit.patch(1,
  List("Lemon",
  "Lime"),
- 1)
-\end_layout
-
-\begin_layout Subsubsection*
-Vectors:
- The Random-Access Specialist
+ 1) // Apple,
+ Cherry,
+ Lemon,
+ Lime
 \end_layout
 
 \begin_layout Standard
-If your dataset is enormous and you need to jump to the middle of it instantly,
- use a Vector.
- While a List has to walk from the beginning to find the 10,000th element,
- a Vector can "teleport" there.
+Now,
+ like Ruby,
+ we can actually do some overriding of the 
+\begin_inset Quotes eld
+\end_inset
+
+()
+\begin_inset Quotes erd
+\end_inset
+
+ operator by overriding the 
+\begin_inset Quotes eld
+\end_inset
+
+apply
+\begin_inset Quotes erd
+\end_inset
+
+ method in subclasses of lists:
 \end_layout
 
 \begin_layout LyX-Code
-Scala
+class SafeList(items:
+ List[String]) {
 \end_layout
 
 \begin_layout LyX-Code
-val trees = Vector("Pine",
- "Birch",
- "Maple")
+  // This "overrides" the () syntax
 \end_layout
 
 \begin_layout LyX-Code
-val middle = trees(trees.length / 2)
+  def apply(index:
+ Int):
+ String = {
 \end_layout
 
-\begin_layout Subsubsection*
+\begin_layout LyX-Code
+    if (index >= 0 && index < items.length) {
+\end_layout
+
+\begin_layout LyX-Code
+      items(index) // Calls the underlying list's apply
+\end_layout
+
+\begin_layout LyX-Code
+    } else {
+\end_layout
+
+\begin_layout LyX-Code
+      "Whoops!
+ Out of bounds."
+\end_layout
+
+\begin_layout LyX-Code
+    }
+\end_layout
+
+\begin_layout LyX-Code
+  }
+\end_layout
+
+\begin_layout LyX-Code
+}
+\end_layout
+
+\begin_layout LyX-Code
+// Usage
+\end_layout
+
+\begin_layout LyX-Code
+val mySafeList = new SafeList(List("Scala",
+ "sttp",
+ "Doobie"))
+\end_layout
+
+\begin_layout LyX-Code
+println(mySafeList(1))  // Output:
+ "sttp"
+\end_layout
+
+\begin_layout Standard
+The slice operator is a convenient operator that returns a range of items within a list:
+\end_layout
+
+\begin_layout LyX-Code
+// Get elements from index 1 to 2 (exclusive of 3)
+\end_layout
+
+\begin_layout LyX-Code
+val middle = citruses.slice(1,
+ 3) 
+\end_layout
+
+\begin_layout LyX-Code
+// Result:
+ List(Cherry,
+ Lemon)
+\end_layout
+
+\begin_layout Standard
+As we mentioned,
+ lists are immutable,
+ but we create new lists with different values at specified indices.
+\end_layout
+
+\begin_layout Standard
+There are many other operators for lists that are worth looking into,
+ like take and drop and many others.
+\end_layout
+
+\begin_layout Subsection*
 Maps:
  The Dictionary
 \end_layout
 
 \begin_layout Standard
-A Map (often called a Hash or Dictionary) stores pairs of keys and values.
+A Map (often called a Hash or Dictionary) is quite similar to lists as collections of indexed options.
+ Maps,
+ however,
+ store pairs of keys and values.
  There is no sequencing requirement here;
  you just need to know the key.
-\end_layout
-
-\begin_layout LyX-Code
-Scala
+ The example below creates the map as a literal:
 \end_layout
 
 \begin_layout LyX-Code
@@ -236,6 +368,546 @@ val meal = Map(
 val appy = meal("starter") // "Escargots"
 \end_layout
 
+\begin_layout Standard
+Map elements are not ordered in any particular way.
+ However,
+ despite this,
+ they are a very popular data structure in scala.
+\end_layout
+
+\begin_layout Standard
+To create new maps we again make copies from existing ones:
+\end_layout
+
+\begin_layout LyX-Code
+val userRoles = Map("Alice" -> "Admin",
+ "Bob" -> "User")
+\end_layout
+
+\begin_layout LyX-Code
+// Replace Bob's role
+\end_layout
+
+\begin_layout LyX-Code
+val updatedRoles = userRoles + ("Bob" -> "SuperUser")
+\end_layout
+
+\begin_layout Standard
+We can also add / replace multiple keys at once:
+\end_layout
+
+\begin_layout LyX-Code
+val batchUpdate = userRoles ++ Map("Alice" -> "Owner",
+ "Bob" -> "Admin")
+\end_layout
+
+\begin_layout Standard
+Again,
+ there are many interesting operations to take list creation further,
+ like 
+\begin_inset Quotes eld
+\end_inset
+
+updateWith
+\begin_inset Quotes erd
+\end_inset
+
+,
+ and it's worth taking a deeper look when you have time.
+\end_layout
+
+\begin_layout Subsection*
+Vectors:
+ The Random-Access Specialist
+\end_layout
+
+\begin_layout Standard
+Just a quick note about the last of the big 3 containers:
+ the vectors.
+ If your dataset is enormous and you need to jump to the middle of it instantly,
+ use a Vector.
+ While a List has to walk from the beginning to find the 10,000th element,
+ a Vector can "teleport" there.
+\end_layout
+
+\begin_layout LyX-Code
+val trees = Vector("Pine",
+ "Birch",
+ "Maple")
+\end_layout
+
+\begin_layout LyX-Code
+val middle = trees(trees.length / 2)
+\end_layout
+
+\begin_layout Standard
+Addtionally,
+ updating an element in a vector is much faster as well (close to constant),
+ so large lists needing replacements are also well accommodated here.
+\end_layout
+
+\begin_layout Subsection*
+Back to our CompanyList Container
+\end_layout
+
+\begin_layout Standard
+With our newfound knowledge,
+ let's return to our CompanyList container.
+ To make things interesting,
+ let's come up with some operations we would like to implement:
+\end_layout
+
+\begin_layout LyX-Code
+append(company) -> list
+\end_layout
+
+\begin_layout LyX-Code
+delete_first() -> company
+\end_layout
+
+\begin_layout LyX-Code
+delete_last() -> company
+\end_layout
+
+\begin_layout LyX-Code
+(index) -> company
+\end_layout
+
+\begin_layout LyX-Code
+with_name(name) -> company
+\end_layout
+
+\begin_layout Standard
+Let's consider how to implement this.
+ We need to be able to add to the start of the list,
+ remove from the start and the end,
+ as well as grabbing an element at a given index.
+ These all seem to point to a list.
+ However,
+ on closer thought,
+ deleting from the end of a *list* is actually O(n),
+ since lists are implemented in such a way as to require looking at each element until we come to the end in order to know which is the last.
+\end_layout
+
+\begin_layout Standard
+Vectors,
+ however,
+ have no such restriction,
+ and actually remain close to constant operation time on append,
+ delete from start *and* end,
+ and indexing.
+ so we will go with that.
+\end_layout
+
+\begin_layout Standard
+The one question mark is the capability to return an element by it's name.
+ But as we have pointed out in the intro,
+ scala is very adept at filtering a list by name,
+ so likely a map is not warranted here – we can simply search.
+\end_layout
+
+\begin_layout Standard
+We know we can start by creating a class for the CompanyList.
+ We will give it a list to hold the songs:
+\end_layout
+
+\begin_layout LyX-Code
+case class CompanyList(name:
+ String,
+ companies:
+ Vector[Company])
+\end_layout
+
+\begin_layout Standard
+We will have the append method add to the list and return a new list instance (maintaining immutability):
+\end_layout
+
+\begin_layout LyX-Code
+case class CompanyList(name:
+ String,
+ companies:
+ Vector[Company]) {
+\end_layout
+
+\begin_layout LyX-Code
+  
+\end_layout
+
+\begin_layout LyX-Code
+  // Add a song
+\end_layout
+
+\begin_layout LyX-Code
+  def add(company:
+ Company):
+ Playlist = 
+\end_layout
+
+\begin_layout LyX-Code
+    this.copy(companies = companies :+ company)
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+}
+\end_layout
+
+\begin_layout Standard
+The delete_first and delete_last will similarly return new instances of the Playlist with updated companies vector:
+\end_layout
+
+\begin_layout LyX-Code
+case class CompanyList(name:
+ String,
+ companies:
+ Vector[Company]) {
+\end_layout
+
+\begin_layout LyX-Code
+  
+\end_layout
+
+\begin_layout LyX-Code
+  // Add a company
+\end_layout
+
+\begin_layout LyX-Code
+  def add(company:
+ Company):
+ CompanyList = 
+\end_layout
+
+\begin_layout LyX-Code
+    this.copy(companies = companies :+ company)
+\end_layout
+
+\begin_layout LyX-Code
+  // Remove a song by index
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+  // Returns a pair:
+ (The song pulled out,
+ The updated playlist)
+\end_layout
+
+\begin_layout LyX-Code
+  def popFirst:
+ (Option[Company],
+ CompanyList) = 
+\end_layout
+
+\begin_layout LyX-Code
+    (songs.headOption,
+ Playlist(songs.drop(1)))
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+  def popLast:
+ (Option[Company],
+ CompanyList) =
+\begin_inset Newline newline
+\end_inset
+
+    (songs.lastOption,
+ Playlist(songs.dropRight(1)))
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+}
+\end_layout
+
+\begin_layout Standard
+Interesting – unlike raw lists,
+ vectors come with a robust set of built in operations,
+ like headOption,
+ drop(),
+ lastOption,
+ dropRight,
+ etc.
+ Like we said,
+ worth looking into!
+\end_layout
+
+\begin_layout Standard
+Our next method will be the index method,
+ which is shortened to the 
+\begin_inset Quotes eld
+\end_inset
+
+()
+\begin_inset Quotes erd
+\end_inset
+
+ call:
+\end_layout
+
+\begin_layout LyX-Code
+case class CompanyList(name:
+ String,
+ companies:
+ Vector[Company]) {
+\end_layout
+
+\begin_layout LyX-Code
+  def apply(index:
+ Int):
+ Option[Company] = 
+\end_layout
+
+\begin_layout LyX-Code
+    companies.lift(index)
+\begin_inset Newline newline
+\end_inset
+
+}
+\end_layout
+
+\begin_layout Standard
+Note the we implement the 
+\begin_inset Quotes eld
+\end_inset
+
+apply
+\begin_inset Quotes erd
+\end_inset
+
+ method here.
+ Scala understands that the shorthand for this is simply 
+\begin_inset Quotes eld
+\end_inset
+
+(<index_int>)
+\begin_inset Quotes erd
+\end_inset
+
+:
+\end_layout
+
+\begin_layout LyX-Code
+val list = CompanyList("Tech",
+ Vector(Company("A")))
+\end_layout
+
+\begin_layout LyX-Code
+println(list(0))     // Works automatically!
+ -> 
+\begin_inset Quotes eld
+\end_inset
+
+A
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+At this point,
+ let's introduce some tests.
+ ScalaTest is the very unoriginally-named library we make use of here - with the AnyFlatSpec class ( one of the most popular testing mechanisms ):
+\end_layout
+
+\begin_layout LyX-Code
+import org.scalatest.flatspec.AnyFlatSpec
+\end_layout
+
+\begin_layout LyX-Code
+import org.scalatest.matchers.should.Matchers
+\end_layout
+
+\begin_layout LyX-Code
+class CompanyListSpec extends AnyFlatSpec with Matchers:
+\end_layout
+
+\begin_layout LyX-Code
+  "CompanyList" should "return Some(company) when indexing a valid position" in {
+\end_layout
+
+\begin_layout LyX-Code
+    val google = Company("Google")
+\end_layout
+
+\begin_layout LyX-Code
+    val list = CompanyList("Tech",
+ Vector(google,
+ Company("Nvidia")))
+\end_layout
+
+\begin_layout LyX-Code
+    
+\end_layout
+
+\begin_layout LyX-Code
+    list(0) shouldBe Some(google)
+\end_layout
+
+\begin_layout LyX-Code
+  }
+\end_layout
+
+\begin_layout LyX-Code
+  it should "return None when the index is out of bounds" in {
+\end_layout
+
+\begin_layout LyX-Code
+    val list = CompanyList("Empty",
+ Vector.empty)
+\end_layout
+
+\begin_layout LyX-Code
+    
+\end_layout
+
+\begin_layout LyX-Code
+    list(0) shouldBe None
+\end_layout
+
+\begin_layout LyX-Code
+    list(5) shouldBe None
+\end_layout
+
+\begin_layout LyX-Code
+  }
+\end_layout
+
+\begin_layout LyX-Code
+  it should "correctly pop the first element and return the remaining list" in {
+\end_layout
+
+\begin_layout LyX-Code
+    val c1 = Company("A")
+\end_layout
+
+\begin_layout LyX-Code
+    val c2 = Company("B")
+\end_layout
+
+\begin_layout LyX-Code
+    val list = CompanyList("Letters",
+ Vector(c1,
+ c2))
+\end_layout
+
+\begin_layout LyX-Code
+    
+\end_layout
+
+\begin_layout LyX-Code
+    // Assuming our popFirst implementation from earlier:
+\end_layout
+
+\begin_layout LyX-Code
+    // def popFirst:
+ (Option[Company],
+ CompanyList)
+\end_layout
+
+\begin_layout LyX-Code
+    val (result,
+ updatedList) = list.popFirst
+\end_layout
+
+\begin_layout LyX-Code
+    
+\end_layout
+
+\begin_layout LyX-Code
+    result shouldBe Some(c1)
+\end_layout
+
+\begin_layout LyX-Code
+    updatedList.companies should have size 1
+\end_layout
+
+\begin_layout LyX-Code
+    updatedList.companies.head shouldBe c2
+\end_layout
+
+\begin_layout LyX-Code
+  }
+\end_layout
+
+\begin_layout Standard
+We use the 
+\begin_inset Quotes eld
+\end_inset
+
+should
+\begin_inset Quotes erd
+\end_inset
+
+ clause to dictate the class being tested and invidivual test case captions.
+ For actual data checks,
+ we make use of the 
+\begin_inset Quotes eld
+\end_inset
+
+shouldBe
+\begin_inset Quotes erd
+\end_inset
+
+ assertion to test individual values ( paired with options,
+ eg.
+ 
+\begin_inset Quotes eld
+\end_inset
+
+Some
+\begin_inset Quotes erd
+\end_inset
+
+,
+ 
+\begin_inset Quotes eld
+\end_inset
+
+None
+\begin_inset Quotes erd
+\end_inset
+
+ ).
+\end_layout
+
+\begin_layout Standard
+To start with,
+ we do a small amount of setup,
+ specifying that our class extends AnyFlatSpec (allowing us the ability to run it's tests) and using Matchers to inspect the actual values (eg.
+ using shouldBe as mentioned above).
+ We give the apply/index method a couple of tests,
+ as well as popFirst.
+ We should naturally extend this to test all methods,
+ but we will leave that as an exercise for the reader.
+\end_layout
+
+\begin_layout Standard
+One operation is conspicuously missing here though,
+ and so we will examine that next - the 
+\begin_inset Quotes eld
+\end_inset
+
+with_name
+\begin_inset Quotes erd
+\end_inset
+
+ operation.
+\end_layout
+
 \begin_layout Subsection*
 The Iterator Block (Higher-Order Functions)
 \end_layout
@@ -247,21 +919,48 @@ This is where Scala gets exciting.
 \end_layout
 
 \begin_layout Standard
-Imagine we have a list of Company objects.
- We want to find a specific one.
+Let's continue with our CompanyList,
+ and imagine we want to find a specific company within.
+ We *could write a for loop to iterate through companies,
+ returning when we find a match on name:
 \end_layout
 
 \begin_layout LyX-Code
-Scala
+  def with_name(brand:
+ String):
+ Option[Company] =
+\end_layout
+
+\begin_layout LyX-Code
+    val result = for 
+\end_layout
+
+\begin_layout LyX-Code
+      c <- companies 
+\end_layout
+
+\begin_layout LyX-Code
+      if c.name == brand
+\end_layout
+
+\begin_layout LyX-Code
+    yield c
+\end_layout
+
+\begin_layout Standard
+This is kind of a scala-ish approach already,
+ using a comprehension to go through a list.
+ However,
+ there is a better way:
 \end_layout
 
 \begin_layout LyX-Code
 class CompanyList(companies:
- List[Company]):
+ Vector[Company]):
 \end_layout
 
 \begin_layout LyX-Code
-  def withBrand(brand:
+  def with_name(brand:
  String):
  Option[Company] =
 \end_layout
@@ -276,6 +975,12 @@ class CompanyList(companies:
 
 \begin_layout LyX-Code
     }
+\end_layout
+
+\begin_layout Standard
+The find operator applies this test to each entry in the companies vector,
+ until it finds a match and returns.
+ 
 \end_layout
 
 \begin_layout Standard
@@ -327,6 +1032,10 @@ Note on Returns:
  and perfectly "Pragmatic."
 \end_layout
 
+\begin_layout Standard
+This approach uses a iterator and block function - 2 super-common concepts in scala.
+\end_layout
+
 \begin_layout Subsection*
 Flexible Logic:
  Passing Blocks
@@ -354,8 +1063,21 @@ The type Company => Boolean tells the compiler:
 \end_layout
 
 \begin_layout Standard
-Now,
- we can call it with whatever logic we want:
+Since it's a parameter with the name 
+\begin_inset Quotes eld
+\end_inset
+
+check
+\begin_inset Quotes erd
+\end_inset
+
+,
+ you can see we invoke by simply calling the parameter name with parameters (eg.
+ check(c) ).
+\end_layout
+
+\begin_layout Standard
+What this now allows is for us to call it with whatever logic we want:
 \end_layout
 
 \begin_layout LyX-Code
@@ -385,6 +1107,59 @@ The Underscore (_):
  you can toss the c => and just use the underscore.
  It turns your code into a succinct,
  readable sentence.
+\end_layout
+
+\begin_layout Standard
+Again,
+ many methods for collections in scala.
+ A couple are foreach and map (which we have already mentioned),
+ but take a look at docs for more!
+\end_layout
+
+\begin_layout Standard
+A couple of other useful methods are foldLeft and reduce:
+\end_layout
+
+\begin_layout LyX-Code
+val totalValuation = companies.foldLeft(0) { (sum,
+ c) => sum + c.valuation }
+\end_layout
+
+\begin_layout Standard
+We can see foldLeft is similar to the 
+\begin_inset Quotes eld
+\end_inset
+
+inject
+\begin_inset Quotes erd
+\end_inset
+
+ method in ruby,
+ where we accumulate over successive calls as we go through the list.
+ Here we start with the initial value of 0.
+\end_layout
+
+\begin_layout Standard
+Reduce and reduceOption are similarly some methods to be aware of.
+ They work like foldLeft,
+ however they don't take an initial value,
+ but rather start with the value from the first element.
+\end_layout
+
+\begin_layout LyX-Code
+// Only works if companies is NOT empty
+\end_layout
+
+\begin_layout LyX-Code
+val total = companies.map(_.valuation).reduce(_ + _)
+\end_layout
+
+\begin_layout LyX-Code
+// Safer version
+\end_layout
+
+\begin_layout LyX-Code
+val totalOpt = companies.map(_.valuation).reduceOption(_ + _) // Returns Option[Int]
 \end_layout
 
 \end_body
