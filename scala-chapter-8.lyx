@@ -148,6 +148,13 @@ try {
 }
 \end_layout
 
+\begin_layout Standard
+Here we see some matching already - we prioritize the handler for sql exceptions,
+ but also have a catch-all afterwards to deal with anything else.
+ Every exception has a message,
+ along with a getter and printer method for the stack trace.
+\end_layout
+
 \begin_layout Subsubsection*
 Raising Exceptions
 \end_layout
@@ -178,6 +185,104 @@ def getUser(id:
 
 \begin_layout LyX-Code
   else "Alice"
+\end_layout
+
+\begin_layout Standard
+You can see here that we do a basic check on parameters,
+ and 
+\series bold
+throw
+\series default
+ an exception when things go awry.
+\end_layout
+
+\begin_layout Standard
+We can also catch multiple exceptions on a single line with the | operator:
+\end_layout
+
+\begin_layout LyX-Code
+case e @ (_:
+ IllegalArgumentException | _:
+ NullPointerException) =>
+\end_layout
+
+\begin_layout LyX-Code
+    println(s"Validation error:
+ ${e.getMessage}")
+\end_layout
+
+\begin_layout Subsubsection*
+Defining Exceptions
+\end_layout
+
+\begin_layout Standard
+Creating new exception types is pretty straightforward.
+ We just choose another exception type and extend it:
+\end_layout
+
+\begin_layout LyX-Code
+// A simple custom exception
+\end_layout
+
+\begin_layout LyX-Code
+class UserNotFoundException(message:
+ String) extends RuntimeException(message)
+\end_layout
+
+\begin_layout LyX-Code
+// Usage
+\end_layout
+
+\begin_layout LyX-Code
+throw new UserNotFoundException("User with ID 123 not found")
+\end_layout
+
+\begin_layout Standard
+Though using case classes actually makes our lives a bit easier because we can then pattern match on the contents:
+\end_layout
+
+\begin_layout LyX-Code
+case class DatabaseError(code:
+ Int,
+ detail:
+ String) 
+\end_layout
+
+\begin_layout LyX-Code
+  extends RuntimeException(s"Error $code:
+ $detail")
+\end_layout
+
+\begin_layout LyX-Code
+// You can now match on the specific fields
+\end_layout
+
+\begin_layout LyX-Code
+try {
+\end_layout
+
+\begin_layout LyX-Code
+  throw DatabaseError(500,
+ "Connection Timeout")
+\end_layout
+
+\begin_layout LyX-Code
+} catch {
+\end_layout
+
+\begin_layout LyX-Code
+  case DatabaseError(500,
+ _) => println("The DB is down!")
+\end_layout
+
+\begin_layout LyX-Code
+  case DatabaseError(code,
+ _) => println(s"Other DB error:
+ $code")
+\end_layout
+
+\begin_layout LyX-Code
+}
 \end_layout
 
 \begin_layout Subsection*
@@ -229,8 +334,14 @@ result match
 \end_layout
 
 \begin_layout Standard
-This is the "Pragmatic" way.
- By returning a Try,
+This is the "Pragmatic" way:
+ wrap the dangerous code in the Try operator,
+ and we can more quickly match on Success / Failure,
+ allowing Failure to further handle the various exceptions if need be.
+\end_layout
+
+\begin_layout Standard
+By returning a Try,
  you tell the next developer:
  "This might fail,
  and the compiler is going to make sure you deal with that possibility."

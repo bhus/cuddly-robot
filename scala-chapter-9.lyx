@@ -94,10 +94,234 @@ If Classes are the blueprints for your data,
  In earlier versions of Scala,
  Traits were often seen as simple "Interfaces." In modern Scala,
  they have evolved into powerful Mixins that can carry both logic and state.
+ They give you 2 major benefits:
+\end_layout
+
+\begin_layout Enumerate
+Traits provide a namespace and prevent name clashes
+\end_layout
+
+\begin_layout Enumerate
+Traits implement the mixin facility
 \end_layout
 
 \begin_layout Subsection*
 The Anatomy of a Trait
+\end_layout
+
+\begin_layout Standard
+As we write code,
+ we will likely start to recognize chunks of code that can be reused.
+ It helps to break this into different files that can be shared around the program.
+ Because we are object oriented,
+ this will likely end up contained in classes.
+ 
+\end_layout
+
+\begin_layout Standard
+There are absolutely times where this stuff can't be naturally organized into classes however.
+ For example,
+ if 2 workers are developing their own libraries,
+ they may end up accidentally using the same method names,
+ or even the same class names.
+ This is a pretty well-known problem,
+ and the answer is namespaces – many languages use these – it's a well known pattern.
+ 
+\end_layout
+
+\begin_layout Standard
+We can define a companion object on traits that allow us to scope methods to them:
+\end_layout
+
+\begin_layout LyX-Code
+trait User {
+\end_layout
+
+\begin_layout LyX-Code
+  def name:
+ String // Instance method
+\end_layout
+
+\begin_layout LyX-Code
+}
+\end_layout
+
+\begin_layout LyX-Code
+object User {
+\end_layout
+
+\begin_layout LyX-Code
+  // This acts like a "static" method
+\end_layout
+
+\begin_layout LyX-Code
+  def anonymous:
+ User = new User { val name = "Guest" }
+\end_layout
+
+\begin_layout LyX-Code
+  def fromString(name:
+ String):
+ User = {
+\end_layout
+
+\begin_layout LyX-Code
+    val n = name
+\end_layout
+
+\begin_layout LyX-Code
+    new User { val nme = n;
+ def name = nme }
+\end_layout
+
+\begin_layout LyX-Code
+  }
+\end_layout
+
+\begin_layout LyX-Code
+}
+\end_layout
+
+\begin_layout LyX-Code
+// Usage:
+\end_layout
+
+\begin_layout LyX-Code
+val guest = User.anonymous
+\end_layout
+
+\begin_layout LyX-Code
+val biff = User.fromString(
+\begin_inset Quotes eld
+\end_inset
+
+Biff
+\begin_inset Quotes erd
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Standard
+More than that,
+ however,
+ traits significantly reduce the need for multiple inheritance.
+ 
+\end_layout
+
+\begin_layout Standard
+When you look at a trait itself (without a companion object),
+ it's not something that you can use on it's own.
+ Instead,
+ you mark classes as *extending* traits (can be multiple) – what this means is effectively that you get the methods (and instance values) defined in the trait for free.
+ They effectively behave as super classes.
+ This is exciting because now we get new methods we can call on the instance itself,
+ as well as *within* methods of the instance.
+\end_layout
+
+\begin_layout LyX-Code
+trait HasNameTag {
+\end_layout
+
+\begin_layout LyX-Code
+  def prefix:
+ String = "ID:" // A constant/default value
+\end_layout
+
+\begin_layout LyX-Code
+  
+\end_layout
+
+\begin_layout LyX-Code
+  // A method defined in the trait
+\end_layout
+
+\begin_layout LyX-Code
+  def formatName(name:
+ String):
+ String = s"[$prefix] $name"
+\end_layout
+
+\begin_layout LyX-Code
+}
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+class Robot(val model:
+ String) extends HasNameTag {
+\end_layout
+
+\begin_layout LyX-Code
+  
+\end_layout
+
+\begin_layout LyX-Code
+  // 1.
+ Internal Use
+\end_layout
+
+\begin_layout LyX-Code
+  // The class uses 'formatName' from the trait inside its own method
+\end_layout
+
+\begin_layout LyX-Code
+  def greet():
+ Unit = {
+\end_layout
+
+\begin_layout LyX-Code
+    val formatted = formatName(model) 
+\end_layout
+
+\begin_layout LyX-Code
+    println(s"Hello,
+ I am $formatted")
+\end_layout
+
+\begin_layout LyX-Code
+  }
+\end_layout
+
+\begin_layout LyX-Code
+}
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+val bot = new Robot("RX-9000")
+\end_layout
+
+\begin_layout LyX-Code
+// 2.
+ External Use (on the instance)
+\end_layout
+
+\begin_layout LyX-Code
+// We can call the trait method directly on the bot object
+\end_layout
+
+\begin_layout LyX-Code
+val label = bot.formatName("Maintenance") 
+\end_layout
+
+\begin_layout LyX-Code
+bot.greet()             // Prints:
+ Hello,
+ I am [ID:] RX-9000
+\end_layout
+
+\begin_layout LyX-Code
+println(s"Task:
+ $label") // Prints:
+ Task:
+ [ID:] Maintenance
 \end_layout
 
 \begin_layout Standard
@@ -277,10 +501,6 @@ Organizing the World:
 As your application grows,
  you’ll need a way to organize your traits and classes.
  Scala uses Packages to group related code together.
-\end_layout
-
-\begin_layout LyX-Code
-Scala
 \end_layout
 
 \begin_layout LyX-Code

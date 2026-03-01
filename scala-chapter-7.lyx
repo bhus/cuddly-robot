@@ -1022,7 +1022,11 @@ The Side-Effect Loop
 \end_layout
 
 \begin_layout Standard
-We use do when we want to interact with the outside world (I/O,
+We use 
+\series bold
+do
+\series default
+ when we want to interact with the outside world (I/O,
  printing,
  databases).
  This is where the loop has a "side effect."
@@ -1039,7 +1043,7 @@ for app <- apps do
 \end_layout
 
 \begin_layout LyX-Code
-  println(s"Learning $app...")
+  println(s"Learning $app...") // printing to stdout
 \end_layout
 
 \begin_layout Subsubsection*
@@ -1048,7 +1052,11 @@ The Functional Loop (Comprehensions)
 
 \begin_layout Standard
 When we want to create a new list from an old one,
- we use yield.
+ we use 
+\series bold
+yield
+\series default
+.
  This is the "Functional Loop."
 \end_layout
 
@@ -1059,24 +1067,20 @@ val names = List("alice",
 \end_layout
 
 \begin_layout LyX-Code
-val capitalizedAdmins = for
+val capitalizedAdmins = 
 \end_layout
 
 \begin_layout LyX-Code
-  name <- names
+  for name <- names
 \end_layout
 
 \begin_layout LyX-Code
-  if name.startsWith("a") // The Guard:
+    if name.startsWith("a") // The Guard:
  Filters the input
 \end_layout
 
 \begin_layout LyX-Code
-yield
-\end_layout
-
-\begin_layout LyX-Code
-  name.capitalize // The Yield:
+      yield name.capitalize // The Yield:
  Transforms the result
 \begin_inset Newline newline
 \end_inset
@@ -1102,6 +1106,10 @@ like pulling values out of a container and yielding a new result.
 val numbers = List(1,
  2,
  3)
+\begin_inset Newline newline
+\end_inset
+
+
 \end_layout
 
 \begin_layout LyX-Code
@@ -1118,15 +1126,15 @@ val doubled =
 \end_layout
 
 \begin_layout LyX-Code
-  for 
+  for n <- numbers 
 \end_layout
 
 \begin_layout LyX-Code
-    n <- numbers 
-\end_layout
+    yield n * 2
+\begin_inset Newline newline
+\end_inset
 
-\begin_layout LyX-Code
-  yield n * 2
+
 \end_layout
 
 \begin_layout LyX-Code
@@ -1179,6 +1187,101 @@ It may help to think of Scala as a language designed with mathematical symmetry.
 
 \begin_layout Standard
 It’s less about "doing" and more about "becoming."
+\end_layout
+
+\begin_layout Standard
+So for comprehensions provide a much cleaner way to deal with iterations in may cases.
+ The example below shows how it can clean up mutli-level iteration for example:
+\end_layout
+
+\begin_layout LyX-Code
+// The "Pyramid of Doom" with flatMap
+\end_layout
+
+\begin_layout LyX-Code
+val result = userOpt.flatMap { user =>
+\end_layout
+
+\begin_layout LyX-Code
+  addressOpt.flatMap { address =>
+\end_layout
+
+\begin_layout LyX-Code
+    getZipCode(address).map { zip =>
+\end_layout
+
+\begin_layout LyX-Code
+      s"${user.name} lives in $zip"
+\end_layout
+
+\begin_layout LyX-Code
+    }
+\end_layout
+
+\begin_layout LyX-Code
+  }
+\end_layout
+
+\begin_layout LyX-Code
+}
+\end_layout
+
+\begin_layout LyX-Code
+// The clean "for" version (Identical logic)
+\end_layout
+
+\begin_layout LyX-Code
+val result = for {
+\end_layout
+
+\begin_layout LyX-Code
+  user    <- userOpt
+\end_layout
+
+\begin_layout LyX-Code
+  address <- addressOpt
+\end_layout
+
+\begin_layout LyX-Code
+  zip     <- getZipCode(address)
+\end_layout
+
+\begin_layout LyX-Code
+} yield s"${user.name} lives in $zip"
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+As we mentioned,
+ for comprehensions are also ideal for dealing with side-effects that don't just transform data.
+\end_layout
+
+\begin_layout Standard
+A note on imperative style:
+\end_layout
+
+\begin_layout LyX-Code
+for {
+\end_layout
+
+\begin_layout LyX-Code
+  i <- 1 to 5
+\end_layout
+
+\begin_layout LyX-Code
+  if i != 3 // This is your "next"
+\end_layout
+
+\begin_layout LyX-Code
+} println(i)
 \end_layout
 
 \end_body
