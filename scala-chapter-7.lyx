@@ -104,6 +104,29 @@ transformation
  rather than a set of instructions.
 \end_layout
 
+\begin_layout Standard
+A foundation of this approach is that pretty much everything returns a value or object of some sort;
+ pretty much any statement is an expression.
+ This is what allows us to chain methods together.
+ More than that,
+ however,
+ this allows things like conditional statements to be used in assignment.
+ 
+\end_layout
+
+\begin_layout LyX-Code
+val age = 20
+\end_layout
+
+\begin_layout LyX-Code
+val status = if (age >= 18) "Adult" else "Minor"
+\end_layout
+
+\begin_layout LyX-Code
+println(status) // Output:
+ Adult
+\end_layout
+
 \begin_layout Subsection*
 Custom Operators:
  Making Code Readable
@@ -112,7 +135,7 @@ Custom Operators:
 \begin_layout Standard
 Scala allows you to redefine operators like +,
  -,
- or *.
+ or * by overriding methods on a class.
  While this sounds like a "scripting" trick,
  it’s actually a way to make your domain logic read like a native part of the language.
 \end_layout
@@ -155,6 +178,540 @@ val p3 = p1 + p2 // Result:
  25)
 \end_layout
 
+\begin_layout Standard
+The snippet above defines the + operator on the class,
+ allowing us to represent a class operation without the baggage of a full word-style method name.
+\end_layout
+
+\begin_layout Subsection*
+Commands
+\end_layout
+
+\begin_layout Standard
+The string class has many built in surprises just waiting to be taken advantage of.
+ One of the more interesting ones is the 
+\begin_inset Quotes eld
+\end_inset
+
+.!
+\begin_inset Quotes erd
+\end_inset
+
+ operator,
+ which treats a string as a command-line operation and invokes it as if from a dos shell.
+\end_layout
+
+\begin_layout LyX-Code
+import scala.sys.process._
+\end_layout
+
+\begin_layout LyX-Code
+// Just run it and print to console
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+val exitCode = "ls -al".!
+ 
+\end_layout
+
+\begin_layout LyX-Code
+println(s"Command finished with:
+ $exitCode")
+\end_layout
+
+\begin_layout Subsection*
+Assignment
+\end_layout
+
+\begin_layout Standard
+We touched on this before,
+ but it bears repeating:
+ scala offers a wonderful shorthand to adding parameters that the constructor takes and automatically giving them getters and setters.
+ Simply attach the 
+\begin_inset Quotes eld
+\end_inset
+
+val
+\begin_inset Quotes erd
+\end_inset
+
+ keyword to add a getter,
+ or the 
+\begin_inset Quotes eld
+\end_inset
+
+var
+\begin_inset Quotes erd
+\end_inset
+
+ keyword to add a getter and setter.
+\end_layout
+
+\begin_layout Standard
+But more to the point,
+ scala provides an override both for 
+\begin_inset Quotes eld
+\end_inset
+
+class(x,y) = value
+\begin_inset Quotes erd
+\end_inset
+
+ and 
+\begin_inset Quotes eld
+\end_inset
+
+val v = class(x,y)
+\begin_inset Quotes erd
+\end_inset
+
+.
+ The following example shows how this works:
+\end_layout
+
+\begin_layout LyX-Code
+class MyGrid {
+\end_layout
+
+\begin_layout LyX-Code
+  private val data = scala.collection.mutable.Map[(Int,
+ Int),
+ String]()
+\end_layout
+
+\begin_layout LyX-Code
+  // This allows:
+ grid(x,
+ y) = "Value"
+\end_layout
+
+\begin_layout LyX-Code
+  def update(x:
+ Int,
+ y:
+ Int,
+ value:
+ String):
+ Unit = {
+\end_layout
+
+\begin_layout LyX-Code
+    data((x,
+ y)) = value
+\end_layout
+
+\begin_layout LyX-Code
+    println(s"Set ($x,
+ $y) to $value")
+\end_layout
+
+\begin_layout LyX-Code
+  }
+\end_layout
+
+\begin_layout LyX-Code
+  // This allows:
+ val v = grid(x,
+ y)
+\end_layout
+
+\begin_layout LyX-Code
+  def apply(x:
+ Int,
+ y:
+ Int):
+ String = {
+\end_layout
+
+\begin_layout LyX-Code
+    data.getOrElse((x,
+ y),
+ "Empty")
+\end_layout
+
+\begin_layout LyX-Code
+  }
+\end_layout
+
+\begin_layout LyX-Code
+}
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+// Usage:
+\end_layout
+
+\begin_layout LyX-Code
+val grid = new MyGrid()
+\end_layout
+
+\begin_layout LyX-Code
+grid(1,
+ 1) = "Start"  // Calls grid.update(1,
+ 1,
+ "Start")
+\end_layout
+
+\begin_layout LyX-Code
+println(grid(1,
+ 1))   // Calls grid.apply(1,
+ 1)
+\end_layout
+
+\begin_layout Standard
+The point here is 2-fold:
+ 
+\begin_inset Quotes eld
+\end_inset
+
+apply
+\begin_inset Quotes erd
+\end_inset
+
+ gives us the ability to basically call the object as a method and update internal state;
+ while the 
+\begin_inset Quotes eld
+\end_inset
+
+update
+\begin_inset Quotes erd
+\end_inset
+
+ method gives a default operation gives us a default operation to perform when the object is invoked as if it were a function.
+ Wild stuff.
+\end_layout
+
+\begin_layout Standard
+A note on using assignment in a method:
+ we can invoke other methods on the object we are a part of simply by using the method name,
+ though we can achieve the same thing with the 
+\begin_inset Quotes eld
+\end_inset
+
+this.
+\begin_inset Quotes erd
+\end_inset
+
+ operator.
+\end_layout
+
+\begin_layout Standard
+As well,
+ if we want to extract an array into a subset of variables,
+ we can use the array extractor ( 
+\begin_inset Quotes eld
+\end_inset
+
+_*
+\begin_inset Quotes erd
+\end_inset
+
+ syntax ):
+\end_layout
+
+\begin_layout LyX-Code
+// x gets the first element
+\end_layout
+
+\begin_layout LyX-Code
+// rest gets the remainder as a WrappedArray/Seq
+\end_layout
+
+\begin_layout LyX-Code
+val Array(x,
+ rest @ _*) = fruit
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+println(x)    // Apple
+\end_layout
+
+\begin_layout LyX-Code
+println(rest) // ArraySeq(Banana,
+ Cherry,
+ Date)
+\end_layout
+
+\begin_layout Standard
+Or alternatively,
+ we can do the reverse with the +:
+ operator:
+\end_layout
+
+\begin_layout LyX-Code
+val numbers = Array(1,
+ 2,
+ 3,
+ 4,
+ 5)
+\end_layout
+
+\begin_layout LyX-Code
+val first +:
+ others = numbers
+\end_layout
+
+\begin_layout LyX-Code
+println(first)  // 1
+\end_layout
+
+\begin_layout LyX-Code
+println(others.toList) // List(2,
+ 3,
+ 4,
+ 5)
+\end_layout
+
+\begin_layout Standard
+Finally,
+ scala has the traditional 
+\begin_inset Quotes eld
+\end_inset
+
++=
+\begin_inset Quotes erd
+\end_inset
+
+ operator,
+ but in addition to numerics it can be invoked on mutable collections as well:
+\end_layout
+
+\begin_layout LyX-Code
+var count = 10
+\end_layout
+
+\begin_layout LyX-Code
+count += 5 // Same as count = count + 5
+\end_layout
+
+\begin_layout LyX-Code
+println(count) // 15
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+import scala.collection.mutable.ArrayBuffer
+\end_layout
+
+\begin_layout LyX-Code
+val list = ArrayBuffer(1,
+ 2,
+ 3)
+\end_layout
+
+\begin_layout LyX-Code
+list += 4 // Adds 4 to the existing buffer
+\end_layout
+
+\begin_layout LyX-Code
+println(list) // ArrayBuffer(1,
+ 2,
+ 3,
+ 4)
+\end_layout
+
+\begin_layout Standard
+Finally,
+ note that with immutable collections,
+ this still works,
+ but creates an entirely new list holding the collection with the item appended:
+\end_layout
+
+\begin_layout LyX-Code
+var items = List(1,
+ 2,
+ 3) // Immutable List
+\end_layout
+
+\begin_layout LyX-Code
+items += 4
+\end_layout
+
+\begin_layout Subsection*
+Conditionals
+\end_layout
+
+\begin_layout Standard
+Scala's conditional checks take the familiar mechanisms as foundational,
+ and lift them to new hights.
+ First,
+ however,
+ let's take a quick look at boolean expressions.
+\end_layout
+
+\begin_layout Standard
+Every boolean expression can be either true or false.
+ Full stop.
+ Not a lot of flexibility.
+ However,
+ with pattern matching,
+ this is rarely what we test for.
+ 
+\end_layout
+
+\begin_layout Standard
+Another concept can be viewed as foundational here - namely the dichotomy introduced by the 
+\begin_inset Quotes eld
+\end_inset
+
+Option
+\begin_inset Quotes erd
+\end_inset
+
+ type.
+ Here,
+ the foundational values are either 
+\begin_inset Quotes eld
+\end_inset
+
+Some
+\begin_inset Quotes erd
+\end_inset
+
+ or 
+\begin_inset Quotes eld
+\end_inset
+
+None
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout LyX-Code
+val maybeName:
+ Option[String] = Some("Alice")
+\end_layout
+
+\begin_layout LyX-Code
+maybeName match {
+\end_layout
+
+\begin_layout LyX-Code
+  case Some(name) => println(s"Found:
+ $name") // Extract 'name' here
+\end_layout
+
+\begin_layout LyX-Code
+  case None       => println("No name found")
+\end_layout
+
+\begin_layout LyX-Code
+}
+\end_layout
+
+\begin_layout Standard
+We can see that before we examine anything else,
+ we must first check if there is 
+\begin_inset Quotes eld
+\end_inset
+
+Some
+\begin_inset Quotes erd
+\end_inset
+
+ or 
+\begin_inset Quotes eld
+\end_inset
+
+None
+\begin_inset Quotes erd
+\end_inset
+
+.
+ This effectively packages 
+\begin_inset Quotes eld
+\end_inset
+
+null
+\begin_inset Quotes erd
+\end_inset
+
+ checks and other empty states into a coherent idiom that is much more readable.
+ This brings us back once again to the fact that matching leads to much safer code.
+\end_layout
+
+\begin_layout Standard
+Standard boolean operators are the same as traditional ones for the most part.
+ && and || are used to join expressions,
+ and short circuit in the normal circumstances.
+ !
+ is the traditional 
+\begin_inset Quotes eld
+\end_inset
+
+not
+\begin_inset Quotes erd
+\end_inset
+
+ test for boolean values as well.
+ ( Incidentally,
+ the 
+\begin_inset Quotes eld
+\end_inset
+
+!
+\begin_inset Quotes erd
+\end_inset
+
+ operator can be overridden with .unary_!
+ method overrides.
+\end_layout
+
+\begin_layout Standard
+Ther are 2 equality operators we can use:
+ 
+\begin_inset Quotes eld
+\end_inset
+
+==
+\begin_inset Quotes erd
+\end_inset
+
+ tests for equality and returns false if types are not the same,
+ while 
+\begin_inset Quotes eld
+\end_inset
+
+.eq(obj)
+\begin_inset Quotes erd
+\end_inset
+
+ checks if 2 variables point to the same object exactly.
+ There are some libraries that also define the 
+\begin_inset Quotes eld
+\end_inset
+
+===
+\begin_inset Quotes erd
+\end_inset
+
+ operator,
+ allowing for typesafe equality checks.
+\end_layout
+
+\begin_layout Standard
+The Option pattern we mentioned above is generally how the language avoids null checks.
+ We use a match on an expression,
+ and act accordingly.
+\end_layout
+
 \begin_layout Subsection*
 Conditionals and the "Safe" Choice
 \end_layout
@@ -173,6 +730,73 @@ val storedName:
 
 \begin_layout LyX-Code
 val name = storedName.getOrElse("Guest") // The "Elvis" move
+\end_layout
+
+\begin_layout Standard
+In fact,
+ scala has several methods of this form,
+ that check if a value exists,
+ set it to a value if need be,
+ then add to that list:
+\end_layout
+
+\begin_layout LyX-Code
+import scala.collection.mutable
+\end_layout
+
+\begin_layout LyX-Code
+val registry = mutable.Map[String,
+ mutable.ListBuffer[String]]()
+\end_layout
+
+\begin_layout LyX-Code
+def addValue(key:
+ String,
+ value:
+ String):
+ Unit = {
+\end_layout
+
+\begin_layout LyX-Code
+  // 1.
+ Get the list or create a new ListBuffer if key doesn't exist
+\end_layout
+
+\begin_layout LyX-Code
+  // 2.
+ Append the value using +=
+\end_layout
+
+\begin_layout LyX-Code
+  registry.getOrElseUpdate(key,
+ mutable.ListBuffer()) += value
+\end_layout
+
+\begin_layout LyX-Code
+}
+\end_layout
+
+\begin_layout LyX-Code
+addValue("user1",
+ "login")
+\end_layout
+
+\begin_layout LyX-Code
+addValue("user1",
+ "logout")
+\end_layout
+
+\begin_layout LyX-Code
+println(registry) // Map(user1 -> ListBuffer(login,
+ logout))
+\end_layout
+
+\begin_layout Standard
+A few other notes:
+ if statements for the most part work like any other language.
+ The ternary operator (thing = (a == b) ?
+ 1 :
+ 0 ) is also supported.
 \end_layout
 
 \begin_layout Subsubsection*
@@ -257,6 +881,37 @@ toTest match
 
 \begin_layout LyX-Code
   case _ => "Fallback" // The Wildcard
+\end_layout
+
+\begin_layout Standard
+Additionally,
+ we can get a 
+\begin_inset Quotes eld
+\end_inset
+
+parallel assigment
+\begin_inset Quotes erd
+\end_inset
+
+ type functionality using pattern matching on tuples or collections:
+\end_layout
+
+\begin_layout LyX-Code
+// Assigning two variables at once
+\end_layout
+
+\begin_layout LyX-Code
+val (lat,
+ long) = (43.45,
+ -80.49)
+\end_layout
+
+\begin_layout LyX-Code
+println(lat)  // 43.45
+\end_layout
+
+\begin_layout LyX-Code
+println(long) // -80.49
 \end_layout
 
 \begin_layout Subsubsection*
@@ -344,6 +999,11 @@ list match
   case head ::
  tail => s"Starts with $head,
  followed by $tail"
+\end_layout
+
+\begin_layout Standard
+Case statements are probably the most important concept in scala.
+ Meditate on this and embrace it in your heart.
 \end_layout
 
 \begin_layout Subsection*

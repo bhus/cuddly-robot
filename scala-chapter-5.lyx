@@ -95,8 +95,18 @@ Scala is more than just a high-level language;
  it gives you direct control over how your data is stored.
  You don't have to worry about these details every day,
  but when you're processing a billion rows of data,
- you'll be glad Scala doesn't hide the "plumbing."1.
- 
+ you'll be glad Scala doesn't hide the "plumbing
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+But we really haven't really touched on the basic building blocks of all this :
+ standard types.
+ We inherit much of this from Java,
+ but a refresher might be helpful.
 \end_layout
 
 \begin_layout Subsection*
@@ -105,15 +115,20 @@ Numbers:
 \end_layout
 
 \begin_layout Standard
-In a script,
+In many scripting languages,
  a number is just a "number." In Scala,
  we choose the right tool for the job.
  This keeps your code optimized and your memory usage lean.
 \end_layout
 
 \begin_layout Standard
+Scala still makes the determination between different whole number (integer) types,
+ since it determines range of possible values and memory occupied:
+\end_layout
+
+\begin_layout Standard
 \begin_inset Tabular
-<lyxtabular version="3" rows="6" columns="2">
+<lyxtabular version="3" rows="8" columns="2">
 <features tabularvalignment="middle">
 <column alignment="center" valignment="top">
 <column alignment="center" valignment="top">
@@ -220,7 +235,28 @@ The standard for decimals and scientific math.
 </cell>
 </row>
 <row>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Float
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Rather than confining ourselves to fixes # decimal places,
+ floats allow numbers of different precisions
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -229,11 +265,31 @@ BigInt
 
 \end_inset
 </cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Numbers as large as your RAM will allow (stored as objects of variable length)
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+BigDecimal
+\end_layout
+
+\end_inset
+</cell>
 <cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
-Numbers as large as your RAM will allow.
+Decimal numbers as large as RAM will allow (stored as objects of variable length)
 \end_layout
 
 \end_inset
@@ -244,6 +300,57 @@ Numbers as large as your RAM will allow.
 \end_inset
 
 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newline newline
+\end_inset
+
+Characters are a type closely linked to int,
+ and we can quickly convert to int with 
+\begin_inset Quotes eld
+\end_inset
+
+.toInt
+\begin_inset Quotes erd
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+val letter = 'A'
+\end_layout
+
+\begin_layout LyX-Code
+val code = letter.toInt
+\end_layout
+
+\begin_layout Standard
+Note that we can get the digit value value of a character (if it is a digit) with 
+\begin_inset Quotes eld
+\end_inset
+
+.asDigit
+\begin_inset Quotes erd
+\end_inset
+
+.
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+All numbers are also objects,
+ however,
+ and we can call methods directly on them (eg.
+ (-10).abs).
 \end_layout
 
 \begin_layout Subsection*
@@ -262,11 +369,23 @@ Literals and Layouts
 \end_layout
 
 \begin_layout Standard
-You can define strings with single quotes (for a single Char),
+You can define string literals with single quotes (for a single Char),
  double quotes,
  or triple quotes for multi-line blocks.
  To keep your code indented without messing up your string's formatting,
  we use the "Pipe and Strip" trick:
+\end_layout
+
+\begin_layout LyX-Code
+var simpleString = 
+\begin_inset Quotes eld
+\end_inset
+
+my simple string
+\begin_inset Quotes erd
+\end_inset
+
+
 \end_layout
 
 \begin_layout LyX-Code
@@ -284,6 +403,8 @@ val html = """<html>
 \begin_layout Standard
 The | symbol marks the "margin," and .stripMargin trims everything to the left of it.
  It’s a small detail that makes your source code much more readable.
+ Characters are escaped in the usual way,
+ with a backslash.
 \end_layout
 
 \begin_layout Subsubsection*
@@ -293,6 +414,7 @@ Interpolation:
 
 \begin_layout Standard
 Why concatenate strings with + when you can bake variables right into them?
+ There are a couple of options here:
 \end_layout
 
 \begin_layout Itemize
@@ -322,7 +444,408 @@ println(f"Pi is roughly $pi%.2f") // Result:
  "Pi is roughly 3.14"
 \end_layout
 
+\begin_layout Standard
+Notice that both allow us to embed values with the ${...} sequence.
+ f interpolation gives us the added capability to add modifiers for formatting options for different data types,
+ such as decimal places for floats.
+\end_layout
+
+\begin_layout Standard
+You can even combine multiline strings with interpolation for a suped up version of here documents:
+\end_layout
+
+\begin_layout LyX-Code
+val tableName = "orders"
+\end_layout
+
+\begin_layout LyX-Code
+val query = s"""SELECT * |FROM $tableName 
+\end_layout
+
+\begin_layout LyX-Code
+               |LIMIT 10""".stripMargin
+\end_layout
+
 \begin_layout Subsubsection*
+Everyday strings
+\end_layout
+
+\begin_layout Standard
+String is probably the most robust built-in class in scala,
+ so we won't cover every method here.
+ Instead,
+ we will look at some common string idioms:
+\end_layout
+
+\begin_layout Standard
+One task almost every dev must work on is deal with lines of text from files that represent structured data.
+ We can getLines from the file,
+ iterating over each,
+ splitting each by the pipe and trimming it down to size.
+\end_layout
+
+\begin_layout LyX-Code
+import scala.io.Source
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+// 1.
+ Load the file (don't forget to close it later!)
+\end_layout
+
+\begin_layout LyX-Code
+val source = Source.fromFile("records.txt")
+\end_layout
+
+\begin_layout LyX-Code
+try {
+\end_layout
+
+\begin_layout LyX-Code
+  val records = source.getLines().map { line =>
+\end_layout
+
+\begin_layout LyX-Code
+    // 2.
+ Split by pipe and trim each part
+\end_layout
+
+\begin_layout LyX-Code
+    val parts = line.split('|').map(_.trim)
+\end_layout
+
+\begin_layout LyX-Code
+    
+\end_layout
+
+\begin_layout LyX-Code
+    // 3.
+ Map to a Case Class for type safety
+\end_layout
+
+\begin_layout LyX-Code
+    if (parts.length >= 3) {
+\end_layout
+
+\begin_layout LyX-Code
+      Some(Record(parts(0),
+ parts(1),
+ parts(2)))
+\end_layout
+
+\begin_layout LyX-Code
+    } else None
+\end_layout
+
+\begin_layout LyX-Code
+  }.toList.flatten
+\end_layout
+
+\begin_layout LyX-Code
+  records.foreach(println)
+\end_layout
+
+\begin_layout LyX-Code
+} finally {
+\end_layout
+
+\begin_layout LyX-Code
+  source.close()
+\end_layout
+
+\begin_layout LyX-Code
+}
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+case class Record(id:
+ String,
+ name:
+ String,
+ category:
+ String)
+\end_layout
+
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We can also scan strings for regex patterns,
+ such as strings of digits:
+\end_layout
+
+\begin_layout LyX-Code
+import scala.io.Source
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+// 1.
+ Load the file (don't forget to close it later!)
+\end_layout
+
+\begin_layout LyX-Code
+val source = Source.fromFile("records.txt")
+\end_layout
+
+\begin_layout LyX-Code
+try {
+\end_layout
+
+\begin_layout LyX-Code
+  val records = source.getLines().map { line =>
+\end_layout
+
+\begin_layout LyX-Code
+    // 2.
+ Split by pipe and trim each part
+\end_layout
+
+\begin_layout LyX-Code
+    val parts = line.split('|').map(_.trim)
+\end_layout
+
+\begin_layout LyX-Code
+    
+\end_layout
+
+\begin_layout LyX-Code
+    // 3.
+ Map to a Case Class for type safety
+\end_layout
+
+\begin_layout LyX-Code
+    if (parts.length >= 3) {
+\end_layout
+
+\begin_layout LyX-Code
+      val digitRegex = """(
+\backslash
+d+)""".r
+\end_layout
+
+\begin_layout LyX-Code
+      // This returns an Iterator of all matches
+\end_layout
+
+\begin_layout LyX-Code
+      val allNumbers = digitRegex.findAllIn(line).toList 
+\end_layout
+
+\begin_layout LyX-Code
+      Some(Record(parts(0),
+ parts(1),
+ parts(2),
+ allNumbers))
+\end_layout
+
+\begin_layout LyX-Code
+    } else None
+\end_layout
+
+\begin_layout LyX-Code
+  }.toList.flatten
+\end_layout
+
+\begin_layout LyX-Code
+  records.foreach(println)
+\end_layout
+
+\begin_layout LyX-Code
+} finally {
+\end_layout
+
+\begin_layout LyX-Code
+  source.close()
+\end_layout
+
+\begin_layout LyX-Code
+}
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+case class Record(id:
+ String,
+ name:
+ String,
+ category:
+ String,
+ num:
+ String)
+\end_layout
+
+\begin_layout Standard
+In fact,
+ it would be really nice if we could have an index that we could build that would tell us what songs each word belongs to:
+\end_layout
+
+\begin_layout LyX-Code
+case class Song(title:
+ String,
+ artist:
+ String,
+ lyrics:
+ String)
+\end_layout
+
+\begin_layout LyX-Code
+case class SongIndex(index:
+ Map[String,
+ List[Song]]) {
+\end_layout
+
+\begin_layout LyX-Code
+  def lookup(word:
+ String):
+ List[Song] = 
+\end_layout
+
+\begin_layout LyX-Code
+    index.getOrElse(word.toLowerCase,
+ Nil)
+\end_layout
+
+\begin_layout LyX-Code
+}
+\end_layout
+
+\begin_layout LyX-Code
+object SongIndex {
+\end_layout
+
+\begin_layout LyX-Code
+  private val WordRegex = """
+\backslash
+w+""".r
+\end_layout
+
+\begin_layout LyX-Code
+  def fromSongs(songs:
+ List[Song]):
+ SongIndex = {
+\end_layout
+
+\begin_layout LyX-Code
+    // We group everything into a Map[Word,
+ List[Song]]
+\end_layout
+
+\begin_layout LyX-Code
+    val builtMap = songs.foldLeft(Map.empty[String,
+ List[Song]]) { (acc,
+ song) =>
+\end_layout
+
+\begin_layout LyX-Code
+      // Extract unique words from the lyrics
+\end_layout
+
+\begin_layout LyX-Code
+      val words = WordRegex.findAllIn(song.lyrics).map(_.toLowerCase).toSet
+\end_layout
+
+\begin_layout LyX-Code
+      
+\end_layout
+
+\begin_layout LyX-Code
+      words.foldLeft(acc) { (innerMap,
+ word) =>
+\end_layout
+
+\begin_layout LyX-Code
+        val existingSongs = innerMap.getOrElse(word,
+ Nil)
+\end_layout
+
+\begin_layout LyX-Code
+        innerMap + (word -> (existingSongs :+ song))
+\end_layout
+
+\begin_layout LyX-Code
+      }
+\end_layout
+
+\begin_layout LyX-Code
+    }
+\end_layout
+
+\begin_layout LyX-Code
+    SongIndex(builtMap)
+\end_layout
+
+\begin_layout LyX-Code
+  }
+\end_layout
+
+\begin_layout LyX-Code
+}
+\end_layout
+
+\begin_layout Standard
+We can see there's a lot of techniques in use here:
+ for each song,
+ we use the WordRex 
+\begin_inset Quotes eld
+\end_inset
+
+
+\backslash
+w+
+\begin_inset Quotes erd
+\end_inset
+
+ to grab each word from a song's lyrics,
+ then compress to a unique 
+\begin_inset Quotes eld
+\end_inset
+
+Set
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+From there we go through each word,
+ check the map for that key - creating a list of existingSongs.
+ Finally,
+ we take the original map,
+ add an entry with the given word as key and the new song appended to the existing list as value.
+\end_layout
+
+\begin_layout Standard
+This just gives a sample of how scala operates,
+ but again reiterates the core values.
+ It's kind of verbose and requires a bit more effort to think through what we want to build,
+ but the payoff is quality and maintainability.
+\end_layout
+
+\begin_layout Standard
+And we're just scratching the surface here – strings are a first class citizen in scala.
+\end_layout
+
+\begin_layout Subsection*
 Ranges:
  Memory-Efficient Sequences
 \end_layout
@@ -330,7 +853,10 @@ Ranges:
 \begin_layout Standard
 A Range is a clever abstraction.
  It represents a list of values (like 1 to 1000) without actually creating 1000 integers in your memory.
- It only generates the numbers as you need them.
+ It comes in quite useful when dealing with:
+ sequences,
+ conditions,
+ and intervals It only generates the numbers as you need them.
 \end_layout
 
 \begin_layout LyX-Code
@@ -357,7 +883,46 @@ If you ever need to "solidify" a range into a real list,
  just call .toList.
 \end_layout
 
-\begin_layout Subsubsection*
+\begin_layout Subsection*
+Ranges:
+ Robust Intervals
+\end_layout
+
+\begin_layout Standard
+Ranges can prove useful when testing for conditions.
+ 
+\end_layout
+
+\begin_layout LyX-Code
+val logicRange = 1 to 10
+\end_layout
+
+\begin_layout LyX-Code
+println(logicRange.contains(5)) // true
+\end_layout
+
+\begin_layout LyX-Code
+println(logicRange.contains(11)) // false
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+val oddRange = 1 to 10 by 2 // 1,
+ 3,
+ 5,
+ 7,
+ 9
+\end_layout
+
+\begin_layout LyX-Code
+println(oddRange.contains(2)) // false (it's in the bounds,
+ but not in the "step")
+\end_layout
+
+\begin_layout Subsection*
 Regular Expressions:
  Patterns as Objects
 \end_layout
@@ -377,7 +942,8 @@ val EmailRegex = """([a-zA-Z0-9.-]+)@([a-zA-Z0-9.-]+
 
 \begin_layout Standard
 Because they are objects,
- you can call methods directly on them:
+ you can call methods directly on them,
+ such as matching operations:
 \end_layout
 
 \begin_layout LyX-Code
@@ -397,6 +963,49 @@ val first = NumberRegex.findFirstIn(text) // Some("10")
 \begin_layout LyX-Code
 val all = NumberRegex.findAllIn(text).toList // List("10",
  "20")
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+NumberRegex.findFirstMatchIn(text) match {
+\end_layout
+
+\begin_layout LyX-Code
+  case Some(m) => 
+\end_layout
+
+\begin_layout LyX-Code
+    println(s"Found '${m.matched}' starting at character ${m.start}")
+\end_layout
+
+\begin_layout LyX-Code
+    // Output:
+ Found '150' starting at character 25
+\end_layout
+
+\begin_layout LyX-Code
+  case None => 
+\end_layout
+
+\begin_layout LyX-Code
+    println("No match found")
+\end_layout
+
+\begin_layout LyX-Code
+}
+\end_layout
+
+\begin_layout Standard
+The match object has a number of attributes & methods of use,
+ like the matched string & position.
+\end_layout
+
+\begin_layout Standard
+If we use triple-quoted strings,
+ special characters don't have to be escaped to be used.
 \end_layout
 
 \begin_layout Subsubsection*
@@ -425,6 +1034,54 @@ input match
 
 \begin_layout LyX-Code
   case _ => println("No email found.")
+\end_layout
+
+\begin_layout Standard
+Match instances also give us before and after methods that return the entire portion of the original string before and after the match itself.
+ As well,
+ we get the following metadata on each match:
+\end_layout
+
+\begin_layout LyX-Code
+.start:
+ The index of the first character of the match.
+\end_layout
+
+\begin_layout LyX-Code
+.end:
+ The index of the character immediately following the match.
+\end_layout
+
+\begin_layout LyX-Code
+.groupCount:
+ How many capturing groups were in your regex.
+\end_layout
+
+\begin_layout LyX-Code
+.group(n):
+ Retrieves a specific group by index.
+\end_layout
+
+\begin_layout LyX-Code
+.source:
+ Returns the entire original string being searched.
+\end_layout
+
+\begin_layout LyX-Code
+.before
+\end_layout
+
+\begin_layout LyX-Code
+.after
+\end_layout
+
+\begin_layout Standard
+Again,
+ this is just scratching the surface.
+ We have not talked about .replaceAllIn,
+ unapplySeq,
+ split,
+ and the multitude of find methods available as well.
 \end_layout
 
 \begin_layout Subsection*

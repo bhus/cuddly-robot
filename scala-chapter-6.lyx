@@ -96,9 +96,191 @@ In Scala,
 \end_layout
 
 \begin_layout Standard
-Let's look at how to make your methods flexible,
+Let's dig into the deteails and have a look at how to make your methods flexible,
  succinct,
  and powerful.
+\end_layout
+
+\begin_layout Subsection*
+Defining a Method
+\end_layout
+
+\begin_layout Standard
+Methods of classes are defined with 
+\begin_inset Quotes eld
+\end_inset
+
+def
+\begin_inset Quotes erd
+\end_inset
+
+.
+ Java naming conventions are adopted,
+ so class names are capital camel case,
+ methods - lower camel case,
+ etc.
+ One of the unique patterns of scala is we strive for Uniform Access - that is,
+ methods should look like attribute access.
+ So get methods are strictly descriptors of the data;
+ set methods are named with a trailing underscore.
+\end_layout
+
+\begin_layout Standard
+For example:
+\end_layout
+
+\begin_layout LyX-Code
+class Item(private var t:
+ String) {
+\end_layout
+
+\begin_layout LyX-Code
+  // Getter
+\end_layout
+
+\begin_layout LyX-Code
+  def thing():
+ String = t
+\end_layout
+
+\begin_layout LyX-Code
+  // Setter
+\end_layout
+
+\begin_layout LyX-Code
+  def thing_=(newThing:
+ String):
+ Unit = {
+\end_layout
+
+\begin_layout LyX-Code
+    t = newThing
+\end_layout
+
+\begin_layout LyX-Code
+  }
+\end_layout
+
+\begin_layout LyX-Code
+}
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+// Usage:
+\end_layout
+
+\begin_layout LyX-Code
+val myItem = new Item("initial")
+\end_layout
+
+\begin_layout LyX-Code
+myItem.thing = "new_thing" // Scala transforms this into:
+ 
+\end_layout
+
+\begin_layout LyX-Code
+                           // myItem.thing_=("new_thing")
+\end_layout
+
+\begin_layout LyX-Code
+println(myItem.thing)      // Output:
+ new_thing
+\end_layout
+
+\begin_layout Standard
+A couple of things to note here:
+ we gave the Item a private var.
+ This means it creates an internal object instance variable with the given value.
+ But because we specified 
+\begin_inset Quotes eld
+\end_inset
+
+var
+\begin_inset Quotes erd
+\end_inset
+
+ and not 
+\begin_inset Quotes eld
+\end_inset
+
+val
+\begin_inset Quotes erd
+\end_inset
+
+,
+ it can be updated (mutable).
+\end_layout
+
+\begin_layout Standard
+The main point here,
+ though,
+ is the thing() and thing_=() methods.
+ 
+\begin_inset Quotes eld
+\end_inset
+
+thing()
+\begin_inset Quotes erd
+\end_inset
+
+ gives us a getter.
+ 
+\begin_inset Quotes eld
+\end_inset
+
+thing_=()
+\begin_inset Quotes erd
+\end_inset
+
+ gives us a setter.
+\end_layout
+
+\begin_layout Standard
+Notice that we also declare parameters for the methods.
+ 
+\begin_inset Quotes eld
+\end_inset
+
+parameter:
+ type
+\begin_inset Quotes erd
+\end_inset
+
+.
+ As well,
+ notice that the setter returns the type 
+\begin_inset Quotes eld
+\end_inset
+
+Unit
+\begin_inset Quotes erd
+\end_inset
+
+.
+ This serves the same function as returning 
+\begin_inset Quotes eld
+\end_inset
+
+void
+\begin_inset Quotes erd
+\end_inset
+
+ in Java or C#.
+ Basically,
+ it tells us there is no return value.
+\end_layout
+
+\begin_layout Standard
+Method bodies contain arbitrary scala code.
+ If you really wanted to,
+ you could define classes inside the method that only exist in that context.
+ Static class and companion objects cannot be used here,
+ though,
+ so just be warned.
 \end_layout
 
 \begin_layout Subsection*
@@ -154,6 +336,94 @@ Within the method,
  It’s clean,
  it’s readable,
  and it’s very "Pragmatic."
+\end_layout
+
+\begin_layout Subsection*
+Methods and Functions
+\end_layout
+
+\begin_layout Standard
+scala's 
+\begin_inset Quotes eld
+\end_inset
+
+functional
+\begin_inset Quotes erd
+\end_inset
+
+ emphasis means that one thing we can is pass functions as parameters to methods,
+ which can then be invoked within the method itself.
+ The syntax for this is 
+\begin_inset Quotes eld
+\end_inset
+
+parameter_name:
+ (FunctionParamType1,
+ FunctionParamType2) => ReturnType
+\begin_inset Quotes erd
+\end_inset
+
+.
+ It can then be invoked within the function using traditional syntax:
+\end_layout
+
+\begin_layout LyX-Code
+// A method that takes a String and a function as parameters
+\end_layout
+
+\begin_layout LyX-Code
+def greet(name:
+ String,
+ formatter:
+ String => String):
+ Unit = {
+\end_layout
+
+\begin_layout LyX-Code
+  // To invoke it,
+ just call it like a normal method/function
+\end_layout
+
+\begin_layout LyX-Code
+  val result = formatter(name) 
+\end_layout
+
+\begin_layout LyX-Code
+  println(result)
+\end_layout
+
+\begin_layout LyX-Code
+}
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+// 1.
+ Passing an anonymous function (Lambda)
+\end_layout
+
+\begin_layout LyX-Code
+greet("Alice",
+ n => n.toUpperCase)
+\end_layout
+
+\begin_layout LyX-Code
+// 2.
+ Passing a pre-defined function
+\end_layout
+
+\begin_layout LyX-Code
+def bracketFormat(s:
+ String):
+ String = s"[$s]"
+\end_layout
+
+\begin_layout LyX-Code
+greet("Bob",
+ bracketFormat)
 \end_layout
 
 \begin_layout Subsection*
@@ -265,6 +535,125 @@ In this example,
 \end_layout
 
 \begin_layout Subsection*
+Calling a Method
+\end_layout
+
+\begin_layout Standard
+Calling a method is done by giving the receiver,
+ the name of the method,
+ and optionally some parameters (which can be functions,
+ as the language vigourously encourages).
+ 
+\end_layout
+
+\begin_layout LyX-Code
+class Greeter {
+\end_layout
+
+\begin_layout LyX-Code
+  // A method that takes a String and a function as parameters
+\end_layout
+
+\begin_layout LyX-Code
+  def greet(name:
+ String,
+ formatter:
+ String => String):
+ Unit = {
+\end_layout
+
+\begin_layout LyX-Code
+    // To invoke it,
+ just call it like a normal method/function
+\end_layout
+
+\begin_layout LyX-Code
+    val result = formatter(name) 
+\end_layout
+
+\begin_layout LyX-Code
+    println(result)
+\end_layout
+
+\begin_layout LyX-Code
+  }
+\end_layout
+
+\begin_layout LyX-Code
+}
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+val g = Greeter()
+\end_layout
+
+\begin_layout LyX-Code
+// 1.
+ Passing an anonymous function (Lambda)
+\end_layout
+
+\begin_layout LyX-Code
+g.greet("Alice",
+ n => n.toUpperCase)
+\end_layout
+
+\begin_layout LyX-Code
+// 2.
+ Passing a pre-defined function
+\end_layout
+
+\begin_layout LyX-Code
+def bracketFormat(s:
+ String):
+ String = s"[$s]"
+\end_layout
+
+\begin_layout LyX-Code
+g.greet("Bob",
+ bracketFormat)
+\end_layout
+
+\begin_layout Standard
+Here,
+ we see g is the object receiver,
+ method name is greet,
+ and we pass a string and a function in parentheses.
+\end_layout
+
+\begin_layout Subsection*
+Method Return Values
+\end_layout
+
+\begin_layout Standard
+As we noted above,
+ every method has a return value.
+ For methods that act like procedures (eg.
+ don't have a usable return value),
+ we designate the 
+\begin_inset Quotes eld
+\end_inset
+
+Unit
+\begin_inset Quotes erd
+\end_inset
+
+ return type.
+ We can use this to exit a method or function early.
+ However,
+ in scala this is considered bad form.
+ We should strive as much as possible to design our logic to not need these.
+\end_layout
+
+\begin_layout Standard
+If a return statement is not explicitly given,
+ the last value in the method is used as return value.
+\end_layout
+
+\begin_layout Subsection*
 Default and Named Arguments
 \end_layout
 
@@ -272,10 +661,6 @@ Default and Named Arguments
 To keep your method signatures from growing into unreadable monsters,
  Scala allows you to provide default values.
  This lets users omit arguments they don't care about.
-\end_layout
-
-\begin_layout LyX-Code
-Scala
 \end_layout
 
 \begin_layout LyX-Code
