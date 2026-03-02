@@ -89,6 +89,14 @@
 \begin_body
 
 \begin_layout Standard
+Testing is a must have in any modern language.
+ It has a direct link to quality.
+ It gives you constant feedback as you write,
+ letting you know if you're headed in the right direction.
+ It is a universally good thing.
+\end_layout
+
+\begin_layout Standard
 Testing in Scala is primarily handled by ScalaTest.
  It is a massive,
  flexible framework that supports many styles,
@@ -104,6 +112,7 @@ The WordSpec Style:
 \begin_layout Standard
 Instead of naming a method test_price_calculation_with_tax,
  we describe the Subject and its Behavior.
+ 
 \end_layout
 
 \begin_layout LyX-Code
@@ -180,7 +189,9 @@ class ProductServiceSpec extends AnyWordSpec with Matchers:
 \end_layout
 
 \begin_layout Standard
-By mixing in Matchers,
+Here the Subject is the ProductService,
+ and the behaviour is price calculation.
+ By mixing in Matchers,
  we get access to shouldBe.
  It makes assertions feel less like a math equation and more like a conversation.
 \end_layout
@@ -249,6 +260,75 @@ class ApiSpec extends AnyWordSpec with ScalaFutures:
 
 \begin_layout LyX-Code
   }
+\end_layout
+
+\begin_layout Standard
+Structuring tests this way gives us a place to put individual tests,
+ providing a structure (around services).
+ We also get a few options for how to run tests:
+\end_layout
+
+\begin_layout LyX-Code
+Run all tests:
+ 
+\end_layout
+
+\begin_layout LyX-Code
+sbt test
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+Run a specific test suite:
+\end_layout
+
+\begin_layout LyX-Code
+sbt "testOnly MyFirstTest"
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+Continuous testing (Watch mode):
+ This is the "pro" way.
+ sbt will watch your files and re-run tests every time you hit save.
+\end_layout
+
+\begin_layout LyX-Code
+sbt ~test
+\end_layout
+
+\begin_layout Standard
+The 
+\begin_inset Quotes eld
+\end_inset
+
+shouldBe
+\begin_inset Quotes erd
+\end_inset
+
+ operation is generally a test for equality,
+ but can also be used with 
+\begin_inset Quotes eld
+\end_inset
+
+empty
+\begin_inset Quotes erd
+\end_inset
+
+ on collection types,
+ or even on types (eg.
+ data.name shouldBe a [String])
+\end_layout
+
+\begin_layout Standard
+Unlike the assert operation inherited from Java,
+ shouldBe will return a more gracious message on failure.
 \end_layout
 
 \begin_layout Subsection*
@@ -331,6 +411,41 @@ Doobie
  doobie-scalatest
 \emph default
  module that can actually check your SQL strings against your database schema at compile time to ensure your queries are valid.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We can add before {} and after {} clasues to our tests for setup & teardown code to run before and after each test.
+\end_layout
+
+\begin_layout Standard
+The standard for tests is one test for every class,
+ named with a 
+\begin_inset Quotes eld
+\end_inset
+
+Spec
+\begin_inset Quotes erd
+\end_inset
+
+ postfix.
+\end_layout
+
+\begin_layout Standard
+We do also encourage unit and integration tests.
+ Unit tests go in src/test/scala.
+ Integration tests go in src/it/scala.
+\end_layout
+
+\begin_layout Standard
+Generally,
+ we make use of traits to create shared resources the tests can use.
 \end_layout
 
 \end_body

@@ -465,6 +465,108 @@ This uses the
 \end_layout
 
 \begin_layout Subsection*
+Environment Variables
+\end_layout
+
+\begin_layout Standard
+There are a few ways to grab enironment values,
+ depending on what exactly you need:
+\end_layout
+
+\begin_layout Standard
+scala.util.Properties - best for quick OS-based logic:
+\end_layout
+
+\begin_layout LyX-Code
+import scala.util.Properties
+\end_layout
+
+\begin_layout LyX-Code
+println(s"OS Name:
+ ${Properties.osName}")
+\end_layout
+
+\begin_layout LyX-Code
+println(s"Java Home:
+ ${Properties.javaHome}")
+\end_layout
+
+\begin_layout LyX-Code
+println(s"Scala Version:
+ ${Properties.versionNumberString}")
+\end_layout
+
+\begin_layout Standard
+System.getProperty - best for JVM startup flags:
+\end_layout
+
+\begin_layout LyX-Code
+// CPU Architecture (e.g.,
+ x86_64,
+ aarch64)
+\end_layout
+
+\begin_layout LyX-Code
+val arch = System.getProperty("os.arch")
+\end_layout
+
+\begin_layout LyX-Code
+// Library Directory (Where the OS looks for .so,
+ .dll,
+ or .dylib files)
+\end_layout
+
+\begin_layout LyX-Code
+val libPath = System.getProperty("java.library.path")
+\end_layout
+
+\begin_layout LyX-Code
+// Temporary Directory (Good for File IO chunks we discussed)
+\end_layout
+
+\begin_layout LyX-Code
+val tmpDir = System.getProperty("java.io.tmpdir")
+\end_layout
+
+\begin_layout LyX-Code
+// User's Working Directory
+\end_layout
+
+\begin_layout LyX-Code
+val userDir = System.getProperty("user.dir")
+\end_layout
+
+\begin_layout LyX-Code
+println(s"Arch:
+ $arch")
+\end_layout
+
+\begin_layout LyX-Code
+println(s"Lib Dirs:
+ $libPath")
+\end_layout
+
+\begin_layout Standard
+General system info - best for Shell/OS environment,
+ like passwords,
+ docker setting,
+ config:
+\end_layout
+
+\begin_layout LyX-Code
+import scala.jdk.CollectionConverters._
+\end_layout
+
+\begin_layout LyX-Code
+val allProps = System.getProperties.asScala
+\end_layout
+
+\begin_layout LyX-Code
+allProps.foreach { case (k,
+ v) => println(s"$k -> $v") }
+\end_layout
+
+\begin_layout Subsection*
 Best Practices for CLI Tools
 \end_layout
 

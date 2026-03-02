@@ -98,8 +98,67 @@ At some point,
 \end_layout
 
 \begin_layout Subsection*
+Common Ops
+\end_layout
+
+\begin_layout Standard
+The most common way to read from / write to standard i/o in scala is with the StdIn
+\end_layout
+
+\begin_layout LyX-Code
+// uses implicit StdOut
+\end_layout
+
+\begin_layout LyX-Code
+println("Hello,
+ World!") 
+\end_layout
+
+\begin_layout LyX-Code
+print("No newline here...
+ ")
+\end_layout
+
+\begin_layout LyX-Code
+printf("Age:
+ %d,
+ Name:
+ %s",
+ 25,
+ "Alice")
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+import scala.io.StdIn
+\end_layout
+
+\begin_layout LyX-Code
+println("Enter your name:")
+\end_layout
+
+\begin_layout LyX-Code
+val name = StdIn.readLine() // Returns a String
+\end_layout
+
+\begin_layout LyX-Code
+println("Enter your age:")
+\end_layout
+
+\begin_layout LyX-Code
+val age = StdIn.readInt()    // Returns an Int (throws exception if not a number)
+\end_layout
+
+\begin_layout Subsection*
 Reading Files:
  The Safe Way
+\end_layout
+
+\begin_layout Standard
+The idiomatic way to deal with file reading & writing is with the scala.io.Source library.
 \end_layout
 
 \begin_layout Standard
@@ -247,6 +306,104 @@ A Note on Performance
 \end_layout
 
 \begin_layout Subsection*
+Creating Files
+\end_layout
+
+\begin_layout Standard
+To create a new file,
+ we simply use the default 
+\begin_inset Quotes eld
+\end_inset
+
+write
+\begin_inset Quotes erd
+\end_inset
+
+ method to fill it with content.
+ 
+\end_layout
+
+\begin_layout LyX-Code
+import java.nio.file.{Files,
+ Paths}
+\end_layout
+
+\begin_layout LyX-Code
+import java.nio.charset.StandardCharsets
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+val path = Paths.get("data/config.txt")
+\end_layout
+
+\begin_layout LyX-Code
+val content = "key=value
+\backslash
+nuser=admin"
+\end_layout
+
+\begin_layout LyX-Code
+// Creates the file and writes the string in one shot
+\end_layout
+
+\begin_layout LyX-Code
+Files.write(path,
+ content.getBytes(StandardCharsets.UTF_8))
+\end_layout
+
+\begin_layout Standard
+To append to a file,
+ we use the same operation with some extra parameters:
+\end_layout
+
+\begin_layout LyX-Code
+import java.nio.file.{Files,
+ Paths,
+ StandardOpenOption}
+\end_layout
+
+\begin_layout LyX-Code
+val path = Paths.get("log.txt")
+\end_layout
+
+\begin_layout LyX-Code
+val logEntry = "New event happened
+\backslash
+n"
+\end_layout
+
+\begin_layout LyX-Code
+Files.write(
+\end_layout
+
+\begin_layout LyX-Code
+  path,
+ 
+\end_layout
+
+\begin_layout LyX-Code
+  logEntry.getBytes,
+ 
+\end_layout
+
+\begin_layout LyX-Code
+  StandardOpenOption.CREATE,
+ // Create if missing
+\end_layout
+
+\begin_layout LyX-Code
+  StandardOpenOption.APPEND  // Add to the end
+\end_layout
+
+\begin_layout LyX-Code
+)
+\end_layout
+
+\begin_layout Subsection*
 Working with Paths
 \end_layout
 
@@ -274,6 +431,330 @@ val file = dir.resolve("app.log") // Automatically handles separators
 \begin_layout LyX-Code
 println(s"Looking for file at:
  ${file.toAbsolutePath}")
+\end_layout
+
+\begin_layout Subsection*
+Working with Different Chars/Bytes/etc
+\end_layout
+
+\begin_layout Standard
+There are different options for reading from a file based on the chunk size you want your data in:
+\end_layout
+
+\begin_layout LyX-Code
+Files.readString(Path.of("file.txt")) // gets us the entire contents as a string.
+ 
+\end_layout
+
+\begin_layout LyX-Code
+Source.fromFile("file.txt").getLines().foreach(println) // gets us contents line-by-line.
+ 
+\end_layout
+
+\begin_layout LyX-Code
+val char = Source.fromFile("file.txt").next() allows us to read by character.
+\end_layout
+
+\begin_layout LyX-Code
+val bytes:
+ Array[Byte] = Files.readAllBytes(path)
+\end_layout
+
+\begin_layout LyX-Code
+val buffer = new Array[Byte](1024);
+ is.read(buffer) // allows us to read as a stream
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+import java.io.FileReader
+\end_layout
+
+\begin_layout LyX-Code
+val reader = new FileReader("massive_line.txt")
+\end_layout
+
+\begin_layout LyX-Code
+val buffer = new Array[Char](1024) // 1024 characters at a time
+\end_layout
+
+\begin_layout LyX-Code
+val charsRead = reader.read(buffer) // can optionally loop here,
+ as charsRead will be -1 when done
+\end_layout
+
+\begin_layout LyX-Code
+// buffer now contains the first 1024 characters
+\end_layout
+
+\begin_layout LyX-Code
+reader.close()
+\end_layout
+
+\begin_layout Standard
+When it comes to writing,
+ the same applies:
+\end_layout
+
+\begin_layout LyX-Code
+Files.writeString(Paths.get("output.txt"),
+ "The whole story...")
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+// line by line
+\begin_inset Newline newline
+\end_inset
+
+import java.io.PrintWriter
+\end_layout
+
+\begin_layout LyX-Code
+val pw = new PrintWriter("lines.txt")
+\end_layout
+
+\begin_layout LyX-Code
+pw.println("Line 1")
+\end_layout
+
+\begin_layout LyX-Code
+pw.println("Line 2")
+\end_layout
+
+\begin_layout LyX-Code
+pw.close()
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+import java.io.FileOutputStream
+\end_layout
+
+\begin_layout LyX-Code
+val os = new FileOutputStream("large_data.bin")
+\end_layout
+
+\begin_layout LyX-Code
+val chunk = new Array[Byte](4096) // 4KB increments
+\end_layout
+
+\begin_layout LyX-Code
+// Imagine a loop fetching data from a socket or another file
+\end_layout
+
+\begin_layout LyX-Code
+os.write(chunk,
+ 0,
+ chunk.length) 
+\end_layout
+
+\begin_layout LyX-Code
+os.close()
+\end_layout
+
+\begin_layout Subsection*
+Talking with Networks
+\end_layout
+
+\begin_layout Standard
+Scala was built for the internet.
+ 
+\end_layout
+
+\begin_layout Standard
+It can handle sockets & servers,
+ be they TCP,
+ UDP,
+ whatever.
+\end_layout
+
+\begin_layout LyX-Code
+import java.net.Socket
+\end_layout
+
+\begin_layout LyX-Code
+import java.io.PrintWriter
+\end_layout
+
+\begin_layout LyX-Code
+import scala.io.Source
+\end_layout
+
+\begin_layout LyX-Code
+// 1.
+ Open a TCP connection to port 80 (standard HTTP)
+\end_layout
+
+\begin_layout LyX-Code
+val socket = new Socket("google.com",
+ 80)
+\end_layout
+
+\begin_layout LyX-Code
+val out = new PrintWriter(socket.getOutputStream,
+ true)
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+// 2.
+ Write the raw HTTP text
+\end_layout
+
+\begin_layout LyX-Code
+out.print("GET / HTTP/1.1
+\backslash
+r
+\backslash
+n") // Request Line
+\end_layout
+
+\begin_layout LyX-Code
+out.print("Host:
+ google.com
+\backslash
+r
+\backslash
+n") // Required Header
+\end_layout
+
+\begin_layout LyX-Code
+out.print("Connection:
+ close
+\backslash
+r
+\backslash
+n") // Tell server to hang up after sending
+\end_layout
+
+\begin_layout LyX-Code
+out.print("
+\backslash
+r
+\backslash
+n") // The mandatory empty line that ends the header section
+\end_layout
+
+\begin_layout LyX-Code
+out.flush()
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+// 3.
+ Read the raw response
+\end_layout
+
+\begin_layout LyX-Code
+val response = Source.fromInputStream(socket.getInputStream).mkString
+\end_layout
+
+\begin_layout LyX-Code
+println(response)
+\end_layout
+
+\begin_layout LyX-Code
+socket.close()
+\end_layout
+
+\begin_layout Standard
+But of course,
+ that's not where most people live.
+ Good thing the starndard higher level protocols are also supported (like HTTP et al).
+ 
+\end_layout
+
+\begin_layout LyX-Code
+import sttp.client3._
+\end_layout
+
+\begin_layout LyX-Code
+val request = basicRequest
+\end_layout
+
+\begin_layout LyX-Code
+  .get(uri"https://google.com")
+\end_layout
+
+\begin_layout LyX-Code
+  .header("User-Agent",
+ "Scala-App-1.0")
+\end_layout
+
+\begin_layout LyX-Code
+  // sttp handles the 
+\backslash
+r
+\backslash
+n and Host headers automatically
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We can go even further and write straight to a file:
+\end_layout
+
+\begin_layout LyX-Code
+import sttp.client3._
+\end_layout
+
+\begin_layout LyX-Code
+import java.io.File
+\end_layout
+
+\begin_layout LyX-Code
+// This tells sttp to stream the response directly to a file in chunks
+\end_layout
+
+\begin_layout LyX-Code
+val request = basicRequest
+\end_layout
+
+\begin_layout LyX-Code
+  .get(uri"https://example.com/huge-report.csv")
+\end_layout
+
+\begin_layout LyX-Code
+  .response(asFile(new File("report.csv")))
+\end_layout
+
+\begin_layout LyX-Code
+val backend = HttpClientSyncBackend()
+\end_layout
+
+\begin_layout LyX-Code
+request.send(backend)
+\end_layout
+
+\begin_layout Standard
+Of course,
+ there's no error handling here,
+ redirects,
+ or really anything useful,
+ but you get the idea.
 \end_layout
 
 \end_body

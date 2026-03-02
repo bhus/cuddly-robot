@@ -89,7 +89,18 @@
 \begin_body
 
 \begin_layout Standard
-Because Scala lives on the JVM,
+Scala still does enable multithreading via threads (concurrent executions of code,
+ but still sharing the same process space and using it to cooperate) as well as processes themselves (each with its own memory space).
+\end_layout
+
+\begin_layout Subsection*
+Multithreading
+\end_layout
+
+\begin_layout Standard
+Often the way to do multiple things at once is via threading.
+ These are all still within the same process space.
+ And because Scala lives on the JVM,
  you can manage raw threads manually.
  It looks exactly like the Java you might remember from years ago:
 \end_layout
@@ -104,10 +115,23 @@ thread.start()
 
 \begin_layout Standard
 But manual threading is like trying to manage a busy kitchen by shouting at every individual cook.
+ There are all sorts of things that can go wrong,
+ in terms of prioritization,
+ deadlock,
+ waiting on long running system calls,
+ trying to take advantage of multi-processor,
+ starvation,
+ etc.
  It’s stressful and prone to accidents.
- In modern Scala,
- we don't manage threads;
- we manage 
+ However,
+ the benefits of concurrency now are undeniable.
+ 
+\end_layout
+
+\begin_layout Standard
+In modern Scala,
+ a magical approach was devised that meant we don't manage threads,
+ but get the benefits of multi-threading – 
 \series bold
 Futures
 \series default
@@ -208,6 +232,28 @@ Eagerness
  it starts running in the background.
 \end_layout
 
+\begin_layout Standard
+So we create a future with the Future( ...
+ ) call.
+ This *immediately* starts running,
+ but in the background,
+ so execution progresses to the next statement without waiting.
+ 
+\end_layout
+
+\begin_layout Standard
+We can see on the next line,
+ we define a 
+\begin_inset Quotes eld
+\end_inset
+
+onComplete
+\begin_inset Quotes erd
+\end_inset
+
+ handler for what to do when the Future finishes.
+\end_layout
+
 \begin_layout Subsection*
 Waiting (The "Break Glass" Option)
 \end_layout
@@ -229,6 +275,26 @@ import scala.concurrent.duration.*
 \end_layout
 
 \begin_layout LyX-Code
+val eventualData = Future {
+\end_layout
+
+\begin_layout LyX-Code
+  // This block runs on a background thread
+\end_layout
+
+\begin_layout LyX-Code
+  Thread.sleep(1000) 
+\end_layout
+
+\begin_layout LyX-Code
+  "The secret ingredient"
+\end_layout
+
+\begin_layout LyX-Code
+}
+\end_layout
+
+\begin_layout LyX-Code
 // We pause the current thread for up to 5 seconds
 \end_layout
 
@@ -241,6 +307,35 @@ val result = Await.result(eventualData,
 println(s"I waited,
  and I got:
  $result")
+\end_layout
+
+\begin_layout Standard
+So the Await will try to allow the Future to complete and get the data.
+ But we don't want to wait forever,
+ so we also give a timeout value.
+\end_layout
+
+\begin_layout Standard
+In the case that something goes wrong,
+ like an exception being raised within the Future code,
+ we can use the recover clause to deal with it:
+\end_layout
+
+\begin_layout LyX-Code
+val handled = eventualData.recover {
+\end_layout
+
+\begin_layout LyX-Code
+  case e:
+ ArithmeticException => 0
+\end_layout
+
+\begin_layout LyX-Code
+  case _ => -1 // Generic fallback
+\end_layout
+
+\begin_layout LyX-Code
+}
 \end_layout
 
 \begin_layout Subsection*
@@ -278,6 +373,38 @@ val result = for {
 
 \begin_layout LyX-Code
 }
+\end_layout
+
+\begin_layout Subsection*
+A Note on Mutual Exclusion
+\end_layout
+
+\begin_layout Standard
+In more traditional languages,
+ mutual exclusion was often achieved with Mutexes,
+ Locks,
+ and other syncronization mechanisms.
+ Scala allows this via the JVM,
+ but encourages strongly for developers to design around it:
+\end_layout
+
+\begin_layout Standard
+Firstly,
+ the immutable nature of default data goes a long way to avoid problems that way.
+ Secondly,
+ usage of Atomic data types for simple flags or values to avoid read/write race conditions.
+ Pekko and other libraries are designed around *message-passing* over direct method invocation,
+ again to allow for single thread code exection at a time.
+\end_layout
+
+\begin_layout Subsection*
+Queues
+\end_layout
+
+\begin_layout Standard
+Queues also enable async communication,
+ whether within process or over the network.
+ FS2 Streams and Channels are the go-to here.
 \end_layout
 
 \begin_layout Subsection*
@@ -368,6 +495,49 @@ and
 
 \emph default
  methods make Scala an incredible language for writing system scripts that would usually be written in Bash or Python.
+\end_layout
+
+\begin_layout Subsection*
+Multiple Processes
+\end_layout
+
+\begin_layout Standard
+As mentioned,
+ we can turn a string into a system command - process with a simple .!
+\end_layout
+
+\begin_layout LyX-Code
+import scala.sys.process._
+\end_layout
+
+\begin_layout LyX-Code
+// 1.
+ Execute and get the exit code (0 usually means success)
+\end_layout
+
+\begin_layout LyX-Code
+val exitCode:
+ Int = "ls -al".!
+\end_layout
+
+\begin_layout LyX-Code
+// 2.
+ Execute and capture the output as a String
+\end_layout
+
+\begin_layout LyX-Code
+val output:
+ String = "whoami".!!
+\end_layout
+
+\begin_layout LyX-Code
+println(s"Current user:
+ ${output.trim}")
+\end_layout
+
+\begin_layout Standard
+If we need system variables set in order to run,
+ we can do that with the Process class.
 \end_layout
 
 \end_body
