@@ -107,14 +107,557 @@ By running
  you launch an interactive session that is context-aware.
  It doesn't just give you a blank slate;
  it loads every dependency and every class defined in your current project.
+ All in an environment that gives you immediate feedback:
 \end_layout
 
 \begin_layout LyX-Code
-# Launch the REPL with your project's superpowers
+# Launch the REPL with your project's superpowers from DOS/shell prompt
 \end_layout
 
 \begin_layout LyX-Code
 scala-cli repl .
+\end_layout
+
+\begin_layout Standard
+The repl of course comes with several switches to modify it's behaviour:
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Tabular
+<lyxtabular version="3" rows="7" columns="3">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+Switch
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+Purpose
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+scala-cli Example
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+--dep
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+Adds libraries (replaces -cp)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+scala-cli repl --dep com.softwaremill.sttp.client3::core:3.9.0
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+--deprecation
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+Shows detailed warnings
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+scala-cli run .
+ --deprecation
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+--feature
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+Enables advanced language features
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+scala-cli run .
+ --feature
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+-i
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+Pre-loads a script into the REPL
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+scala-cli repl -i setup.scala
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+-e
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+Executes a string and exits
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+scala-cli run -e "println(1+1)"
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+As with all CLIs,
+ functions,
+ constants,
+ and general context is available going forward.
+\end_layout
+
+\begin_layout Standard
+This is the ideal place to test out classes & functions you have built to see how they handle various scenarios.
+\end_layout
+
+\begin_layout Standard
+The most common way to dynamically pull in updated code is the :load command.
+ It reads a .scala file and executes every line as if you typed it into the REPL manually.
+\end_layout
+
+\begin_layout LyX-Code
+scala> :load MyScript.scala
+\end_layout
+
+\begin_layout LyX-Code
+// All classes,
+ objects,
+ and variables in MyScript.scala are now updated in your session.
+\end_layout
+
+\begin_layout Standard
+However,
+ due to scala's sophistication,
+ we can tell the scala-cli to dynamically reload any libraries it has loaded whenever they change:
+\end_layout
+
+\begin_layout LyX-Code
+scala-cli repl .
+ --watch
+\end_layout
+
+\begin_layout Standard
+You can also simply redefine things on the fly,
+ such as classes,
+ in the REPL:
+\end_layout
+
+\begin_layout LyX-Code
+object Config { val url = "http://new.com" } // replaces existing Config values
+\end_layout
+
+\begin_layout Subsection*
+Tab Completion
+\end_layout
+
+\begin_layout Standard
+The repl has a very sophisticated tab completion feature.
+ Simply partially type a class/funtion/variable/whatever,
+ and press tab to get a list of possible completions.
+ Saves on type,
+ and also helps to explore classes and methods.
 \end_layout
 
 \begin_layout Subsection*
@@ -158,6 +701,664 @@ Quick Imports
 \begin_layout Standard
 It is the ultimate "Pragmatic" tool for debugging:
  move from "I think this works" to "I know this works" in seconds.
+\end_layout
+
+\begin_layout Subsection*
+Configuration
+\end_layout
+
+\begin_layout Standard
+There are several frameworks available for scala that provide customized REPLs with their own initialization code,
+ etc.
+ However,
+ we're going to stick to the OG here.
+\end_layout
+
+\begin_layout Standard
+For the standard REPL we have been discussion,
+ you can provide 
+\begin_inset Quotes eld
+\end_inset
+
+preloaded
+\begin_inset Quotes erd
+\end_inset
+
+ code that runs whenever a REPL is opened.
+ For example,
+ if we write some initial code in 
+\series bold
+init.scala
+\end_layout
+
+\begin_layout LyX-Code
+import sttp.client3._
+\end_layout
+
+\begin_layout LyX-Code
+import doobie._
+\end_layout
+
+\begin_layout LyX-Code
+import doobie.implicits._
+\end_layout
+
+\begin_layout LyX-Code
+import cats.effect.IO
+\end_layout
+
+\begin_layout LyX-Code
+// Pre-define your standard backend and database connection
+\end_layout
+
+\begin_layout LyX-Code
+val backend = HttpClientSyncBackend()
+\end_layout
+
+\begin_layout LyX-Code
+val xa = Transactor.fromDriverManager[IO](...) 
+\end_layout
+
+\begin_layout LyX-Code
+println("Environment loaded:
+ sttp and doobie ready.")
+\end_layout
+
+\begin_layout Standard
+We can load it with:
+\end_layout
+
+\begin_layout LyX-Code
+scala-cli repl --dep ...
+ -i init.scala
+\end_layout
+
+\begin_layout Standard
+In fact,
+ we can define all sorts of helper methods and classes that we can then use in the repl console with:
+\end_layout
+
+\begin_layout LyX-Code
+//> using dep com.softwaremill.sttp.client3::core:3.9.0
+\end_layout
+
+\begin_layout LyX-Code
+//> using dep org.tpolecat::doobie-core:1.1.0
+\end_layout
+
+\begin_layout LyX-Code
+import sttp.client3._
+\end_layout
+
+\begin_layout LyX-Code
+import doobie._
+\end_layout
+
+\begin_layout LyX-Code
+import doobie.implicits._
+\end_layout
+
+\begin_layout LyX-Code
+// 1.
+ Define a helper Class for API calls
+\end_layout
+
+\begin_layout LyX-Code
+case class Api(token:
+ String) {
+\end_layout
+
+\begin_layout LyX-Code
+  val base = basicRequest.auth.bearer(token)
+\end_layout
+
+\begin_layout LyX-Code
+  def getUser(id:
+ Int) = base.get(uri"https://api.com/users/$id")
+\end_layout
+
+\begin_layout LyX-Code
+}
+\end_layout
+
+\begin_layout LyX-Code
+// 2.
+ Define a helper Method for DB status
+\end_layout
+
+\begin_layout LyX-Code
+def checkDb(xa:
+ Transactor[cats.effect.IO]):
+ Unit = {
+\end_layout
+
+\begin_layout LyX-Code
+  import cats.effect.unsafe.implicits.global
+\end_layout
+
+\begin_layout LyX-Code
+  val result = sql"SELECT 1".query[Int].unique.transact(xa).unsafeRunSync()
+\end_layout
+
+\begin_layout LyX-Code
+  println(s"Database Status:
+ $result (Success)")
+\end_layout
+
+\begin_layout LyX-Code
+}
+\end_layout
+
+\begin_layout LyX-Code
+println("--- Dev Environment Loaded ---")
+\end_layout
+
+\begin_layout LyX-Code
+println("Try:
+ val api = Api(
+\backslash
+"my-secret
+\backslash
+")")
+\end_layout
+
+\begin_layout Subsection*
+Configuration
+\end_layout
+
+\begin_layout Standard
+To see current settings:
+ :settings
+\end_layout
+
+\begin_layout Standard
+To change a setting:
+ :settings -deprecation or :settings -Xlint
+\end_layout
+
+\begin_layout Standard
+To see the "Power" mode (internal compiler debug):
+ :power
+\end_layout
+
+\begin_layout Standard
+Note:
+ Power mode is for advanced users;
+ it gives you access to the compiler's internal symbol table.
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+You can use the import $dep syntax to pull in a library on the fly.
+ You don't need to restart.
+\end_layout
+
+\begin_layout LyX-Code
+// Pull in the sttp Circe (JSON) module mid-session
+\end_layout
+
+\begin_layout LyX-Code
+import $dep.`com.softwaremill.sttp.client3::circe:3.9.0`
+\end_layout
+
+\begin_layout LyX-Code
+// Now you can immediately use it
+\end_layout
+
+\begin_layout LyX-Code
+import sttp.client3.circe._
+\end_layout
+
+\begin_layout Standard
+We can also update log levels:
+\end_layout
+
+\begin_layout LyX-Code
+import org.slf4j.LoggerFactory
+\end_layout
+
+\begin_layout LyX-Code
+import ch.qos.logback.classic.{Level,
+ Logger}
+\end_layout
+
+\begin_layout LyX-Code
+// Get the root logger and silence it,
+ or set to DEBUG to see SQL/HTTP traces
+\end_layout
+
+\begin_layout LyX-Code
+val root = LoggerFactory.getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME).asInstanceOf[Logger]
+\end_layout
+
+\begin_layout LyX-Code
+root.setLevel(Level.DEBUG) 
+\end_layout
+
+\begin_layout LyX-Code
+// Now Doobie will likely print every SQL statement it executes!
+\end_layout
+
+\begin_layout Standard
+Finally,
+ if you're unsure what's currently available in your session:
+\end_layout
+
+\begin_layout Standard
+:imports:
+ Lists all the import statements currently active in your session.
+\end_layout
+
+\begin_layout Standard
+:type:
+ Check the type of any variable to see if a module's implicit conversion has "taken over" your object.
+\end_layout
+
+\begin_layout Standard
+:javap:
+ If you want to see the "real" Java methods on a class you just loaded.
+\end_layout
+
+\begin_layout Subsection*
+Commands
+\end_layout
+
+\begin_layout Standard
+There are commands to interact with the REPL beyond standard classes & methods
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Tabular
+<lyxtabular version="3" rows="5" columns="3">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+Command
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+Action
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+Key Shortcut
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+:quit (or :q)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+Exits the REPL session entirely.
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+Ctrl+D (Unix) / Ctrl+Z (Win)
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+:help
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+Displays a list of all available colon commands.
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+:reset
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+Forgets all defined variables and classes but stays in the REPL.
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+:history
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+Shows the last few lines you typed.
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+Up/Down Arrow keys
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+In addition to:
+\end_layout
+
+\begin_layout Standard
+:load <path>:
+ Pulls in an external file.
+\end_layout
+
+\begin_layout Standard
+:save <path>:
+ This is a "hidden gem." It saves your entire current REPL session history to a file so you can turn your experiments into a script later.
+\end_layout
+
+\begin_layout Standard
+import $dep.<coordinates>:
+ Dynamically adds a library (like we saw for adding JSON support to sttp).
+\end_layout
+
+\begin_layout Standard
+import $file.<path>:
+ Similar to :load,
+ but treats the file as a module you can reference.
+\end_layout
+
+\begin_layout Subsection*
+Some Extras
+\end_layout
+
+\begin_layout Standard
+If you want more informative outputs as you run scripts,
+ use:
+\end_layout
+
+\begin_layout LyX-Code
+scala> :settings -print-types
 \end_layout
 
 \end_body
