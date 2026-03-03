@@ -164,6 +164,134 @@ def processPayment(c:
  Unit = ???
 \end_layout
 
+\begin_layout Standard
+But in fact you can link to arbitrary hyperlinks as well with [Label](URL) syntax
+\end_layout
+
+\begin_layout LyX-Code
+/** * Fetches a user from the DB.
+\end_layout
+
+\begin_layout LyX-Code
+ * * @param id the unique user identifier
+\end_layout
+
+\begin_layout LyX-Code
+ * @return a [[doobie.ConnectionIO]] containing the user
+\end_layout
+
+\begin_layout LyX-Code
+ * @note Requires a [[doobie.util.transactor.Transactor]] to execute.
+\end_layout
+
+\begin_layout LyX-Code
+ * @see [[https://tpolecat.github.io/doobie/ Doobie Documentation]]
+\end_layout
+
+\begin_layout LyX-Code
+ */
+\end_layout
+
+\begin_layout LyX-Code
+def findUser(id:
+ Int):
+ ConnectionIO[User] = ???
+\end_layout
+
+\begin_layout Standard
+We can also create lists,
+ which comes in handy for readability:
+\end_layout
+
+\begin_layout LyX-Code
+/**
+\end_layout
+
+\begin_layout LyX-Code
+ * To perform a Doobie transaction:
+\end_layout
+
+\begin_layout LyX-Code
+ * 1.
+ Define your query using the `sql` interpolator.
+\end_layout
+
+\begin_layout LyX-Code
+ * 2.
+ Map the result to a case class.
+\end_layout
+
+\begin_layout LyX-Code
+ * 3.
+ Use a [[doobie.util.transactor.Transactor]] to run it.
+\end_layout
+
+\begin_layout LyX-Code
+ * * Key features:
+\end_layout
+
+\begin_layout LyX-Code
+ * - Type-safe SQL
+\end_layout
+
+\begin_layout LyX-Code
+ * - Automatic resource management
+\end_layout
+
+\begin_layout LyX-Code
+ * - Streaming support via FS2
+\end_layout
+
+\begin_layout LyX-Code
+ */
+\end_layout
+
+\begin_layout Section*
+Headings
+\end_layout
+
+\begin_layout Standard
+Markdown headings are full supported,
+ helping with readability in the generated docs:
+\end_layout
+
+\begin_layout LyX-Code
+/**
+\end_layout
+
+\begin_layout LyX-Code
+ * # User Management Service
+\end_layout
+
+\begin_layout LyX-Code
+ * This service handles all database interactions for Users.
+\end_layout
+
+\begin_layout LyX-Code
+ * * ## Database Operations
+\end_layout
+
+\begin_layout LyX-Code
+ * These methods use [[doobie]] to execute SQL.
+\end_layout
+
+\begin_layout LyX-Code
+ * * ### Read Operations
+\end_layout
+
+\begin_layout LyX-Code
+ * Methods for fetching data.
+\end_layout
+
+\begin_layout LyX-Code
+ */
+\end_layout
+
+\begin_layout LyX-Code
+object UserService { ...
+ }
+\end_layout
+
 \begin_layout Section*
 Common Tags
 \end_layout
