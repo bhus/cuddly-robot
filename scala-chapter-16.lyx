@@ -89,413 +89,617 @@
 \begin_body
 
 \begin_layout Standard
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
 Once your code works on your machine,
  the next challenge is getting it to work on someone else’s.
  This involves two things:
  managing your internal code structure (Packages) and bundling your application for the world (Publishing).
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout Standard
+Scala packages are a standardized packaging and installation framework for libraries and applications that make it easy to locate,
+ install,
+ uninstall,
+ and upgrade your packages.
+ It provides:
 \end_layout
 
-\begin_layout Plain Layout
-
-
-\backslash
-subsection*{The Internal Structure:
- Packages}
+\begin_layout Itemize
+a standard package format
 \end_layout
 
-\begin_layout Plain Layout
+\begin_layout Itemize
+a central repository for hosting packages of this format
+\end_layout
 
+\begin_layout Itemize
+installation & management of multiple installed versions of the same library
+\end_layout
+
+\begin_layout Itemize
+end-user tools for querying,
+ installing,
+ uninstalling & otherwise managing these packages
+\end_layout
+
+\begin_layout Standard
+In the scala world,
+ devs bundle apps.
+ Most commonly,
+ they bundle them into *jars (just like Java).
+ If the any library you request is missing,
+ when you run your projects,
+ scala-cli first checks your local cache (often somewhere like ~/.cache/coursier or ~/.ivy2),
+ and if the library you asked for isn't there it reaches out and downloads the JAR and POM (describing what the library itself needs) from *Maven Central*.
+ It uses this same approach recursively on the packages required by each package until all the needed code is on the local machine.
+\end_layout
+
+\begin_layout Standard
+In the scala-cli world,
+ devs package their libraries and applications into JARs with POMs.
+ These conform to a standardized format,
+ and the scala-cli tool provides a great way for manipulating them.
+ 
+\end_layout
+
+\begin_layout Subsection*
+The Internal Structure:
+ Packages
+\end_layout
+
+\begin_layout Standard
 As we touched on in Chapter 9,
  packages are the "folders" of your logic.
  They prevent name collisions and organize your code into logical domains.
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-begin{verbatim}
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 package io.startup.renaissance.auth
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 class Authenticator:
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
   def login() = ???
 \end_layout
 
-\begin_layout Plain Layout
-
-
-\backslash
-end{verbatim}
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout Standard
 The 
-\backslash
-textbf{Pragmatic} rule:
+\series bold
+Pragmatic
+\series default
+ rule:
  Your package names should usually mirror your folder structure (e.g.,
  
-\backslash
-texttt{src/auth/Authenticator.scala}),
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+src/auth/Authenticator.scala
+\end_layout
+
+\end_inset
+
+),
  making it easy for developers to find files just by looking at the import statements.
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout Subsection*
+The project.scala File:
+ The Source of Truth
 \end_layout
 
-\begin_layout Plain Layout
-
-
-\backslash
-subsection*{The project.scala File:
- The Source of Truth}
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout Standard
 Instead of scattering settings across multiple files,
  we centralize everything in 
-\backslash
-texttt{project.scala}.
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+project.scala
+\end_layout
+
+\end_inset
+
+.
  This is your manifest.
  It tells 
-\backslash
-texttt{scala-cli} who you are,
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+scala-cli
+\end_layout
+
+\end_inset
+
+ who you are,
  what version you’re on,
  and what you need.
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-begin{verbatim}
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 //> using scala "3.3.1"
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 //> using dep "com.softwaremill.sttp.client3::core:3.9.0"
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 //> using dep "org.tpolecat::doobie-core:1.0.0-RC4"
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 // Publishing metadata
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 //> using publish.name "renaissance-core"
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 //> using publish.organization "io.startup"
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 //> using publish.version "0.1.0"
 \end_layout
 
-\begin_layout Plain Layout
-
-
-\backslash
-end{verbatim}
+\begin_layout Standard
+This will automatically ensure these libraries have what they need and are themselves installed the next time you run.
 \end_layout
 
-\begin_layout Plain Layout
+\begin_layout Standard
+Alternatively,
+ when running a scala script,
+ you can add –dep arguments detailing the libraries required.
+\end_layout
+
+\begin_layout Subsection*
+Documentation
+\end_layout
+
+\begin_layout Standard
+When you build documentation for your application,
+ the tool is smart – it will look at the //> using dep lines and try to link to official documentation for those libraries.
+\end_layout
+
+\begin_layout Subsection*
+Creating your Own Libraries
+\end_layout
+
+\begin_layout Standard
+So,
+ we established that using external libraries with scala (from Maven Central) is powerful and easy.
+ It would be nice if we could create our own to help structure our code and allow others to use them.
+ Let's take a look at that.
+\end_layout
+
+\begin_layout Standard
+Let's say our startup tracking app is in a nice,
+ finished state.
+ Wouldn't it be nice if we could make it available for others?
+\end_layout
+
+\begin_layout Subsection*
+Package Layout
+\end_layout
+
+\begin_layout Standard
+The nice thing about scala is that it is refreshingly flat and clear – there's not a lot you need to do to your project in order to be able to package it.
+ For our project,
+ here's what we might look like:
+\begin_inset Newline newline
+\end_inset
+
 
 \end_layout
 
-\begin_layout Plain Layout
-
-
-\backslash
-subsection*{Creating an Executable (Fat JARs)}
+\begin_layout Standard
+renaissance-project/
 \end_layout
 
-\begin_layout Plain Layout
+\begin_layout Standard
+├── project.scala <-- Best practice:
+ centralize your "using" directives here
+\end_layout
 
+\begin_layout Standard
+└── main.scala <-- Your @main entry point
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Our project.scala would contain 
+\begin_inset Quotes eld
+\end_inset
+
+build
+\begin_inset Quotes erd
+\end_inset
+
+ configuration code like:
+\end_layout
+
+\begin_layout LyX-Code
+//> using scala 3.x
+\end_layout
+
+\begin_layout LyX-Code
+//> using dep com.softwaremill.sttp.client3::core:3.9.11
+\end_layout
+
+\begin_layout LyX-Code
+//> using dep org.tpolecat::doobie-core:1.0.0-RC5
+\end_layout
+
+\begin_layout LyX-Code
+//> using dep org.postgresql:postgresql:42.7.2
+\end_layout
+
+\begin_layout Standard
+The main.scala would create our application code,
+ cleared of all the configration code.
+\end_layout
+
+\begin_layout Standard
+If we wanted to put scala code in folders,
+ the scala-cli will automatically detect those as well.
+ We could add data models to a 
+\begin_inset Quotes eld
+\end_inset
+
+/models
+\begin_inset Quotes erd
+\end_inset
+
+ folder,
+ for example,
+ to keep things tidy.
+\end_layout
+
+\begin_layout Standard
+On top of that.
+ should you have resource files (If your Doobie setup requires raw .sql files or your sttp client needs a logback.xml for logging,
+ for example),
+ you should use a /resources folder,
+ and place them in ther.
+\end_layout
+
+\begin_layout Standard
+Once our files are structured properly,
+ we could run 
+\end_layout
+
+\begin_layout LyX-Code
+scala-cli package .
+\end_layout
+
+\begin_layout Standard
+to grab every scala file (including in subfolders) and compile them together.
+\end_layout
+
+\begin_layout Subsection*
+Creating an Executable (Fat JARs)
+\end_layout
+
+\begin_layout Standard
 The most common way to share a Scala app is a "Fat JAR" (or Assembly).
  This is a single file that contains your code 
-\backslash
-textbf{plus} every library it needs to run (like 
-\backslash
-texttt{sttp} and 
-\backslash
-texttt{Doobie}).
-\end_layout
+\series bold
+plus
+\series default
+ every library it needs to run (like 
+\begin_inset ERT
+status open
 
 \begin_layout Plain Layout
 
+sttp
 \end_layout
+
+\end_inset
+
+ and 
+\begin_inset ERT
+status open
 
 \begin_layout Plain Layout
 
+Doobie
 \end_layout
 
-\begin_layout Plain Layout
+\end_inset
 
+).
 \end_layout
 
-\begin_layout Plain Layout
-
-
-\backslash
-begin{verbatim}
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 scala-cli package .
  --assembly -o renaissance.jar
 \end_layout
 
-\begin_layout Plain Layout
-
-
-\backslash
-end{verbatim}
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout Standard
 Now,
  anyone with a JVM can run your app with:
  
-\backslash
-texttt{java -jar renaissance.jar}.
-\end_layout
+\begin_inset ERT
+status open
 
 \begin_layout Plain Layout
 
+java -jar renaissance.jar
 \end_layout
 
-\begin_layout Plain Layout
+\end_inset
 
-
-\backslash
-subsection*{Native Binaries:
- No JVM Required}
+.
 \end_layout
 
-\begin_layout Plain Layout
+\begin_layout Subsection*
+Native Binaries:
+ No JVM Required
+\end_layout
 
+\begin_layout Standard
 For CLI tools where you want "instant-on" performance,
  you can package your app as a native binary.
  This uses GraalVM to compile your Scala code down to machine code (like C++ or Go).
 \end_layout
 
-\begin_layout Plain Layout
+\begin_layout Standard
 
 \end_layout
 
-\begin_layout Plain Layout
-
-
-\backslash
-begin{verbatim}
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 scala-cli package .
  --native-image -o renaissance
 \end_layout
 
-\begin_layout Plain Layout
-
-
-\backslash
-end{verbatim}
-\end_layout
-
-\begin_layout Plain Layout
+\begin_layout Standard
 
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout Standard
 This produces a file that runs natively on the target OS,
  with no Java installation required by the end-user.
 \end_layout
 
-\begin_layout Plain Layout
+\begin_layout Standard
 
 \end_layout
 
-\begin_layout Plain Layout
-
-
-\backslash
-subsection*{Publishing to the World}
+\begin_layout Subsection*
+Publishing Specifications
 \end_layout
 
-\begin_layout Plain Layout
+\begin_layout Standard
+In our project.scala file,
+ we can give details that get associated with the package you are publishing:
+\end_layout
 
+\begin_layout LyX-Code
+//> using publish.organization "io.github.renaissance"
+\end_layout
+
+\begin_layout LyX-Code
+//> using publish.name "renaissance-core"
+\end_layout
+
+\begin_layout LyX-Code
+//> using publish.version "0.1.0"
+\end_layout
+
+\begin_layout LyX-Code
+//> using publish.url "https://github.com/your-repo/renaissance"
+\end_layout
+
+\begin_layout LyX-Code
+//> using publish.license "Apache-2.0"
+\end_layout
+
+\begin_layout LyX-Code
+//> using publish.developer "YourName|YourEmail|https://your-website.com"
+\end_layout
+
+\begin_layout LyX-Code
+// Point to the modern Sonatype portal
+\end_layout
+
+\begin_layout LyX-Code
+//> using publish.repository "central-s01"
+\end_layout
+
+\begin_layout Standard
+To publish publicly,
+ to get yourself ready,
+ you can run the following command to get setup:
+\end_layout
+
+\begin_layout LyX-Code
+scala-cli --power publish setup .
+\end_layout
+
+\begin_layout Subsection*
+Adding Tests
+\end_layout
+
+\begin_layout Standard
+Any good package will need to be sufficiently tested just out of good manners.
+ Just like our source,
+ the layout is very flexible.
+ 
+\end_layout
+
+\begin_layout Standard
+Any file ending in the suffix .test.scala is automatically treated as a test source.
+ Running:
+\end_layout
+
+\begin_layout LyX-Code
+scala-cli test .
+\end_layout
+
+\begin_layout Standard
+will run every test.
+\end_layout
+
+\begin_layout Standard
+Tests should either be kept next to the source logic they are testing,
+ or in a tests/ subfolder.
+\end_layout
+
+\begin_layout Standard
+Note that in project.scala,
+ we will want to add:
+\end_layout
+
+\begin_layout LyX-Code
+// This is only downloaded/used when running 'scala-cli test'
+\end_layout
+
+\begin_layout LyX-Code
+//> using test.dep org.scalameta::munit::1.0.2
+\end_layout
+
+\begin_layout Standard
+Which,
+ as state,
+ will only be used when testing.
+ This states we are using MUnit,
+ which is a modern,
+ lightweight,
+ and has great integration wil sttp's Future and IO responses.
+\end_layout
+
+\begin_layout Subsection*
+Publishing to the World
+\end_layout
+
+\begin_layout Standard
 If you’ve built a library that others should use,
  you’ll want to "publish" it to a repository (like Maven Central or a private GitHub Packages repo).
  
-\backslash
-texttt{scala-cli} makes this surprisingly simple:
 \end_layout
+
+\begin_layout Standard
+To get set up,
+ we will first need to do a few things:
+\end_layout
+
+\begin_layout Standard
+- Create a Sonatype Account:
+ Sign up at the Maven Central Portal.
+\end_layout
+
+\begin_layout Standard
+- Claim your Namespace:
+ You must prove you own the domain (e.g.,
+ io.github.yourusername or com.yourdomain).
+ Sonatype will ask you to create a specific DNS TXT record or a public GitHub repo to verify ownership.
+\end_layout
+
+\begin_layout Standard
+- Set up a gpg key:
+\end_layout
+
+\begin_layout LyX-Code
+# Generate your key
+\end_layout
+
+\begin_layout LyX-Code
+gpg --gen-key
+\end_layout
+
+\begin_layout LyX-Code
+# List it to find your Key ID
+\end_layout
+
+\begin_layout LyX-Code
+gpg --list-keys
+\end_layout
+
+\begin_layout LyX-Code
+# Send it to a public server so Maven can verify it
+\end_layout
+
+\begin_layout LyX-Code
+gpg --keyserver keyserver.ubuntu.com --send-keys YOUR_KEY_ID
+\end_layout
+
+\begin_layout Standard
+You will also need to setup passwords:
+\end_layout
+
+\begin_layout LyX-Code
+scala-cli config publish.credentials central-s01 env:SONATYPE_USER env:SONATYPE_PASSWORD
+\end_layout
+
+\begin_layout Standard
+But when it comes to actually publishgin,
+ 
+\begin_inset ERT
+status open
 
 \begin_layout Plain Layout
 
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-begin{verbatim}
-\end_layout
-
-\begin_layout Plain Layout
-
-# This prepares your library for a repository
-\end_layout
-
-\begin_layout Plain Layout
-
-scala-cli publish .
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-end{verbatim}
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-subsection*{Managing Versions with "Directives"}
-\end_layout
-
-\begin_layout Plain Layout
-
-One of Scala’s greatest strengths is "Typelevel" versioning.
- When you see a double colon 
-\backslash
-texttt{::} in a dependency,
- it tells Scala to look for the version of the library that matches your specific Scala version.
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-begin{itemize}
-\end_layout
-
-\begin_layout Plain Layout
-
-    
-\backslash
-item 
-\backslash
-texttt{com.lihaoyi::pprint:0.8.1} $
-\backslash
-rightarrow$ "Get me the version of pprint built for Scala 3."
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-end{itemize}
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
+scala-cli
 \end_layout
 
 \end_inset
 
+ makes this surprisingly simple:
+\end_layout
 
+\begin_layout LyX-Code
+# This prepares your library for a repository
+\end_layout
+
+\begin_layout LyX-Code
+scala-cli publish .
+\end_layout
+
+\begin_layout Subsection*
+Managing Versions with "Directives"
+\end_layout
+
+\begin_layout Standard
+One of Scala’s greatest strengths is "Typelevel" versioning.
+ When you see a double colon 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+::
+\end_layout
+
+\end_inset
+
+ in a dependency,
+ it tells Scala to look for the version of the library that matches your specific Scala version.
+\end_layout
+
+\begin_layout Itemize
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+com.lihaoyi::pprint:0.8.1
+\end_layout
+
+\end_inset
+
+ $>$ "Get me the version of pprint built for Scala 3."
 \end_layout
 
 \end_body
