@@ -89,52 +89,33 @@
 \begin_body
 
 \begin_layout Standard
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-section*{Chapter 16:
- Driving the Web}
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
 Scala's web ecosystem is built for scale,
  but modern tools like 
-\backslash
-texttt{Tapir} and 
-\backslash
-texttt{sttp} ensure that "scale" doesn't mean "complexity." In this chapter,
+\family typewriter
+Tapir
+\family default
+ and 
+\family typewriter
+sttp
+\family default
+ ensure that "scale" doesn't mean "complexity." In this chapter,
  we move beyond scripts and into the world of REST APIs and HTTP services.
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout Subsection*
+The Tapir Philosophy:
+ Endpoints as Values
 \end_layout
 
-\begin_layout Plain Layout
-
-
-\backslash
-subsection*{The Tapir Philosophy:
- Endpoints as Values}
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout Standard
 In most frameworks,
  an endpoint is a function.
  In Scala,
  an endpoint is a 
-\backslash
-textbf{value}.
+\family typewriter
+value
+\family default
+.
  This means you can describe your API (its inputs,
  outputs,
  and errors) once,
@@ -143,754 +124,421 @@ textbf{value}.
  and documentation.
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-begin{verbatim}
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 import sttp.tapir.*
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 import sttp.tapir.json.zio.* // Define the "Shape" of your endpoint
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 val helloEndpoint = endpoint.get
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
   .in("hello")
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
   .in(query[String]("name"))
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
   .out(stringBody)
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
   .errorOut(stringBody)
 \end_layout
 
-\begin_layout Plain Layout
-
-
-\backslash
-end{verbatim}
+\begin_layout Subsection*
+Serving the API
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-subsection*{Serving the API}
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout Standard
 Once the shape is defined,
  you simply "bind" logic to it.
  Because we are using 
-\backslash
-texttt{sttp} for HTTP,
+\family typewriter
+sttp
+\family default
+ for HTTP,
  the transition from definition to execution is seamless.
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-begin{verbatim}
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 val helloLogic = helloEndpoint.serverLogic { name =>
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
   if (name.isEmpty) Future.successful(Left("Name cannot be empty"))
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
   else Future.successful(Right(s"Hello,
  $name!
  Welcome to Renaissance."))
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 }
 \end_layout
 
-\begin_layout Plain Layout
-
-
-\backslash
-end{verbatim}
+\begin_layout Subsection*
+The JSON Connection
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-subsection*{The JSON Connection}
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout Standard
 Scala excels at Case Class to JSON conversion.
  By using a library like 
-\backslash
-texttt{ZIO-JSON},
+\family typewriter
+ZIO-JSON
+\family default
+,
  you can send and receive complex objects without manual parsing.
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-begin{verbatim}
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 case class CompanyStats(name:
  String,
  revenue:
  Int)
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 // Tapir handles JSON conversion based on your case class
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 val statsEndpoint = endpoint.get
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
   .in("stats" / path[String]("orgId"))
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
   .out(jsonBody[CompanyStats])
 \end_layout
 
-\begin_layout Plain Layout
-
-
-\backslash
-end{verbatim}
+\begin_layout Subsection*
+Connecting the Database:
+ Doobie in the Web
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-subsection*{Connecting the Database:
- Doobie in the Web}
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout Standard
 A web app is only as good as its data.
  Following our project standard,
  we use 
-\backslash
-textbf{Doobie} to bridge the gap between our endpoints and our SQL store.
+\family typewriter
+Doobie
+\family default
+ to bridge the gap between our endpoints and our SQL store.
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-begin{verbatim}
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 import doobie.*
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 import doobie.implicits.*
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 def getStats(orgId:
  String):
  ConnectionIO[CompanyStats] =
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
   sql"SELECT name,
  revenue FROM organizations WHERE id = $orgId"
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
     .query[CompanyStats]
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
     .unique
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 // In your server logic,
  you run the Doobie program:
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 val statsLogic = statsEndpoint.serverLogic { id =>
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
   getStats(id).transact(xa).map(Right(_))
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 }
 \end_layout
 
-\begin_layout Plain Layout
-
-
-\backslash
-end{verbatim}
+\begin_layout Subsection*
+Automatic Documentation
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-subsection*{Automatic Documentation}
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout Standard
 Because your endpoints are values,
  Scala can look at them and generate an OpenAPI/Swagger UI automatically.
  
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-begin{verbatim}
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 import sttp.tapir.swagger.bundle.SwaggerInterpreter
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 val swaggerEndpoints = SwaggerInterpreter()
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
   .fromEndpoints(List(helloEndpoint,
  statsEndpoint),
  "My API",
  "1.0")
 \end_layout
 
-\begin_layout Plain Layout
-
-
-\backslash
-end{verbatim}
+\begin_layout Subsection*
+Launching the Server
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-section*{Chapter 16.5:
- Launching the Server}
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout Standard
 Describing an endpoint is one thing;
  actually listening for traffic on port 8080 is another.
  To stay "Pragmatic," we want a server that is fast,
  lightweight,
  and easy to configure.
  Using the 
-\backslash
-texttt{NettyFutureServer} interpreter,
+\family typewriter
+NettyFutureServer
+\family default
+ interpreter,
  we can turn our Tapir logic into a running process.
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout Subsection*
+The Main Entry Point
 \end_layout
 
-\begin_layout Plain Layout
-
-
-\backslash
-subsection*{The Main Entry Point}
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout Standard
 Following our Scala 3 standards,
  we use the 
-\backslash
-texttt{@main} annotation to create our server's entry point.
+\family typewriter
+@main
+\family default
+ annotation to create our server's entry point.
  This script pulls everything together:
  your endpoints,
  your logic,
  and the server engine.
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-begin{verbatim}
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 import sttp.tapir.server.netty.NettyFutureServer
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 import scala.concurrent.ExecutionContext.Implicits.global
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 import scala.concurrent.Await
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 import scala.concurrent.duration.*
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 @main def startApi():
  Unit =
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
   // 1.
  Combine your business logic endpoints into a list
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
   val allEndpoints = List(helloLogic,
  statsLogic)
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
   
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
   // 2.
  Add the auto-generated Swagger docs to the mix
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
   val routes = allEndpoints ++ swaggerEndpoints
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
   // 3.
  Start the Netty server on port 8080
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
   val binding = NettyFutureServer()
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
     .port(8080)
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
     .addEndpoints(routes)
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
     .start()
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
   println("Renaissance Server started at http://localhost:8080")
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
   println("Documentation available at http://localhost:8080/docs")
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
   // Keep the server running
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
   Await.result(binding,
  Duration.Inf)
 \end_layout
 
-\begin_layout Plain Layout
-
-
-\backslash
-end{verbatim}
+\begin_layout Subsection*
+Summary:
+ The Web Stack
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-subsection*{Summary:
- The Web Stack}
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout Standard
 The Renaissance approach to the web favors 
-\backslash
-textbf{Types over Strings}.
+\family typewriter
+Types over Strings
+\family default
+.
 \end_layout
 
-\begin_layout Plain Layout
+\begin_layout Itemize
 
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-begin{itemize}
-\end_layout
-
-\begin_layout Plain Layout
-
-    
-\backslash
-item 
-\backslash
-textbf{High Performance}:
+\family typewriter
+High Performance
+\family default
+:
  Powered by Netty's non-blocking I/O.
 \end_layout
 
-\begin_layout Plain Layout
+\begin_layout Itemize
 
-    
-\backslash
-item 
-\backslash
-textbf{Type Safe}:
+\family typewriter
+Type Safe
+\family default
+:
  If it compiles,
  your API shapes are guaranteed.
 \end_layout
 
-\begin_layout Plain Layout
+\begin_layout Itemize
 
-    
-\backslash
-item 
-\backslash
-textbf{Interactive}:
+\family typewriter
+Interactive
+\family default
+:
  Swagger UI is generated for free.
 \end_layout
 
-\begin_layout Plain Layout
+\begin_layout Itemize
 
-    
-\backslash
-item 
-\backslash
-textbf{Zero Boilerplate}:
+\family typewriter
+Zero Boilerplate
+\family default
+:
  No XML,
  no complex config files.
 \end_layout
 
-\begin_layout Plain Layout
-
-
-\backslash
-end{itemize}
+\begin_layout Subsection*
+Running from the Command Line
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-section*{Chapter 16.6:
- Running from the Command Line}
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout Standard
 In the Renaissance ecosystem,
  we want the distance between "writing code" and "running a server" to be as short as possible.
  Because we are using 
-\backslash
-texttt{scala-cli},
+\family typewriter
+scala-cli
+\family default
+,
  you don't need to install a complex build tool or configure an IDE to see your API in action.
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout Subsection*
+The Project Configuration
 \end_layout
 
-\begin_layout Plain Layout
-
-
-\backslash
-subsection*{The Project Configuration}
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout Standard
 To ensure all the parts we've discussed (Tapir,
  Netty,
  Doobie,
  and sttp) are available,
  we create a 
-\backslash
-texttt{project.scala} file in the same directory as our source code.
+\family typewriter
+project.scala
+\family default
+ file in the same directory as our source code.
  This acts as our manifest.
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-begin{verbatim}
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 //> using scala "3.3.1"
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 //> using dep "com.softwaremill.sttp.tapir::tapir-netty-server:1.9.0"
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 //> using dep "com.softwaremill.sttp.tapir::tapir-json-zio:1.9.0"
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 //> using dep "com.softwaremill.sttp.tapir::tapir-swagger-ui-bundle:1.9.0"
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 //> using dep "com.softwaremill.sttp.client3::core:3.9.0"
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 //> using dep "org.tpolecat::doobie-core:1.0.0-RC4"
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 //> using dep "org.tpolecat::doobie-postgres:1.0.0-RC4"
 \end_layout
 
-\begin_layout Plain Layout
-
-
-\backslash
-end{verbatim}
+\begin_layout Subsection*
+Starting the Server
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-subsection*{Starting the Server}
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout Standard
 Once your code and configuration are in place,
  you can launch the server with one command.
  Scala-cli will automatically download the libraries,
@@ -900,55 +548,19 @@ Once your code and configuration are in place,
 texttt{@main} method.
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-begin{verbatim}
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 # Run the application
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 scala-cli run .
 \end_layout
 
-\begin_layout Plain Layout
-
-
-\backslash
-end{verbatim}
+\begin_layout Subsection*
+The Hot-Reload Workflow
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-subsection*{The Hot-Reload Workflow}
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout Standard
 For the best developer experience,
  use the 
 \backslash
@@ -959,123 +571,76 @@ perhaps to add a new API field or change a database query—
 the server will automatically re-compile and restart in less than a second.
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-begin{verbatim}
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 # Run with automatic restarts on save
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 scala-cli run .
  --watch
 \end_layout
 
-\begin_layout Plain Layout
-
-
-\backslash
-end{verbatim}
+\begin_layout Subsection*
+Testing the Live API
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-subsection*{Testing the Live API}
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout Standard
 Once the server reports it is "Started," you can interact with it immediately.
  You have three primary ways to verify it's working:
 \end_layout
 
-\begin_layout Plain Layout
+\begin_layout Itemize
 
-
-\backslash
-begin{enumerate}
-\end_layout
-
-\begin_layout Plain Layout
-
-    
-\backslash
-item 
-\backslash
-textbf{The Browser}:
+\series bold
+The Browser
+\series default
+:
  Visit 
-\backslash
-texttt{http://localhost:8080/docs} to see the interactive Swagger UI.
+\family typewriter
+http://localhost:8080/docs
+\family default
+ to see the interactive Swagger UI.
 \end_layout
 
-\begin_layout Plain Layout
+\begin_layout Itemize
 
-    
-\backslash
-item 
-\backslash
-textbf{The Terminal}:
+\series bold
+The Terminal
+\series default
+:
  Use 
-\backslash
-texttt{curl "http://localhost:8080/hello?name=Pragmatist"} to see a raw response.
+\family typewriter
+curl "http://localhost:8080/hello?name=Pragmatist"
+\family default
+ to see a raw response.
 \end_layout
 
-\begin_layout Plain Layout
+\begin_layout Itemize
 
-    
-\backslash
-item 
-\backslash
-textbf{The REPL}:
+\series bold
+The REPL
+\series default
+:
  Run 
-\backslash
-texttt{scala-cli repl .} and use 
-\backslash
-texttt{sttp} to call your own server programmatically.
+\family typewriter
+scala-cli repl .
+
+\family default
+ and use 
+\family typewriter
+sttp
+\family default
+ to call your own server programmatically.
 \end_layout
 
-\begin_layout Plain Layout
+\begin_layout Standard
 
-
-\backslash
-end{enumerate}
-\end_layout
-
-\begin_layout Plain Layout
-
----
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-textit{Reviewer’s Notes:
+\emph on
+Reviewer’s Notes:
  This stack represents the "Holy Trinity" of modern Scala web development.
  It’s safe,
  fast,
- and self-documenting.}
-\end_layout
-
-\end_inset
-
-
+ and self-documenting.
 \end_layout
 
 \end_body
