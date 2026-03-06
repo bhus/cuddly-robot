@@ -90,16 +90,22 @@
 
 \begin_layout Standard
 Scala's web ecosystem is built for scale,
- but modern tools like 
-\family typewriter
-Tapir
-\family default
- and 
-\family typewriter
-sttp
-\family default
- ensure that "scale" doesn't mean "complexity." In this chapter,
+ but that "scale" doesn't mean "complexity." You can write your own servers in scala,
+ but more interestingly you can serve up web logic with scala (using libraries to handle the protocol part).
+\end_layout
+
+\begin_layout Standard
+In this chapter,
  we move beyond scripts and into the world of REST APIs and HTTP services.
+ There are several options for this,
+ and we can't possibly do it all justice.
+ We will try to touch on some highlights,
+ give you a lay of the land,
+ and point you towards resources so you can explore further.
+\end_layout
+
+\begin_layout Standard
+Let's start with the simple stuff - coming up with a http server with endpoint handlers.
 \end_layout
 
 \begin_layout Subsection*
@@ -183,6 +189,482 @@ val helloLogic = helloEndpoint.serverLogic { name =>
 
 \begin_layout LyX-Code
 }
+\end_layout
+
+\begin_layout Subsection*
+Return Code
+\end_layout
+
+\begin_layout Standard
+Now,
+ web applications often don't just return plain text when they are called.
+ We have templates (often of HTML) that we like to perhaps put values into.
+ pebble templates fill this function nicely.
+\end_layout
+
+\begin_layout Standard
+We could define a template (often in resources/templates/home.html) like this:
+\end_layout
+
+\begin_layout LyX-Code
+<!DOCTYPE html>
+\end_layout
+
+\begin_layout LyX-Code
+<html>
+\end_layout
+
+\begin_layout LyX-Code
+<body>
+\end_layout
+
+\begin_layout LyX-Code
+    <h1>Welcome,
+ {{ name }}!</h1>
+\end_layout
+
+\begin_layout LyX-Code
+    <p>Status:
+ <strong>{{ status }}</strong></p>
+\end_layout
+
+\begin_layout LyX-Code
+    <ul>
+\end_layout
+
+\begin_layout LyX-Code
+        {% for item in items %}
+\end_layout
+
+\begin_layout LyX-Code
+            <li>{{ item }}</li>
+\end_layout
+
+\begin_layout LyX-Code
+        {% endfor %}
+\end_layout
+
+\begin_layout LyX-Code
+    </ul>
+\end_layout
+
+\begin_layout LyX-Code
+</body>
+\end_layout
+
+\begin_layout LyX-Code
+</html>
+\end_layout
+
+\begin_layout Standard
+In our main scala code that responds to queries,
+ we would use:
+\end_layout
+
+\begin_layout LyX-Code
+//> using scala 3.3.1
+\end_layout
+
+\begin_layout LyX-Code
+//> using dep io.pebbletemplates:pebble:3.2.2
+\end_layout
+
+\begin_layout LyX-Code
+//> using dep com.softwaremill.sttp.tapir::tapir-netty-server:1.10.0
+\end_layout
+
+\begin_layout LyX-Code
+import io.pebbletemplates.pebble.PebbleEngine
+\end_layout
+
+\begin_layout LyX-Code
+import java.io.StringWriter
+\end_layout
+
+\begin_layout LyX-Code
+import scala.jdk.CollectionConverters._
+\end_layout
+
+\begin_layout LyX-Code
+object TemplateEngine {
+\end_layout
+
+\begin_layout LyX-Code
+  val engine = new PebbleEngine.Builder().build()
+\end_layout
+
+\begin_layout LyX-Code
+  val compiledTemplate = engine.getTemplate("templates/home.html")
+\end_layout
+
+\begin_layout LyX-Code
+  def render(name:
+ String,
+ status:
+ String,
+ items:
+ List[String]):
+ String = {
+\end_layout
+
+\begin_layout LyX-Code
+    val writer = new StringWriter()
+\end_layout
+
+\begin_layout LyX-Code
+    // Pebble expects a Java Map for the context
+\end_layout
+
+\begin_layout LyX-Code
+    val context = Map(
+\end_layout
+
+\begin_layout LyX-Code
+      "name" -> name,
+\end_layout
+
+\begin_layout LyX-Code
+      "status" -> status,
+\end_layout
+
+\begin_layout LyX-Code
+      "items" -> items.asJava 
+\end_layout
+
+\begin_layout LyX-Code
+    ).asJava
+\end_layout
+
+\begin_layout LyX-Code
+    compiledTemplate.evaluate(writer,
+ context)
+\end_layout
+
+\begin_layout LyX-Code
+    writer.toString
+\end_layout
+
+\begin_layout LyX-Code
+  }
+\end_layout
+
+\begin_layout LyX-Code
+}
+\end_layout
+
+\begin_layout LyX-Code
+// Then in your Tapir server logic:
+\end_layout
+
+\begin_layout LyX-Code
+// val htmlResult = TemplateEngine.render("Gemini",
+ "Online",
+ List("sttp",
+ "Doobie"))
+\end_layout
+
+\begin_layout Standard
+Which would take the template defined and mix into some nice dynamic markup.
+\end_layout
+
+\begin_layout Subsection*
+Database the things
+\end_layout
+
+\begin_layout Standard
+In fact,
+ we could take the previous code and use a database query to return some dynamic results:
+\end_layout
+
+\begin_layout LyX-Code
+//> using scala 3.3.1
+\end_layout
+
+\begin_layout LyX-Code
+//> using dep com.softwaremill.sttp.tapir::tapir-netty-server:1.10.0
+\end_layout
+
+\begin_layout LyX-Code
+//> using dep io.pebbletemplates:pebble:3.2.2
+\end_layout
+
+\begin_layout LyX-Code
+//> using dep org.tpolecat::doobie-core:1.0.0-RC5
+\end_layout
+
+\begin_layout LyX-Code
+//> using dep org.postgresql:postgresql:42.7.2
+\end_layout
+
+\begin_layout LyX-Code
+import sttp.tapir._
+\end_layout
+
+\begin_layout LyX-Code
+import sttp.tapir.server.netty.NettyFutureServer
+\end_layout
+
+\begin_layout LyX-Code
+import io.pebbletemplates.pebble.PebbleEngine
+\end_layout
+
+\begin_layout LyX-Code
+import doobie._
+\end_layout
+
+\begin_layout LyX-Code
+import doobie.implicits._
+\end_layout
+
+\begin_layout LyX-Code
+import cats.effect.unsafe.implicits.global
+\end_layout
+
+\begin_layout LyX-Code
+import scala.concurrent.ExecutionContext.Implicits.global
+\end_layout
+
+\begin_layout LyX-Code
+import scala.concurrent.Future
+\end_layout
+
+\begin_layout LyX-Code
+import java.io.StringWriter
+\end_layout
+
+\begin_layout LyX-Code
+import scala.jdk.CollectionConverters._
+\end_layout
+
+\begin_layout LyX-Code
+object Main extends App {
+\end_layout
+
+\begin_layout LyX-Code
+  // 1.
+ Setup Doobie (The Database)
+\end_layout
+
+\begin_layout LyX-Code
+  val xa = Transactor.fromDriverManager[cats.effect.IO](
+\end_layout
+
+\begin_layout LyX-Code
+    "org.postgresql.Driver",
+ "jdbc:postgresql:renaissance",
+ "user",
+ "pass"
+\end_layout
+
+\begin_layout LyX-Code
+  )
+\end_layout
+
+\begin_layout LyX-Code
+  // 2.
+ Setup Pebble (The Template Engine)
+\end_layout
+
+\begin_layout LyX-Code
+  val engine = new PebbleEngine.Builder().build()
+\end_layout
+
+\begin_layout LyX-Code
+  val compiledTemplate = engine.getTemplate("templates/home.html")
+\end_layout
+
+\begin_layout LyX-Code
+  // 3.
+ Define the Web Endpoint
+\end_layout
+
+\begin_layout LyX-Code
+  val indexEndpoint = endpoint.get
+\end_layout
+
+\begin_layout LyX-Code
+    .in("welcome" / path[String]("name"))
+\end_layout
+
+\begin_layout LyX-Code
+    .out(htmlBody) // Tells Tapir to set Content-Type:
+ text/html
+\end_layout
+
+\begin_layout LyX-Code
+    .handle { name =>
+\end_layout
+
+\begin_layout LyX-Code
+      // A.
+ Fetch data from DB using Doobie
+\end_layout
+
+\begin_layout LyX-Code
+      val dbAction = sql"SELECT item_name FROM inventory".query[String].to[List].transact(xa)
+\end_layout
+
+\begin_layout LyX-Code
+      
+\end_layout
+
+\begin_layout LyX-Code
+      // B.
+ Run DB action and render template
+\end_layout
+
+\begin_layout LyX-Code
+      val items = dbAction.unsafeRunSync() // Simple sync for this example
+\end_layout
+
+\begin_layout LyX-Code
+      
+\end_layout
+
+\begin_layout LyX-Code
+      val writer = new StringWriter()
+\end_layout
+
+\begin_layout LyX-Code
+      val context = Map("name" -> name,
+ "items" -> items.asJava).asJava
+\end_layout
+
+\begin_layout LyX-Code
+      compiledTemplate.evaluate(writer,
+ context)
+\end_layout
+
+\begin_layout LyX-Code
+      
+\end_layout
+
+\begin_layout LyX-Code
+      Future.successful(Right(writer.toString))
+\end_layout
+
+\begin_layout LyX-Code
+    }
+\end_layout
+
+\begin_layout LyX-Code
+  // 4.
+ Run the Server
+\end_layout
+
+\begin_layout LyX-Code
+  println("Server online at http://localhost:8080/welcome/Gemini")
+\end_layout
+
+\begin_layout LyX-Code
+  NettyFutureServer().addEndpoint(indexEndpoint).start()
+\end_layout
+
+\begin_layout LyX-Code
+}
+\end_layout
+
+\begin_layout Standard
+We will talk about this more below.
+\end_layout
+
+\begin_layout Subsection*
+Query Parameters
+\end_layout
+
+\begin_layout Standard
+Query parameters are tacked on to endpoints:
+\end_layout
+
+\begin_layout LyX-Code
+// Matches:
+ /welcome?name=Gemini&age=25
+\end_layout
+
+\begin_layout LyX-Code
+val welcomeEndpoint = endpoint.get
+\end_layout
+
+\begin_layout LyX-Code
+  .in("welcome")
+\end_layout
+
+\begin_layout LyX-Code
+  .in(query[String]("name")) // Mandatory
+\end_layout
+
+\begin_layout LyX-Code
+  .in(query[Int]("age"))    // Mandatory (will error if not a number)
+\end_layout
+
+\begin_layout LyX-Code
+  .out(htmlBody)
+\end_layout
+
+\begin_layout LyX-Code
+  .handle { (name,
+ age) => 
+\end_layout
+
+\begin_layout LyX-Code
+    // Tapir passes them as a tuple to your handler
+\end_layout
+
+\begin_layout LyX-Code
+    Future.successful(Right(TemplateEngine.render(name,
+ age)))
+\end_layout
+
+\begin_layout LyX-Code
+  }
+\end_layout
+
+\begin_layout Standard
+By default,
+ these will be mandatory.
+ However,
+ we can also take optional parameters:
+\end_layout
+
+\begin_layout LyX-Code
+// Matches:
+ /items or /items?category=books
+\end_layout
+
+\begin_layout LyX-Code
+val itemsEndpoint = endpoint.get
+\end_layout
+
+\begin_layout LyX-Code
+  .in("items")
+\end_layout
+
+\begin_layout LyX-Code
+  .in(query[Option[String]]("category")) 
+\end_layout
+
+\begin_layout LyX-Code
+  .handle { categoryOpt =>
+\end_layout
+
+\begin_layout LyX-Code
+    // categoryOpt will be Some("books") or None
+\end_layout
+
+\begin_layout LyX-Code
+    val category = categoryOpt.getOrElse("all")
+\end_layout
+
+\begin_layout LyX-Code
+    // Use Doobie to fetch based on category...
+\end_layout
+
+\begin_layout LyX-Code
+    Future.successful(Right(renderItems(category)))
+\end_layout
+
+\begin_layout LyX-Code
+  }
 \end_layout
 
 \begin_layout Subsection*
@@ -282,6 +764,345 @@ val statsLogic = statsEndpoint.serverLogic { id =>
 \end_layout
 
 \begin_layout Subsection*
+Cookies
+\end_layout
+
+\begin_layout Standard
+Cookies are a way for web apps to store state.
+ They are useful to store session information,
+ for example.
+\end_layout
+
+\begin_layout Standard
+Reading cookie values is pretty straightforward:
+\end_layout
+
+\begin_layout LyX-Code
+val dashboardEndpoint = endpoint.get
+\end_layout
+
+\begin_layout LyX-Code
+  .in("dashboard")
+\end_layout
+
+\begin_layout LyX-Code
+  .in(cookie[Option[String]]("session_token")) // Optional cookie
+\end_layout
+
+\begin_layout LyX-Code
+  .handle { 
+\end_layout
+
+\begin_layout LyX-Code
+    case Some(token) => 
+\end_layout
+
+\begin_layout LyX-Code
+      // Verify token in your Doobie database
+\end_layout
+
+\begin_layout LyX-Code
+      Future.successful(Right(s"Welcome back!
+ Your token is $token"))
+\end_layout
+
+\begin_layout LyX-Code
+    case None => 
+\end_layout
+
+\begin_layout LyX-Code
+      Future.successful(Left("Please log in."))
+\end_layout
+
+\begin_layout LyX-Code
+  }
+\end_layout
+
+\begin_layout Standard
+Writing cookie values is equally simple:
+\end_layout
+
+\begin_layout LyX-Code
+import sttp.model.headers.CookieValueWithMeta
+\end_layout
+
+\begin_layout LyX-Code
+val loginEndpoint = endpoint.post
+\end_layout
+
+\begin_layout LyX-Code
+  .in("login")
+\end_layout
+
+\begin_layout LyX-Code
+  .out(setCookie("session_token")) // This header will be sent to the browser
+\end_layout
+
+\begin_layout LyX-Code
+  .handle { _ =>
+\end_layout
+
+\begin_layout LyX-Code
+    val cookieValue = CookieValueWithMeta.safe("xyz-123-abc")
+\end_layout
+
+\begin_layout LyX-Code
+      .expires(java.time.Instant.now().plusSeconds(3600)) // 1 hour
+\end_layout
+
+\begin_layout LyX-Code
+      .httpOnly(true) // Security best practice
+\end_layout
+
+\begin_layout LyX-Code
+      .secure(true)   // Only sent over HTTPS
+\end_layout
+
+\begin_layout LyX-Code
+    
+\end_layout
+
+\begin_layout LyX-Code
+    Future.successful(Right(cookieValue))
+\end_layout
+
+\begin_layout LyX-Code
+  }
+\end_layout
+
+\begin_layout Subsection*
+Sessions
+\end_layout
+
+\begin_layout Standard
+Session info is really what we want – it powers the majority of web applicatins.
+ Sessions emulate hashlike behaviour.
+\end_layout
+
+\begin_layout Standard
+In our case ,we need to do a couple of things manually to support sessions.
+\end_layout
+
+\begin_layout Standard
+First,
+ we'll need to create a table:
+\end_layout
+
+\begin_layout LyX-Code
+CREATE TABLE sessions (
+\end_layout
+
+\begin_layout LyX-Code
+    id VARCHAR PRIMARY KEY,
+\end_layout
+
+\begin_layout LyX-Code
+    user_id INT NOT NULL,
+\end_layout
+
+\begin_layout LyX-Code
+    data JSONB,
+ -- You can store JSON here
+\end_layout
+
+\begin_layout LyX-Code
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+\end_layout
+
+\begin_layout LyX-Code
+);
+\end_layout
+
+\begin_layout Standard
+Then,
+ define exactly what it is we want to store.
+ In our case,
+ we will just store a few details about the session:
+\end_layout
+
+\begin_layout LyX-Code
+import io.circe.generic.auto._
+\end_layout
+
+\begin_layout LyX-Code
+import io.circe.syntax._
+\end_layout
+
+\begin_layout LyX-Code
+import io.circe.parser._
+\end_layout
+
+\begin_layout LyX-Code
+case class UserSession(
+\end_layout
+
+\begin_layout LyX-Code
+  username:
+ String,
+\end_layout
+
+\begin_layout LyX-Code
+  isAdmin:
+ Boolean,
+\end_layout
+
+\begin_layout LyX-Code
+  lastLogin:
+ String,
+\end_layout
+
+\begin_layout LyX-Code
+  theme:
+ String
+\end_layout
+
+\begin_layout LyX-Code
+)
+\end_layout
+
+\begin_layout Standard
+Now,
+ on login,
+ store the data to the db:
+\end_layout
+
+\begin_layout LyX-Code
+import java.util.UUID
+\end_layout
+
+\begin_layout LyX-Code
+import sttp.model.headers.CookieValueWithMeta
+\end_layout
+
+\begin_layout LyX-Code
+val loginEndpoint = endpoint.post
+\end_layout
+
+\begin_layout LyX-Code
+  .in("login")
+\end_layout
+
+\begin_layout LyX-Code
+  .out(setCookie("session_id"))
+\end_layout
+
+\begin_layout LyX-Code
+  .handle { _ =>
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+    val sessionData = UserSession("alice",
+ true,
+ "2026-03-05",
+ "dark")
+\end_layout
+
+\begin_layout LyX-Code
+    val sessionId = UUID.randomUUID().toString
+\end_layout
+
+\begin_layout LyX-Code
+    // Doobie turns the case class into a JSON string (using Circe)
+\end_layout
+
+\begin_layout LyX-Code
+    val action = sql"""
+\end_layout
+
+\begin_layout LyX-Code
+      INSERT INTO sessions (id,
+ data) 
+\end_layout
+
+\begin_layout LyX-Code
+      VALUES ($sessionId,
+ ${sessionData.asJson.noSpaces})
+\end_layout
+
+\begin_layout LyX-Code
+    """.update.run.transact(xa)
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+  }
+\end_layout
+
+\begin_layout Standard
+Now we can lookup the session data by session_id from the cookie and use it in response when we are logged in:
+\end_layout
+
+\begin_layout LyX-Code
+val profileEndpoint = endpoint.get
+\end_layout
+
+\begin_layout LyX-Code
+  .in("profile")
+\end_layout
+
+\begin_layout LyX-Code
+  .in(cookie[String]("session_id"))
+\end_layout
+
+\begin_layout LyX-Code
+  .handle { sessionId =>
+\end_layout
+
+\begin_layout LyX-Code
+    // 1.
+ Fetch the JSON string from DB
+\end_layout
+
+\begin_layout LyX-Code
+    val jsonString = sql"SELECT data FROM sessions WHERE id = $sessionId"
+\end_layout
+
+\begin_layout LyX-Code
+      .query[String].unique.transact(xa).unsafeRunSync()
+\end_layout
+
+\begin_layout LyX-Code
+    // 2.
+ Turn the JSON string back into our Scala case class
+\end_layout
+
+\begin_layout LyX-Code
+    decode[UserSession](jsonString) match {
+\end_layout
+
+\begin_layout LyX-Code
+      case Right(session) => 
+\end_layout
+
+\begin_layout LyX-Code
+        Future.successful(Right(s"Hello ${session.username},
+ you are using ${session.theme} mode."))
+\end_layout
+
+\begin_layout LyX-Code
+      case Left(_) => 
+\end_layout
+
+\begin_layout LyX-Code
+        Future.successful(Left("Session corrupted"))
+\end_layout
+
+\begin_layout LyX-Code
+    }
+\end_layout
+
+\begin_layout LyX-Code
+  }
+\end_layout
+
+\begin_layout Subsection*
 Automatic Documentation
 \end_layout
 
@@ -339,88 +1160,7 @@ Following our Scala 3 standards,
  your endpoints,
  your logic,
  and the server engine.
-\end_layout
-
-\begin_layout LyX-Code
-import sttp.tapir.server.netty.NettyFutureServer
-\end_layout
-
-\begin_layout LyX-Code
-import scala.concurrent.ExecutionContext.Implicits.global
-\end_layout
-
-\begin_layout LyX-Code
-import scala.concurrent.Await
-\end_layout
-
-\begin_layout LyX-Code
-import scala.concurrent.duration.*
-\end_layout
-
-\begin_layout LyX-Code
-@main def startApi():
- Unit =
-\end_layout
-
-\begin_layout LyX-Code
-  // 1.
- Combine your business logic endpoints into a list
-\end_layout
-
-\begin_layout LyX-Code
-  val allEndpoints = List(helloLogic,
- statsLogic)
-\end_layout
-
-\begin_layout LyX-Code
-  
-\end_layout
-
-\begin_layout LyX-Code
-  // 2.
- Add the auto-generated Swagger docs to the mix
-\end_layout
-
-\begin_layout LyX-Code
-  val routes = allEndpoints ++ swaggerEndpoints
-\end_layout
-
-\begin_layout LyX-Code
-  // 3.
- Start the Netty server on port 8080
-\end_layout
-
-\begin_layout LyX-Code
-  val binding = NettyFutureServer()
-\end_layout
-
-\begin_layout LyX-Code
-    .port(8080)
-\end_layout
-
-\begin_layout LyX-Code
-    .addEndpoints(routes)
-\end_layout
-
-\begin_layout LyX-Code
-    .start()
-\end_layout
-
-\begin_layout LyX-Code
-  println("Renaissance Server started at http://localhost:8080")
-\end_layout
-
-\begin_layout LyX-Code
-  println("Documentation available at http://localhost:8080/docs")
-\end_layout
-
-\begin_layout LyX-Code
-  // Keep the server running
-\end_layout
-
-\begin_layout LyX-Code
-  Await.result(binding,
- Duration.Inf)
+ 
 \end_layout
 
 \begin_layout Subsection*
