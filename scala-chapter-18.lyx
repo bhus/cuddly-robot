@@ -88,330 +88,386 @@
 
 \begin_body
 
+\begin_layout Subsection*
+Java Interoperability
+\end_layout
+
 \begin_layout Standard
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-section*{Chapter 17:
- The Java Bridge}
+One of Scala’s greatest strengths is its zero-overhead interoperability with Java.
+ Because Scala and Java both run on the JVM and share the same underlying type system at the bytecode level,
+ a Java class is simply another type to Scala.
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout Standard
+There is no need for wrappers,
+ foreign function interfaces (FFIs),
+ or translation layers.
+ Scala code can call Java libraries directly and extend Java classes without any additional glue code.
 \end_layout
 
-\begin_layout Plain Layout
-
-One of Scala’s greatest strengths is its "Zero-Overhead" interoperability with Java.
- You don't need a wrapper,
- a foreign function interface (FFI),
- or a translation layer.
- To Scala,
- a Java class is just another type.
+\begin_layout Standard
+This interoperability is strategically important.
+ It gives Scala developers immediate access to more than twenty-five years of mature JVM libraries.
+ If a Scala-specific library does not exist for a task,
+ the Java equivalent can usually be used without modification.
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout Subsection*
+Using Java Libraries from Scala
 \end_layout
 
-\begin_layout Plain Layout
-
-
-\backslash
-subsection*{Is it Necessary?}
+\begin_layout Standard
+Calling Java code from Scala is completely transparent.
+ You import the classes and use them just as you would in Java.
 \end_layout
 
-\begin_layout Plain Layout
-
-Technically,
- no.
- Scala can do everything Java can do (and usually more concisely).
- However,
- it is 
-\backslash
-textbf{strategically vital} because it gives you instant access to 25 years of JVM libraries.
- If there isn't a Scala-specific library for a task,
- you can use the Java one without a second thought.
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-subsection*{Using Java from Scala}
-\end_layout
-
-\begin_layout Plain Layout
-
-Using a Java library in Scala is transparent.
- You import it and call it exactly like Scala code.
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-begin{verbatim}
-\end_layout
-
-\begin_layout Plain Layout
-
-// Using the standard Java Time API inside Scala
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 import java.time.LocalDateTime
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 import java.time.format.DateTimeFormatter
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 val now = LocalDateTime.now()
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 val formatted = now.format(DateTimeFormatter.ISO_DATE)
 \end_layout
 
-\begin_layout Plain Layout
-
-
-\backslash
-end{verbatim}
+\begin_layout Standard
+Because the runtime is shared,
+ Java libraries often feel like a natural extension of the Scala language.
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout Subsection*
+Extending Java Classes in Scala
 \end_layout
 
-\begin_layout Plain Layout
-
-
-\backslash
-subsection*{Extending Scala with Java Classes}
+\begin_layout Standard
+Scala classes can directly extend Java classes or implement Java interfaces.
+ This is particularly useful when working with frameworks that expect subclassing.
 \end_layout
 
-\begin_layout Plain Layout
-
-Sometimes you might want to write a high-performance routine in Java or use a Java-based framework that requires you to extend its classes.
- Scala handles this effortlessly.
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-begin{verbatim}
-\end_layout
-
-\begin_layout Plain Layout
-
-// A Scala class extending a Java Base Class
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 class MyServlet extends javax.servlet.http.HttpServlet:
 \end_layout
 
-\begin_layout Plain Layout
-
-  override def doGet(req:
+\begin_layout LyX-Code
+override def doGet(req:
  HttpServletRequest,
  resp:
  HttpServletResponse):
  Unit =
 \end_layout
 
-\begin_layout Plain Layout
-
-    resp.getWriter.write("Hello from Scala via Java Servlet!")
+\begin_layout LyX-Code
+resp.getWriter.write("Hello from Scala via Java Servlet!")
 \end_layout
 
-\begin_layout Plain Layout
-
-
-\backslash
-end{verbatim}
+\begin_layout Standard
+Scala compiles to standard JVM bytecode,
+ which allows Java frameworks to treat Scala classes exactly like Java ones.
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout Subsection*
+Collection Interoperability
 \end_layout
 
-\begin_layout Plain Layout
-
-
-\backslash
-subsection*{The "Pragmatic" Conversion:
- Java Converters}
+\begin_layout Standard
+The primary friction between Java and Scala arises from their collection libraries.
+ A java.util.List is not the same as a Scala List.
 \end_layout
 
-\begin_layout Plain Layout
-
-The only "friction" between the two is in the Collection libraries (e.g.,
- a 
-\backslash
-texttt{java.util.List} is not the same as a Scala 
-\backslash
-texttt{List}).
- Fortunately,
- Scala provides a bridge to convert them automatically.
+\begin_layout Standard
+Scala provides built-in converters to bridge the two systems.
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-begin{verbatim}
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 import scala.jdk.CollectionConverters.*
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 val javaList = new java.util.ArrayList[String]()
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 javaList.add("Java Item")
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-// Convert to a Scala-friendly Buffer
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 val scalaList = javaList.asScala
 \end_layout
 
-\begin_layout Plain Layout
-
-
-\backslash
-end{verbatim}
+\begin_layout Standard
+These converters allow Java collections to be viewed and manipulated using Scala’s collection APIs.
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout Subsection*
+Asynchronous Interoperability
 \end_layout
 
-\begin_layout Plain Layout
-
-
-\backslash
-subsection*{When to Write Java}
+\begin_layout Standard
+Modern Scala programs frequently rely on asynchronous programming.
+ Java and Scala both support asynchronous execution,
+ but their primary abstractions differ.
 \end_layout
 
-\begin_layout Plain Layout
-
-You might choose to write a portion of your project in Java if:
+\begin_layout Standard
+Java uses:
 \end_layout
 
-\begin_layout Plain Layout
-
-
-\backslash
-begin{itemize}
+\begin_layout LyX-Code
+java.util.concurrent.CompletableFuture
 \end_layout
 
-\begin_layout Plain Layout
-
-    
-\backslash
-item 
-\backslash
-textbf{Team Skills}:
- You have a legacy team that knows Java intimately.
+\begin_layout Standard
+Scala uses:
 \end_layout
 
-\begin_layout Plain Layout
-
-    
-\backslash
-item 
-\backslash
-textbf{Micro-Optimizations}:
- In extremely rare cases,
- the way Java handles certain low-level arrays can be slightly more predictable for the JIT compiler.
+\begin_layout LyX-Code
+scala.concurrent.Future
 \end_layout
 
-\begin_layout Plain Layout
-
-    
-\backslash
-item 
-\backslash
-textbf{Framework Requirements}:
- Some older Java frameworks use heavy "Reflection" that is occasionally easier to satisfy with a small Java "stub" class.
+\begin_layout Standard
+Scala provides conversion utilities that allow these types to interoperate.
 \end_layout
 
-\begin_layout Plain Layout
-
-
-\backslash
-end{itemize}
+\begin_layout Standard
+Code Example
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
+import scala.jdk.FutureConverters.*
 \end_layout
 
-\end_inset
+\begin_layout LyX-Code
+val scalaFuture =
+\end_layout
 
+\begin_layout LyX-Code
+javaLibrary.fetchDataAsync().asScala
+\end_layout
 
+\begin_layout Standard
+This allows Java asynchronous APIs to integrate seamlessly into Scala applications.
+\end_layout
+
+\begin_layout Standard
+In systems built with functional effect libraries such as Cats Effect or ZIO,
+ Java futures can also be lifted into effect types.
+\end_layout
+
+\begin_layout Standard
+Code Example
+\end_layout
+
+\begin_layout LyX-Code
+IO.fromCompletableFuture(IO(javaLibrary.fetchDataAsync()))
+\end_layout
+
+\begin_layout Subsection*
+Designing Java Libraries for Scala
+\end_layout
+
+\begin_layout Standard
+When writing Java code intended to be used from Scala,
+ a few design principles help maintain a clean integration.
+\end_layout
+
+\begin_layout Subsection*
+Prefer Functional Interfaces
+\end_layout
+
+\begin_layout Standard
+Java functional interfaces such as java.util.function.Function work very well with Scala due to Single Abstract Method (SAM) conversion.
+ Scala developers can treat these interfaces as native lambda expressions.
+\end_layout
+
+\begin_layout Subsection*
+Avoid Returning Null
+\end_layout
+
+\begin_layout Standard
+Null values are one of the most common causes of runtime failures in mixed Java-Scala code.
+\end_layout
+
+\begin_layout Standard
+Instead of returning 
+\family typewriter
+null
+\family default
+,
+ prefer:
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+java.util.Optional
+\end_layout
+
+\begin_layout Standard
+Using annotations such as @
+\family typewriter
+Nullable
+\family default
+ and @
+\family typewriter
+NotNull
+\family default
+ can also help static analysis tools detect potential problems before runtime.
+\end_layout
+
+\begin_layout Subsection*
+Design Collection APIs Carefully
+\end_layout
+
+\begin_layout Standard
+Scala developers often prefer immutable data structures.
+\end_layout
+
+\begin_layout Standard
+A pragmatic approach when designing Java APIs is:
+\end_layout
+
+\begin_layout Standard
+• Accept mutable Java collections such as 
+\family typewriter
+java.util.Collection
+\end_layout
+
+\begin_layout Standard
+• Return immutable views such as 
+\family typewriter
+List.of()
+\family default
+ or 
+\family typewriter
+Collections.unmodifiableList()
+\end_layout
+
+\begin_layout Standard
+Scala users can then convert these results into Scala collections when needed.
+\end_layout
+
+\begin_layout Subsection*
+Integration with the Scala Ecosystem
+\end_layout
+
+\begin_layout Standard
+Well-designed Java libraries can integrate smoothly with the broader Scala ecosystem.
+\end_layout
+
+\begin_layout Subsection*
+Networking with sttp
+\end_layout
+
+\begin_layout Standard
+If a Java library implements low-level protocol or networking logic,
+ expose extension points using functional interfaces.
+\end_layout
+
+\begin_layout Standard
+Scala’s SAM conversion allows these interfaces to be wrapped directly with Scala lambdas,
+ making the Java code feel native when used with HTTP clients such as sttp.
+\end_layout
+
+\begin_layout Subsection*
+Database Access with Doobie
+\end_layout
+
+\begin_layout Standard
+The functional database library Doobie works by lifting JDBC operations into a functional context.
+\end_layout
+
+\begin_layout Standard
+For interoperability,
+ avoid hiding JDBC connections inside a Java library.
+ Instead,
+ design methods that accept a 
+\family typewriter
+java.sql.Connection.
+\end_layout
+
+\begin_layout Standard
+This allows a Scala application to pass a connection managed by a Doobie Transactor,
+ preserving transactional guarantees across both languages.
+\end_layout
+
+\begin_layout Subsection*
+When Writing Java Makes Sense
+\end_layout
+
+\begin_layout Standard
+Although Scala can express everything Java can,
+ there are situations where writing a small portion of a project in Java may still be useful.
+\end_layout
+
+\begin_layout Standard
+Team Expertise
+\end_layout
+
+\begin_layout Standard
+Some teams have deep Java experience,
+ making certain components easier to maintain in Java.
+\end_layout
+
+\begin_layout Standard
+Micro-Optimizations
+\end_layout
+
+\begin_layout Standard
+In rare cases,
+ very low-level array or memory operations may be easier for the JVM’s just-in-time compiler to optimize in Java.
+\end_layout
+
+\begin_layout Standard
+Framework Constraints
+\end_layout
+
+\begin_layout Standard
+Older frameworks that rely heavily on reflection or strict Java conventions may be easier to satisfy using a small Java adapter class.
+\end_layout
+
+\begin_layout Subsection*
+Best Practices Checklist
+\end_layout
+
+\begin_layout Standard
+When designing Java code intended for Scala users:
+\end_layout
+
+\begin_layout Standard
+• Use 
+\family typewriter
+Optional
+\family default
+ instead of returning null
+\end_layout
+
+\begin_layout Standard
+• Prefer functional interfaces for callbacks
+\end_layout
+
+\begin_layout Standard
+• Ensure implementations are thread-safe
+\end_layout
+
+\begin_layout Standard
+• Accept Java collections but return immutable views
+\end_layout
+
+\begin_layout Standard
+• Keep the Java layer thin and focused on core logic
+\end_layout
+
+\begin_layout Standard
+• Allow Scala code to handle effects such as retries,
+ error handling,
+ and concurrency
 \end_layout
 
 \end_body
