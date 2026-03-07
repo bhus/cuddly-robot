@@ -846,17 +846,373 @@ Try[T]
  A wrapper around a block that might throw an exception.
 \end_layout
 
+\end_deeper
+\begin_layout Standard
+In the Scala world—
+especially when using libraries like sttp for networking or Doobie for database access—
+we treat errors as data,
+ not as "explosions" (exceptions).
+ Instead of jumping out of the program flow with a throw,
+ we wrap the result in a container that describes the outcome.
+\end_layout
+
+\begin_layout Standard
+Here is the breakdown of the "Big Three" error-handling types in Scala.
+\end_layout
+
 \begin_layout Subsection*
-8.
- Comparison:
- Ruby vs.
- Scala
+1.
+ Option[T] —
+ The "Maybe" Type
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Use Case
+\series default
+:
+ When a value might simply be missing (replaces 
+\family typewriter
+null
+\family default
+).
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+The Logic
+\series default
+:
+ It has two subclasses:
+ 
+\family typewriter
+Some(value)
+\family default
+ and 
+\family typewriter
+None
+\family default
+.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+When to use it
+\series default
+:
+ Finding a record by ID,
+ optional configuration fields,
+ or a search result.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+The Downside
+\series default
+:
+ It doesn't tell you 
+\emph on
+why 
+\emph default
+the value is missing.
+\end_layout
+
+\begin_layout LyX-Code
+def findUser(id:
+ Int):
+ Option[String] = {
+\end_layout
+
+\begin_layout LyX-Code
+val db = Map(1 -> "Alice",
+ 2 -> "Bob")
+\end_layout
+
+\begin_layout LyX-Code
+db.get(id) // returns Some("Alice") or None
+\end_layout
+
+\begin_layout LyX-Code
+}
+\end_layout
+
+\begin_layout LyX-Code
+// Usage
+\end_layout
+
+\begin_layout LyX-Code
+findUser(1) match {
+\end_layout
+
+\begin_layout LyX-Code
+case Some(name) => println(s"Found:
+ $name")
+\end_layout
+
+\begin_layout LyX-Code
+case None => println("User not found")
+\end_layout
+
+\begin_layout LyX-Code
+}
+\end_layout
+
+\begin_layout LyX-Code
+// Functional approach (Transforming the value if it exists)
+\end_layout
+
+\begin_layout LyX-Code
+val shoutName = findUser(1).map(_.toUpperCase).getOrElse("ANONYMOUS")
+\end_layout
+
+\begin_layout Subsection*
+2.
+ 
+\family typewriter
+Try[T]
+\family default
+ —
+ The "Safety Net"
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Use Case:
+
+\series default
+ When you are calling "dirty" code (usually Java libraries) that might throw a runtime exception.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+The Logic
+\series default
+:
+ It has two subclasses:
+ 
+\family typewriter
+Success(value)
+\family default
+ and 
+\family typewriter
+Failure(exception)
+\family default
+.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+When to use it:
+
+\series default
+ Parsing a string to an integer,
+ reading a file,
+ or any operation where a traditional JVM exception is likely.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+The Benefit
+\series default
+:
+ It "catches" the exception and turns it into a value you can pass around.
+\end_layout
+
+\begin_layout LyX-Code
+import scala.util.{Try,
+ Success,
+ Failure}
+\end_layout
+
+\begin_layout LyX-Code
+def parseConfig(json:
+ String):
+ Try[Int] = Try {
+\end_layout
+
+\begin_layout LyX-Code
+  // This might throw a NumberFormatException
+\end_layout
+
+\begin_layout LyX-Code
+  json.toInt 
+\end_layout
+
+\begin_layout LyX-Code
+}
+\end_layout
+
+\begin_layout LyX-Code
+// Usage
+\end_layout
+
+\begin_layout LyX-Code
+parseConfig("123") match {
+\end_layout
+
+\begin_layout LyX-Code
+  case Success(port) => println(s"Connecting to port $port")
+\end_layout
+
+\begin_layout LyX-Code
+  case Failure(ex) => println(s"Failed to parse config:
+ ${ex.getMessage}")
+\end_layout
+
+\begin_layout LyX-Code
+}
+\end_layout
+
+\begin_layout Subsection*
+3.
+ Either[L,
+ R] —
+ The "Business Logic" Type
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Use Case
+\series default
+:
+ When an operation can fail,
+ and you need to provide a specific reason for that failure (the "Left" value).
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+The Logic
+\series default
+:
+ By convention,
+ 
+\series bold
+Right 
+\series default
+is "Right" (Success),
+ and 
+\series bold
+Left 
+\series default
+is for errors.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+When to use it
+\series default
+:
+ Domain logic.
+ For example,
+ 
+\series bold
+sttp 
+\series default
+returns 
+\series bold
+Either[ResponseException,
+ T]
+\series default
+ because a 404 error is a different 
+\emph on
+type 
+\emph default
+of data than a 500 error.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+The Benefit
+\series default
+:
+ You can define a custom error hierarchy (ADT) for the Left side.
+\end_layout
+
+\begin_layout LyX-Code
+sealed trait RegistrationError
+\end_layout
+
+\begin_layout LyX-Code
+case object EmailTaken extends RegistrationError
+\end_layout
+
+\begin_layout LyX-Code
+case class InvalidPassword(reason:
+ String) extends RegistrationError
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+def registerUser(email:
+ String):
+ Either[RegistrationError,
+ String] = {
+\end_layout
+
+\begin_layout LyX-Code
+  if (email == "taken@job.com") Left(EmailTaken)
+\end_layout
+
+\begin_layout LyX-Code
+  else Right("User Account Created")
+\end_layout
+
+\begin_layout LyX-Code
+}
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+// Usage in a for-comprehension (Chaining multiple Eithers)
+\end_layout
+
+\begin_layout LyX-Code
+val result = for {
+\end_layout
+
+\begin_layout LyX-Code
+  _ <- registerUser("new@job.com")
+\end_layout
+
+\begin_layout LyX-Code
+  status <- Right("Success") // Pretend this is another check
+\end_layout
+
+\begin_layout LyX-Code
+} yield status
+\end_layout
+
+\begin_layout LyX-Code
+println(result) // Right("Success")
+\end_layout
+
+\begin_layout Subsection*
+Summary Comparison
 \end_layout
 
 \begin_layout Standard
 \begin_inset Tabular
-<lyxtabular version="3" rows="7" columns="3">
+<lyxtabular version="3" rows="4" columns="4">
 <features tabularvalignment="middle">
+<column alignment="center" valignment="top">
 <column alignment="center" valignment="top">
 <column alignment="center" valignment="top">
 <column alignment="center" valignment="top">
@@ -879,7 +1235,7 @@ Try[T]
 \uwave off
 \noun off
 \color none
-Feature
+Type
 \end_layout
 
 \end_inset
@@ -902,7 +1258,413 @@ Feature
 \uwave off
 \noun off
 \color none
-Ruby
+Success
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+Failure
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+Primary Purpose
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+Option[T]
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+Some(v)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+None
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+Handling optionality (Presence/Absence).
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+Try[T]
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+Success(v)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+Failure(Throwable)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+Wrapping legacy Java/exception-prone code.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+Either[L,
+ R]
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+Right(v)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+Left(e)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+Complex business logic with specific error types.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+Chaining with for-comprehensions
+\end_layout
+
+\begin_layout Standard
+One of the most powerful features of these types is that they all support flatMap.
+ This allows you to chain operations together.
+ If any step fails (returns None,
+ Failure,
+ or Left),
+ the subsequent steps are skipped:
+\end_layout
+
+\begin_layout LyX-Code
+val finalResult = for {
+\end_layout
+
+\begin_layout LyX-Code
+  id <- parseConfig("101").toOption // Convert Try to Option
+\end_layout
+
+\begin_layout LyX-Code
+  name <- findUser(id) // Get Option[String]
+\end_layout
+
+\begin_layout LyX-Code
+  message <- registerUser(name).toOption // Convert Either to Option
+\end_layout
+
+\begin_layout LyX-Code
+} yield s"Processed:
+ $message"
+\end_layout
+
+\begin_layout Subsection*
+8.
+ Feature summary
+\end_layout
+
+\begin_layout Standard
+\begin_inset Tabular
+<lyxtabular version="3" rows="7" columns="2">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+Feature
 \end_layout
 
 \end_inset
@@ -955,29 +1717,6 @@ Top-level root
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\nospellcheck off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-Object
-\end_layout
-
-\end_inset
-</cell>
 <cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
@@ -1022,29 +1761,6 @@ Any
 \noun off
 \color none
 Method Return
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\nospellcheck off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-Last expression
 \end_layout
 
 \end_inset
@@ -1097,29 +1813,6 @@ Constants
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\nospellcheck off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-NAME = value
-\end_layout
-
-\end_inset
-</cell>
 <cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
@@ -1164,29 +1857,6 @@ val name = value
 \noun off
 \color none
 Missing values
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\nospellcheck off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-nil
 \end_layout
 
 \end_inset
@@ -1239,29 +1909,6 @@ Mixins
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\nospellcheck off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-Modules
-\end_layout
-
-\end_inset
-</cell>
 <cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
@@ -1306,29 +1953,6 @@ Traits
 \noun off
 \color none
 Anonymous Fn
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\nospellcheck off
-\bar no
-\strikeout off
-\xout off
-\uuline off
-\uwave off
-\noun off
-\color none
-`lambda {
 \end_layout
 
 \end_inset
@@ -1407,6 +2031,5 @@ Doobie
 .
 \end_layout
 
-\end_deeper
 \end_body
 \end_document
