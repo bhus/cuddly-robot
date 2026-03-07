@@ -88,208 +88,119 @@
 
 \begin_body
 
+\begin_layout Subsection*
+The Renaissance Philosophy
+\end_layout
+
 \begin_layout Standard
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-section*{Chapter 19:
- The Renaissance Philosophy}
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
 Before we dive back into the mechanics of the language,
  we must understand the core pillars that make Scala 3 unique.
  It is not just "Java with better syntax" or "Haskell on the JVM." It is a multi-paradigm language designed to grow with you—
 from a one-line script to a global-scale distributed system.
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout Subsection*
+The Three Pillars of Scala
 \end_layout
 
-\begin_layout Plain Layout
-
-
-\backslash
-subsection*{The Three Pillars of Scala}
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout Standard
 Scala's power comes from the fusion of three distinct programming philosophies:
 \end_layout
 
-\begin_layout Plain Layout
+\begin_layout Enumerate
 
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-begin{itemize}
-\end_layout
-
-\begin_layout Plain Layout
-
-    
-\backslash
-item 
-\backslash
-textbf{Functional Programming (FP)}:
+\series bold
+Functional Programming (FP)
+\series default
+:
  Treating computation as the evaluation of mathematical functions and avoiding changing-state and mutable data.
 \end_layout
 
-\begin_layout Plain Layout
+\begin_layout Enumerate
 
-    
-\backslash
-item 
-\backslash
-textbf{Object-Oriented Programming (OOP)}:
+\series bold
+Object-Oriented Programming (OOP)
+\series default
+:
  Organizing code into "blueprints" (classes and traits) that encapsulate data and behavior.
 \end_layout
 
-\begin_layout Plain Layout
+\begin_layout Enumerate
 
-    
-\backslash
-item 
-\backslash
-textbf{Strong Static Typing}:
+\series bold
+Strong Static Typing
+\series default
+:
  A rigorous compiler that acts as a first-line tester,
  catching errors before the code ever runs.
 \end_layout
 
-\begin_layout Plain Layout
-
-
-\backslash
-end{itemize}
+\begin_layout Subsection*
+Conciseness:
+ The End of Boilerplate
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-subsection*{Conciseness:
- The End of Boilerplate}
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout Standard
 The most immediate change for a developer moving to Scala 3 is the 
-\backslash
-textbf{Significant Indentation} (Python-style syntax).
+\series bold
+Significant Indentation
+\series default
+ (Python-style syntax).
  By removing braces and semicolons,
  the logic of your program becomes the visual focus.
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-begin{verbatim}
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 // A complete,
  readable class and logic in Scala 3
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 case class User(name:
  String,
  role:
  String)
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-def greet(user:
+\begin_layout LyX-Code
+  def greet(user:
  User):
  String =
 \end_layout
 
-\begin_layout Plain Layout
-
-  if user.role == "Admin" then
+\begin_layout LyX-Code
+    if user.role == "Admin" then
 \end_layout
 
-\begin_layout Plain Layout
-
-    s"Welcome back,
+\begin_layout LyX-Code
+      s"Welcome back,
  Commander ${user.name}"
 \end_layout
 
-\begin_layout Plain Layout
-
-  else
+\begin_layout LyX-Code
+    else
 \end_layout
 
-\begin_layout Plain Layout
-
-    s"Hello,
+\begin_layout LyX-Code
+      s"Hello,
  ${user.name}"
 \end_layout
 
-\begin_layout Plain Layout
-
-
-\backslash
-end{verbatim}
+\begin_layout Subsection*
+Immutability by Default
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-subsection*{Immutability by Default}
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout Standard
 In the Renaissance approach,
  we favor 
-\backslash
-texttt{val} over 
-\backslash
-texttt{var}.
+\family typewriter
+val
+\family default
+ over 
+\family typewriter
+var
+\family default
+.
  By making data immutable,
  we eliminate a whole category of "spooky action at a distance" bugs.
  When you want to change data,
@@ -297,126 +208,1205 @@ texttt{var}.
  you transform it into a new version.
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout Subsection*
+Expressions,
+ Not Statements
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-subsection*{Expressions,
- Not Statements}
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout Standard
 In many languages,
  an 
-\backslash
-texttt{if} block or a 
-\backslash
-texttt{try} block is a "statement" that does something.
+\family typewriter
+if
+\family default
+ block or a 
+\family typewriter
+try
+\family default
+ block is a "statement" that does something.
  In Scala,
  almost everything is an 
-\backslash
-textbf{expression} that returns a value.
+\series bold
+expression
+\series default
+ that returns a value.
  
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-begin{verbatim}
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 // The result of the 'if' is assigned directly to the variable
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 val status = if temperature > 30 then "Hot" else "Comfortable"
 \end_layout
 
-\begin_layout Plain Layout
-
-
-\backslash
-end{verbatim}
+\begin_layout Subsection*
+The Scalable Language
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-subsection*{The Scalable Language}
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout Standard
 The name "Scala" comes from 
-\backslash
-textit{SCAlable LAnguage}.
+\emph on
+SCAlable LAnguage
+\emph default
+.
  This refers to the language's ability to create small,
  "internal" Domain Specific Languages (DSLs).
  This is why libraries like 
-\backslash
-texttt{sttp} and 
-\backslash
-texttt{Doobie} feel like they are part of the language itself rather than external additions.
+\family typewriter
+sttp
+\family default
+ and 
+\family typewriter
+Doobie
+\family default
+ feel like they are part of the language itself rather than external additions.
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout Subsection*
+Unified Type System
 \end_layout
 
-\begin_layout Plain Layout
-
-
-\backslash
-subsection*{Unified Type System}
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout Standard
 Unlike Java,
  which has "primitive" types (like 
-\backslash
-texttt{int}) and "objects" (like 
-\backslash
-texttt{Integer}),
+\family typewriter
+int
+\family default
+) and "objects" (like 
+\family typewriter
+Integer
+\family default
+),
  Scala treats everything as an object.
  However,
  the compiler is smart enough to optimize these down to primitives under the hood to ensure there is no performance penalty.
 \end_layout
 
+\begin_layout Subsection*
+Scala Crystallized—
+A Language at a Glance
+\end_layout
+
+\begin_layout Standard
+This chapter serves as a formal map of the Scala language.
+ It covers the structure of source files,
+ the type system hierarchy,
+ the nature of expressions,
+ and the mechanics of error handling.
+\end_layout
+
+\begin_layout Subsection*
+1.
+ Source and Program Layout
+\end_layout
+
+\begin_layout Standard
+Scala source files typically end in .
+\family typewriter
+scala
+\family default
+.
+ Unlike Java,
+ the file name does not have to match the class name,
+ and multiple classes,
+ traits,
+ and objects can reside in a single file.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Packages
+\series default
+:
+ Defined at the top of the file.
+ Scala supports "scoped" packages:
+ 
+\family typewriter
+package com.project.core
+\family default
+.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Imports
+\series default
+:
+ Can occur anywhere (top of file,
+ inside a class,
+ or inside a method).
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+
+\family typewriter
+import scala.collection.mutable._
+\family default
+ (Wildcard)
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+import java.util.{List,
+ Map}
+\family default
+ (Selective)
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+import java.sql.{Date => SqlDate}
+\family default
+ (Renaming)
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+
+\series bold
+The Entry Point
+\series default
+:
+ A program starts in an 
+\family typewriter
+object 
+\family default
+(a singleton) with a 
+\family typewriter
+main
+\family default
+ method or by extending 
+\family typewriter
+App
+\family default
+.
+\end_layout
+
+\begin_layout Subsection*
+2.
+ The Type System Hierarchy
+\end_layout
+
+\begin_layout Standard
+Scala has a unified type system.
+ All types descend from a single root,
+ 
+\family typewriter
+Any
+\family default
+.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+AnyVal
+\series default
+:
+ Primitive-like types (
+\family typewriter
+Int
+\family default
+,
+ 
+\family typewriter
+Double
+\family default
+,
+ 
+\family typewriter
+Boolean
+\family default
+,
+ 
+\family typewriter
+Unit
+\family default
+).
+ These are often optimized into JVM primitives.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+AnyRef
+\series default
+:
+ All reference types (equivalent to 
+\family typewriter
+java.lang.Object
+\family default
+).
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Nothing
+\series default
+:
+ The "bottom type." It is a subtype of everything.
+ A method that throws an exception or loops infinitely returns 
+\family typewriter
+Nothing
+\family default
+.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Null
+\series default
+:
+ A subtype of all 
+\family typewriter
+AnyRef 
+\family default
+types.
+ It exists for Java interoperability,
+ but its use is discouraged in idiomatic Scala in favor of 
+\family typewriter
+Option
+\family default
+.
+\end_layout
+
+\begin_layout Subsection*
+3.
+ Definitions and Variables
+\end_layout
+
+\begin_layout Standard
+Scala distinguishes between immutable and mutable storage at the keyword level.
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+val 
+\family default
+(
+\series bold
+Value
+\series default
+):
+ Immutable reference.
+ Once assigned,
+ it cannot be changed.
+ Equivalent to 
+\family typewriter
+final 
+\family default
+in Java or a constant in Ruby.
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+var 
+\family default
+(
+\series bold
+Variable
+\series default
+):
+ Mutable reference.
+ Use is generally discouraged in functional Scala.
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+def 
+\family default
+(
+\series bold
+Method
+\series default
+):
+ Evaluated on every call.
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+lazy val
+\family default
+:
+ Evaluated only once,
+ the first time it is accessed.
+\end_layout
+
+\begin_layout Subsection*
+4.
+ Expressions and Control Flow
+\end_layout
+
+\begin_layout Standard
+In Scala,
+ 
+\series bold
+everything is an expression
+\series default
+.
+ Unlike Ruby or Java,
+ there are no "statements" that don't return a value.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+If/Else
+\series default
+:
+ Returns a value.
+ 
+\family typewriter
+val result = if (x > 0) "pos" else "neg"
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+For-Comprehensions
+\series default
+:
+ More than a loop;
+ it is syntactic sugar for 
+\family typewriter
+flatMap
+\family default
+,
+ 
+\family typewriter
+map
+\family default
+,
+ and 
+\family typewriter
+withFilter
+\family default
+.
+\end_layout
+
+\begin_layout LyX-Code
+result = for {
+\end_layout
+
+\begin_layout LyX-Code
+user <- findUser(id) // Option[User]
+\end_layout
+
+\begin_layout LyX-Code
+order <- getOrder(user) // Option[Order]
+\end_layout
+
+\begin_layout LyX-Code
+} yield order
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Pattern Matching
+\series default
+:
+ The "Swiss Army Knife" of Scala.
+\end_layout
+
+\begin_layout LyX-Code
+target match {
+\end_layout
+
+\begin_layout LyX-Code
+  case 1 => "One"
+\end_layout
+
+\begin_layout LyX-Code
+  case s:
+ String => s"It's a string of length ${s.length}"
+\end_layout
+
+\begin_layout LyX-Code
+  case User(name,
+ _) => s"Found user $name"
+\end_layout
+
+\begin_layout LyX-Code
+  case _ => "Default case"
+\end_layout
+
+\begin_layout LyX-Code
+}
+\end_layout
+
+\begin_layout Subsection*
+5.
+ Functional Foundations
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Traits
+\series default
+:
+ Similar to Java Interfaces but can contain concrete fields and methods.
+ They are the primary unit of modularity (used extensively in 
+\family typewriter
+sttp 
+\family default
+backends).
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Case Classes
+\series default
+:
+ Purpose-built for immutable data.
+ They automatically provide 
+\family typewriter
+equals
+\family default
+,
+ 
+\family typewriter
+hashCode
+\family default
+,
+ 
+\family typewriter
+toString
+\family default
+,
+ and 
+\family typewriter
+copy 
+\family default
+methods.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Objects (Singletons)
+\series default
+:
+ Used for static-like methods and the "Companion Object" pattern.
+\end_layout
+
+\begin_layout Subsection*
+6.
+ The "Magic" of Implicits and Contextual Abstraction
+\end_layout
+
+\begin_layout Standard
+Scala 2 uses 
+\family typewriter
+implicit
+\family default
+,
+ while Scala 3 uses 
+\family typewriter
+given/using
+\family default
+.
+ This is how 
+\series bold
+Doobie 
+\series default
+maps database rows to Scala types without manual boilerplate.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Implicit Parameters
+\series default
+:
+ Allows the compiler to "plug in" a value (like a thread pool or a database transaction) automatically.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Extension Methods
+\series default
+:
+ Allows you to add methods to existing classes (even Java classes) without inheritance.
+\end_layout
+
+\begin_layout Subsection*
+7.
+ Exception Handling and Effects
+\end_layout
+
+\begin_layout Standard
+While Scala supports 
+\family typewriter
+try/catch/finally
+\family default
+,
+ the pragmatic community (especially those using 
+\family typewriter
+Doobie 
+\family default
+and 
+\family typewriter
+sttp
+\family default
+) treats exceptions as 
+\series bold
+values
+\series default
+.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Standard Try/Catch
+\series default
+:
+\end_layout
+
+\begin_layout LyX-Code
+try {
+\end_layout
+
+\begin_layout LyX-Code
+  unsafeCall()
+\end_layout
+
+\begin_layout LyX-Code
+} catch {
+\end_layout
+
+\begin_layout LyX-Code
+  case ex:
+ IOException => println("Failed")
+\end_layout
+
+\begin_layout LyX-Code
+}
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+The Functional Alternative
+\series default
+:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+
+\family typewriter
+Option[T]
+\family default
+:
+ For values that might be missing.
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+Either[L,
+ R]
+\family default
+:
+ For operations that can fail with an error (
+\family typewriter
+Left
+\family default
+) or succeed (
+\family typewriter
+Right
+\family default
+).
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+Try[T]
+\family default
+:
+ A wrapper around a block that might throw an exception.
+\end_layout
+
+\begin_layout Subsection*
+8.
+ Comparison:
+ Ruby vs.
+ Scala
+\end_layout
+
+\begin_layout Standard
+\begin_inset Tabular
+<lyxtabular version="3" rows="7" columns="3">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
 \begin_layout Plain Layout
 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+Feature
 \end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+Ruby
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+Scala
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+Top-level root
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+Object
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+Any
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+Method Return
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+Last expression
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+Last expression
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+Constants
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+NAME = value
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+val name = value
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+Missing values
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+nil
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+None (Option)
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+Mixins
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+Modules
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+Traits
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+Anonymous Fn
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+`lambda {
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+x
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
 
 \end_inset
 
 
 \end_layout
 
+\begin_layout Subsection*
+Summary 
+\end_layout
+
+\begin_layout Standard
+When writing Scala,
+ your source layout should prioritize 
+\series bold
+immutability
+\series default
+ (
+\family typewriter
+val 
+\family default
+and 
+\family typewriter
+case class
+\family default
+) and 
+\series bold
+expression-oriented logic
+\series default
+.
+ By treating error handling as data (
+\family typewriter
+Either
+\family default
+) rather than control flow (
+\family typewriter
+throw
+\family default
+),
+ you align with the design of modern libraries like 
+\family typewriter
+sttp 
+\family default
+and 
+\family typewriter
+Doobie
+\family default
+.
+\end_layout
+
+\end_deeper
 \end_body
 \end_document
