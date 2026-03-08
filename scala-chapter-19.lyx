@@ -389,6 +389,776 @@ App
 .
 \end_layout
 
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+The Anatomy of a Scala Source File
+\end_layout
+
+\begin_layout Enumerate
+Header:
+ Packages and Imports
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+Unlike Java,
+ Scala allows "chained" package declarations and imports that can be scoped to specific blocks.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Package Declaration
+\series default
+:
+ Defines the logical namespace.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Imports
+\series default
+:
+ These are not restricted to the top of the file,
+ but standard practice places them here.
+ Scala supports renaming and hiding members during import to avoid name collisions (common when mixing Java and Scala libraries).
+\end_layout
+
+\begin_layout LyX-Code
+package com.adventure.service
+\end_layout
+
+\begin_layout LyX-Code
+import java.util.{UUID => JUUID} // Renaming for clarity
+\end_layout
+
+\begin_layout LyX-Code
+import scala.concurrent.ExecutionContext
+\end_layout
+
+\begin_layout LyX-Code
+import sttp.client3._ // Wildcard import
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+The Main Body:
+ Traits,
+ Classes,
+ and Objects 
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+A single file often contains three distinct but related components.
+ This is a departure from Java’s "one-file-one-public-class" rule.
+\end_layout
+
+\begin_layout Enumerate
+The Interface (The Trait)
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+We define the "what" before the "how." In a library context,
+ this is often a trait that defines the contract.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+The Implementation (The Class)
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+The concrete logic.
+ Scala classes typically use 
+\series bold
+Constructor Parameters 
+\series default
+instead of field declarations with setters.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+The Companion Object
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+This is where "static" logic lives.
+ It shares the same name as the class.
+ It is the idiomatic home for:
+\end_layout
+
+\begin_layout Itemize
+Factory methods (
+\family typewriter
+apply
+\family default
+).
+\end_layout
+
+\begin_layout Itemize
+Data mappers (e.g.,
+ mapping a Doobie 
+\family typewriter
+Row
+\family default
+ to a 
+\family typewriter
+User 
+\family default
+class).
+\end_layout
+
+\begin_layout Itemize
+Constants specific to that type.
+\end_layout
+
+\end_deeper
+\begin_layout Subsection*
+A Complete "Pragmatic" Example
+\end_layout
+
+\begin_layout Standard
+Here is how a single file—
+let's call it 
+\family typewriter
+UserService.scala
+\family default
+—
+is structured in a project using 
+\series bold
+sttp
+\series default
+ and 
+\series bold
+Doobie
+\series default
+.
+\end_layout
+
+\begin_layout LyX-Code
+package com.adventure.api
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+// 1.
+ Imports
+\end_layout
+
+\begin_layout LyX-Code
+import doobie._
+\end_layout
+
+\begin_layout LyX-Code
+import doobie.implicits._
+\end_layout
+
+\begin_layout LyX-Code
+import sttp.model.Uri
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+// 2.
+ The Domain Model (Data)
+\end_layout
+
+\begin_layout LyX-Code
+// Using a Case Class for immutability and built-in methods
+\end_layout
+
+\begin_layout LyX-Code
+case class User(id:
+ Int,
+ name:
+ String,
+ email:
+ String)
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+// 3.
+ The Service Trait (Contract)
+\end_layout
+
+\begin_layout LyX-Code
+// Defines the algebra of what our service can do
+\end_layout
+
+\begin_layout LyX-Code
+trait UserService {
+\end_layout
+
+\begin_layout LyX-Code
+  def findUser(id:
+ Int):
+ ConnectionIO[Option[User]]
+\end_layout
+
+\begin_layout LyX-Code
+}
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+// 4.
+ The Implementation
+\end_layout
+
+\begin_layout LyX-Code
+// Logic is injected via the constructor
+\end_layout
+
+\begin_layout LyX-Code
+class UserServiceImpl(remoteApi:
+ Uri) extends UserService {
+\end_layout
+
+\begin_layout LyX-Code
+  override def findUser(id:
+ Int):
+ ConnectionIO[Option[User]] = {
+\end_layout
+
+\begin_layout LyX-Code
+    // Doobie SQL program logic goes here
+\end_layout
+
+\begin_layout LyX-Code
+    sql"select id,
+ name,
+ email from users where id = $id".query[User].option
+\end_layout
+
+\begin_layout LyX-Code
+  }
+\end_layout
+
+\begin_layout LyX-Code
+}
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+// 5.
+ The Companion Object (Statics & Factories)
+\end_layout
+
+\begin_layout LyX-Code
+object UserService {
+\end_layout
+
+\begin_layout LyX-Code
+  // A factory method to hide the "new" keyword
+\end_layout
+
+\begin_layout LyX-Code
+  def apply(apiUri:
+ Uri):
+ UserService = new UserServiceImpl(apiUri)
+\end_layout
+
+\begin_layout LyX-Code
+  
+\begin_inset Newline newline
+\end_inset
+
+  // A constant used by the service
+\end_layout
+
+\begin_layout LyX-Code
+  val MaxRetryCount = 3
+\end_layout
+
+\begin_layout LyX-Code
+}
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+The "Crystallized" Formatting Rules
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+To maintain the "Pragmatic" style,
+ follow these internal layout conventions:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Tabular
+<lyxtabular version="3" rows="5" columns="3">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+Element
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+Rule
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+Reason
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+Methods
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+Use def even for no-arg methods if they perform I/O.
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+Signals a side-effect to the caller.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+Spacing
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+One blank line between methods;
+ two between classes/objects.
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+Enhances scannability.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+Return Types
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+Always explicitly type public methods.
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+Prevents the compiler from inferring a type that is too specific or too general.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+Braces
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+Optional in Scala 3,
+ but { ...
+ } is standard for Scala 2.
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+Scala 3 uses indentation-based "quiet" syntax.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+Summary of File Flow
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Identity
+\series default
+:
+ Who am I?
+ (
+\family typewriter
+package
+\family default
+)
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Dependencies
+\series default
+:
+ What do I need?
+ (
+\family typewriter
+import
+\family default
+)
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Shape
+\series default
+:
+ What data do I hold?
+ (
+\family typewriter
+case class
+\family default
+)
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Behavior
+\series default
+:
+ What can I do?
+ (
+\family typewriter
+trait & class
+\family default
+)
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Utilities
+\series default
+:
+ What tools do I provide?
+ (
+\family typewriter
+object
+\family default
+)
+\end_layout
+
 \begin_layout Subsection*
 2.
  The Type System Hierarchy
