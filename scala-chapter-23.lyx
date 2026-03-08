@@ -88,388 +88,244 @@
 
 \begin_body
 
+\begin_layout Subsection*
+From Ruby Taint to Scala Types
+\end_layout
+
 \begin_layout Standard
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-section*{Chapter 23.5:
- From Ruby Taint to Scala Types}
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
 Ruby developers will remember 
-\backslash
-texttt{
-\backslash
-$SAFE} levels and "Tainted" objects—
+\family typewriter
+$SAFE
+\family default
+ levels and "Tainted" objects—
 a system where the interpreter tracked whether a string came from a risky source (like a web form) and blocked it from reaching dangerous methods (like 
-\backslash
-texttt{eval}).
+\family typewriter
+eval
+\family default
+).
  
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout Standard
 In Scala,
  we achieve "Safe Levels" through 
-\backslash
-textbf{Type-Level Domain Modeling}.
+\series bold
+Type-Level Domain Modeling
+\series default
+.
  Instead of the runtime checking a "taint flag" on a string,
  the compiler ensures that untrusted data is wrapped in a type that the rest of the system refuses to touch.
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout Subsection*
+The Ruby Way:
+ Runtime Tracking
 \end_layout
 
-\begin_layout Plain Layout
-
-
-\backslash
-subsection*{The Ruby Way:
- Runtime Tracking}
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout Standard
 In Ruby,
  a string is just a string,
  but it might have a hidden "taint" bit flipped.
  
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout Subsection*
+The Scala Way:
+ Type Separation
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-subsection*{The Scala Way:
- Type Separation}
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout Standard
 In Scala,
  we don't use flags.
  We use 
-\backslash
-textbf{Opaque Types} (from Chapter 19).
+\series bold
+Opaque Types
+\series default
+ (from Chapter 19).
  We define a type for "Raw Input" and a type for "Sanitized Data." A function that executes SQL will 
-\backslash
-textit{only} accept 
-\backslash
-texttt{SanitizedData}.
+\emph on
+only
+\emph default
+ accept 
+\family typewriter
+SanitizedData
+\family default
+.
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-begin{verbatim}
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 object Security:
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
   opaque type RawInput = String
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
   opaque type SanitizedData = String
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
   def markAsRaw(s:
  String):
  RawInput = s
 \end_layout
 
-\begin_layout Plain Layout
-
-  
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
   def sanitize(input:
  RawInput):
  SanitizedData = 
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
     input.replaceAll("[';]",
  "") // Basic example
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
+  // Your Database logic
 \end_layout
 
-\begin_layout Plain Layout
-
-// Your Database logic
-\end_layout
-
-\begin_layout Plain Layout
-
-def executeQuery(query:
+\begin_layout LyX-Code
+  def executeQuery(query:
  SanitizedData):
  Unit = ???
+\begin_inset Newline newline
+\end_inset
+
+
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 // This fails to compile!
  You can't pass RawInput where Sanitized is needed.
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 val userPath = Security.markAsRaw("';
  DROP TABLE Users;--")
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 executeQuery(userPath) 
 \end_layout
 
-\begin_layout Plain Layout
-
-
-\backslash
-end{verbatim}
+\begin_layout Subsection*
+Implicit Safety:
+ The "Taint" of Options
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-subsection*{Implicit Safety:
- The "Taint" of Options}
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout Standard
 The closest spiritual successor to Ruby's "Safe Levels" in Scala is how we handle 
-\backslash
-texttt{null}.
+\family typewriter
+null
+\family default
+.
  In Ruby,
  calling a method on 
-\backslash
-texttt{nil} causes a crash.
+\family typewriter
+nil
+\family default
+ causes a crash.
  In Scala's 
-\backslash
-textbf{Strict Nulls} mode (Chapter 23),
+\series bold
+Strict Nulls
+\series default
+ mode (Chapter 23),
  the compiler "taints" any value that could be null by forcing it into a 
-\backslash
-texttt{String | Null} union type.
+\family typewriter
+String | Null
+\family default
+ union type.
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout Subsection*
+Taint Checking via Contextual Abstractions
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-subsection*{Taint Checking via Contextual Abstractions}
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout Standard
 We can also replicate "Safe Levels" using 
-\backslash
-texttt{given} and 
-\backslash
-texttt{using}.
+\family typewriter
+given
+\family default
+ and 
+\family typewriter
+using
+\family default
+.
  We can define a "Security Capability" that must be present in the scope for certain actions to be allowed.
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-begin{verbatim}
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 case class SecurityLevel[L <:
  Int]()
+\begin_inset Newline newline
+\end_inset
+
+
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 // This function only runs if the "Level 2" capability is in the room
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 def deleteSystemFile()(using SecurityLevel[2]):
  Unit = 
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
   println("File deleted")
+\begin_inset Newline newline
+\end_inset
+
+
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 // If this 'given' isn't in scope,
  the code above won't even compile
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 given currentLevel:
  SecurityLevel[1] = SecurityLevel[1]()
 \end_layout
 
-\begin_layout Plain Layout
-
-
-\backslash
-end{verbatim}
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-subsection*{Summary:
+\begin_layout Subsection*
+Summary:
  Prevention vs.
- Detection}
+ Detection
 \end_layout
 
-\begin_layout Plain Layout
+\begin_layout Itemize
 
-
-\backslash
-begin{itemize}
-\end_layout
-
-\begin_layout Plain Layout
-
-    
-\backslash
-item 
-\backslash
-textbf{Ruby Taint}:
+\series bold
+Ruby Taint
+\series default
+:
  A "Safety Net" that catches you when you make a mistake at runtime.
 \end_layout
 
-\begin_layout Plain Layout
+\begin_layout Itemize
 
-    
-\backslash
-item 
-\backslash
-textbf{Scala Types}:
+\series bold
+Scala Types
+\series default
+:
  A "Guardrail" that prevents you from even steering toward the cliff at compile-time.
 \end_layout
 
-\begin_layout Plain Layout
-
-
-\backslash
-end{itemize}
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout Standard
 ---
 \end_layout
 
-\begin_layout Plain Layout
+\begin_layout Standard
 
-
-\backslash
-textit{Reviewer’s Notes:
+\emph on
+Reviewer’s Notes:
  Moving security from runtime to compile-time is the ultimate "Pragmatic" move.
- It turns a potential 3:00 AM security breach into a 3:00 PM compiler error.}
-\end_layout
-
-\end_inset
-
-
+ It turns a potential 3:00 AM security breach into a 3:00 PM compiler error.
 \end_layout
 
 \end_body

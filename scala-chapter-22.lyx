@@ -88,206 +88,117 @@
 
 \begin_body
 
-\begin_layout Standard
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-section*{Chapter 22:
+\begin_layout Subsection*
+Chapter 22:
  Classes,
  Objects,
- and Traits}
+ and Traits
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout Standard
 While Functional Programming handles the logic of transformations,
  Object-Oriented Programming (OOP) handles the 
-\backslash
-textbf{architecture} of our data.
+\series bold
+architecture
+\series default
+ of our data.
  In Scala,
  every value is an object,
  and every operation is a method call.
  This chapter explores how we define these entities and how they collaborate.
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout Subsection*
+Classes:
+ The Basic Blueprints
 \end_layout
 
-\begin_layout Plain Layout
-
-
-\backslash
-subsection*{Classes:
- The Basic Blueprints}
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout Standard
 A class in Scala is more than just a container for data.
  It defines a type and the behavior associated with it.
  Unlike many other languages,
  Scala 3 allows for a very concise syntax where the constructor is defined right in the class header.
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-begin{verbatim}
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 class Project(val name:
  String,
  var budget:
  Int):
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
   def increaseBudget(amount:
  Int):
  Unit =
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
     budget += amount
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
     println(s"New budget for $name is $budget")
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-val p = Project("Renaissance",
+\begin_layout LyX-Code
+    val p = Project("Renaissance",
  1000)
 \end_layout
 
-\begin_layout Plain Layout
-
-
-\backslash
-end{verbatim}
+\begin_layout Subsection*
+Case Classes:
+ Data Carriers
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-subsection*{Case Classes:
- Data Carriers}
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout Standard
 For most of your domain modeling,
  you will use 
-\backslash
-texttt{case classes}.
+\family typewriter
+case classes
+\family default
+.
  These are specialized classes that automatically provide structural equality (comparing by data,
  not memory address),
  a readable 
-\backslash
-texttt{toString},
+\family typewriter
+toString
+\family default
+,
  and the 
-\backslash
-texttt{copy} method we saw in the functional chapter.
+\family typewriter
+copy
+\family default
+ method we saw in the functional chapter.
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-begin{verbatim}
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 case class Task(description:
  String,
  priority:
  Int)
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 val t1 = Task("Write Chapter 21",
  1)
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 val t2 = Task("Write Chapter 21",
  1)
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 // t1 == t2 is true!
 \end_layout
 
-\begin_layout Plain Layout
-
-
-\backslash
-end{verbatim}
+\begin_layout Subsection*
+Traits:
+ The Ultimate Composables
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-subsection*{Traits:
- The Ultimate Composables}
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout Standard
 Traits are the "Renaissance" version of Interfaces.
  They allow you to define a set of methods that a class must implement,
  but unlike Java interfaces,
@@ -295,263 +206,163 @@ Traits are the "Renaissance" version of Interfaces.
  You "mix" them into classes to build complex behavior from simple parts.
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-begin{verbatim}
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 trait Searchable:
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
   def slug:
  String
+\begin_inset Newline newline
+\end_inset
+
+
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 trait Auditable:
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
   def lastModified:
  Long = System.currentTimeMillis()
+\begin_inset Newline newline
+\end_inset
+
+
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 class Document(val title:
  String) extends Searchable with Auditable:
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
   def slug = title.toLowerCase.replace(" ",
  "-")
 \end_layout
 
-\begin_layout Plain Layout
-
-
-\backslash
-end{verbatim}
+\begin_layout Subsection*
+Objects:
+ Singletons and Companions
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-subsection*{Objects:
- Singletons and Companions}
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout Standard
 In Scala,
  we don't have 
-\backslash
-texttt{static} members.
+\family typewriter
+static
+\family default
+ members.
  Instead,
  we have the 
-\backslash
-texttt{object} keyword,
+\family typewriter
+object
+\family default
+ keyword,
  which defines a 
-\backslash
-textbf{Singleton}—
+\series bold
+Singleton
+\series default
+—
 a class that has exactly one instance.
  When an object shares the same name as a class,
  it is called a 
-\backslash
-textbf{Companion Object}.
+\series bold
+Companion Object
+\series default
+.
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-begin{verbatim}
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 class DatabaseConnection(val url:
  String)
+\begin_inset Newline newline
+\end_inset
+
+
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 object DatabaseConnection:
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
   // A factory method in the companion object
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
   def local:
  DatabaseConnection = 
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
     new DatabaseConnection("jdbc:postgresql://localhost:5432/db")
 \end_layout
 
-\begin_layout Plain Layout
-
-
-\backslash
-end{verbatim}
+\begin_layout Subsection*
+Opaque Types vs.
+ Classes
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-subsection*{Opaque Types vs.
- Classes}
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout Standard
 As we saw in Chapter 19,
  sometimes a class is "too heavy" for a simple ID or wrapper.
  We use 
-\backslash
-texttt{opaque type} when we want the type safety of a class without the memory overhead of creating an actual object instance.
+\family typewriter
+opaque type
+\family default
+ when we want the type safety of a class without the memory overhead of creating an actual object instance.
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout Subsection*
+Inheritance and Open Classes
 \end_layout
 
-\begin_layout Plain Layout
-
-
-\backslash
-subsection*{Inheritance and Open Classes}
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout Standard
 Scala 3 encourages composition over inheritance.
  By default,
  classes are "non-open." If you want someone to be able to inherit from your class,
  you must explicitly mark it as 
-\backslash
-texttt{open}.
+\family typewriter
+open
+\family default
+.
  This prevents the "Fragile Base Class" problem where changes in a parent class unexpectedly break children.
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-begin{verbatim}
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 open class BaseRenderer:
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
   def render():
  Unit = println("Default render")
+\begin_inset Newline newline
+\end_inset
+
+
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 class WebRenderer extends BaseRenderer:
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
   override def render():
  Unit = println("HTML render")
 \end_layout
 
-\begin_layout Plain Layout
-
-
-\backslash
-end{verbatim}
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout Standard
 ---
 \end_layout
 
-\begin_layout Plain Layout
+\begin_layout Standard
 
-
-\backslash
-textit{Reviewer’s Notes:
+\emph on
+Reviewer’s Notes:
  By combining Case Classes for data and Traits for behavior,
- Scala developers create systems that are incredibly modular and easy to refactor.}
-\end_layout
-
-\end_inset
-
-
+ Scala developers create systems that are incredibly modular and easy to refactor.
 \end_layout
 
 \end_body
