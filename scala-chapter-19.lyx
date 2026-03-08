@@ -1372,11 +1372,11 @@ result = for {
 \end_layout
 
 \begin_layout LyX-Code
-user <- findUser(id) // Option[User]
+  user <- findUser(id) // Option[User]
 \end_layout
 
 \begin_layout LyX-Code
-order <- getOrder(user) // Option[Order]
+  order <- getOrder(user) // Option[Order]
 \end_layout
 
 \begin_layout LyX-Code

@@ -88,481 +88,239 @@
 
 \begin_body
 
+\begin_layout Subsection*
+Chapter 19:
+ The Pragmatic "Other" Constructs
+\end_layout
+
 \begin_layout Standard
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-section*{Chapter 19:
- The Pragmatic "Other" Constructs}
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
 Beyond the classic battle between Objects and Functions lies a set of constructs that make Scala truly "The Scalable Language." These features allow us to define domain-specific rules,
  optimize performance,
  and handle data with surgical precision.
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout Subsection*
+Opaque Type Aliases
 \end_layout
 
-\begin_layout Plain Layout
-
-
-\backslash
-subsection*{Opaque Type Aliases}
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout Standard
 Sometimes you want the performance of a simple type (like a 
-\backslash
-texttt{String} or 
-\backslash
-texttt{Int}) but the safety of a full class.
+\family typewriter
+String
+\family default
+ or 
+\family typewriter
+Int
+\family default
+) but the safety of a full class.
  Opaque types allow you to wrap a value so the compiler treats it as a unique type,
  but at runtime,
  the wrapper vanishes entirely.
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-begin{verbatim}
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 object Domain:
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
   opaque type AccountId = String
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
+object AccountId:
 \end_layout
 
-\begin_layout Plain Layout
-
-  object AccountId:
-\end_layout
-
-\begin_layout Plain Layout
-
-    def apply(id:
+\begin_layout LyX-Code
+  def apply(id:
  String):
  AccountId = id
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-  extension (id:
+\begin_layout LyX-Code
+extension (id:
  AccountId)
 \end_layout
 
-\begin_layout Plain Layout
-
-    def value:
+\begin_layout LyX-Code
+  def value:
  String = id
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 // Outside,
  you cannot use AccountId as a String accidentally!
 \end_layout
 
-\begin_layout Plain Layout
-
-
-\backslash
-end{verbatim}
+\begin_layout Subsection*
+Enums (ADTs)
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-subsection*{Enums (ADTs)}
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout Standard
 Scala 3 enums are far more than just lists of constants.
  They are Algebraic Data Types (ADTs).
  They allow you to define a fixed set of states,
  where each state can carry its own specific data.
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-begin{verbatim}
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 enum ConnectionStatus:
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
   case Connected(ip:
  String)
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
   case Disconnected(reason:
  String)
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
   case Connecting
 \end_layout
 
-\begin_layout Plain Layout
-
-
-\backslash
-end{verbatim}
+\begin_layout Subsection*
+Extension Methods
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-subsection*{Extension Methods}
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout Standard
 In many languages,
  if you want to add a method to a class you didn't write (like 
-\backslash
-texttt{String}),
+\family typewriter
+String
+\family default
+),
  you're out of luck.
  In Scala,
  you can "extend" existing types with new functionality without modifying their source code.
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-begin{verbatim}
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 extension (s:
  String)
 \end_layout
 
-\begin_layout Plain Layout
-
-  def shout:
+\begin_layout LyX-Code
+def shout:
  String = s.toUpperCase + "!!!"
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 // Usage:
  "hello".shout returns "HELLO!!!"
 \end_layout
 
-\begin_layout Plain Layout
-
-
-\backslash
-end{verbatim}
+\begin_layout Subsection*
+Contextual Abstractions (Given/Using)
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-subsection*{Contextual Abstractions (Given/Using)}
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout Standard
 This is Scala’s answer to Dependency Injection.
  It allows the compiler to "fill in the blanks" for you.
  If a function needs a specific context (like a Database connection or a JSON encoder),
  the compiler looks for a "given" instance in the current scope and passes it automatically.
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-begin{verbatim}
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 case class Config(port:
  Int)
+\begin_inset Newline newline
+\end_inset
+
+
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 def startServer(using conf:
  Config) =
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
   println(s"Starting on ${conf.port}")
+\begin_inset Newline newline
+\end_inset
+
+
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 given standardConfig:
  Config = Config(8080)
+\begin_inset Newline newline
+\end_inset
+
+
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 startServer // The compiler sees the 'given' and inserts it here
 \end_layout
 
-\begin_layout Plain Layout
-
-
-\backslash
-end{verbatim}
+\begin_layout Subsection*
+Pattern Matching on Types (The Match Type)
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-subsection*{Pattern Matching on Types (The Match Type)}
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout Standard
 Scala can perform logic not just on values,
  but on types themselves.
  This allows for extremely advanced "Generic" programming where the return type of a function changes based on the input type.
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-begin{verbatim}
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 type Elem[X] = X match
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
   case String => Char
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
   case Array[t] => t
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
   case Iterable[t] => t
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-// Elem[String] is Char,
+\begin_layout LyX-Code
+  // Elem[String] is Char,
  Elem[List[Int]] is Int
 \end_layout
 
-\begin_layout Plain Layout
-
-
-\backslash
-end{verbatim}
+\begin_layout Subsection*
+The Export Clause
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-subsection*{The Export Clause}
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout Standard
 Instead of writing "wrapper" methods to delegate calls to an internal object,
  you can use 
-\backslash
-texttt{export}.
+\family typewriter
+export
+\family default
+.
  This "promotes" the methods of an internal object to the public interface of the current class.
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-begin{verbatim}
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 class Printer:
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
   def print(msg:
  String) = println(msg)
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
 class Office:
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
   val p = Printer()
 \end_layout
 
-\begin_layout Plain Layout
-
+\begin_layout LyX-Code
   export p.print // Office now has a print() method automatically
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-end{verbatim}
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-
-
 \end_layout
 
 \end_body
